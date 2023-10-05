@@ -1,5 +1,5 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import "./index.css";
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -40,6 +40,9 @@ const App = () => {
   );
 };
 
-const domNode = document.getElementById("root");
-const root = createRoot(domNode);
-root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
