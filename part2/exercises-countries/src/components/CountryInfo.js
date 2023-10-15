@@ -3,7 +3,16 @@ import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+/**
+ * Fetches weather data for a given country and displays country information.
+ * @param {Object} props - The props object containing the country data.
+ * @param {Object} props.country - The country object.
+ */
 export const CountryInfo = ({ country }) => {
+  /**
+   * Fetches weather data for the country using the WeatherStack API.
+   * Logs the response data to the console or logs the error if the request fails.
+   */
   useEffect(() => {
     axios
       .get(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${country?.name?.common}`)
