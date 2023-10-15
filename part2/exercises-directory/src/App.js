@@ -27,11 +27,11 @@ const App = () => {
 
   const addContact = event => {
     event.preventDefault();
-    const contactAlreadyAdded = contacts.find(contact => contact.name === name);
+    const contactAlreadyAdded = contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase().trim());
 
     if (contactAlreadyAdded) {
-      if (window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`)) {
-        const contactObject = { ...contactAlreadyAdded, number };
+      if (window.confirm(`${name.trim()} is already added to phonebook, replace the old number with a new one?`)) {
+        const contactObject = { ...contactAlreadyAdded, number: number.trim() };
         contactService
           .update(contactAlreadyAdded.id, contactObject)
           .then(returnedContact => {
@@ -40,9 +40,12 @@ const App = () => {
             setTimeout(() => {
               setMessage({ ...message, content: "" });
             }, 5000);
+
+            setName("");
+            setNumber("");
           })
           .catch(error => {
-            setMessage({ error: true, content: `Information of ${name} has already been removed from server` });
+            setMessage({ error: true, content: error.response.data.error });
             setTimeout(() => {
               setMessage({ ...message, content: "" });
             }, 5000);
@@ -50,7 +53,7 @@ const App = () => {
           });
       }
     } else {
-      const contactObject = { name, number };
+      const contactObject = { name: name.trim(), number: number.trim() };
       contactService
         .create(contactObject)
         .then(returnedContact => {
@@ -59,23 +62,29 @@ const App = () => {
           setTimeout(() => {
             setMessage({ ...message, content: "" });
           }, 5000);
-        })
-        .catch(error => console.error("´post error:", error));
-    }
 
-    setName("");
-    setNumber("");
+          setName("");
+          setNumber("");
+        })
+        .catch(error => {
+          setMessage({ error: true, content: error.response.data.error });
+          setTimeout(() => {
+            setMessage({ ...message, content: "" });
+          }, 5000);
+          console.error("post error:", error);
+        });
+    }
   };
 
   const removeContact = contact => {
     const { id, name } = contact;
 
-    if (window.confirm(`Delete ${name} ?`)) {
+    if (window.confirm(`Delete ${name.trim()}?`)) {
       contactService
         .remove(id)
         .then(() => {
           setContacts(contacts.filter(contact => contact.id !== id));
-          setMessage({ error: false, content: `${name} has been deleted successfully` });
+          setMessage({ error: false, content: `${name.trim()} has been deleted successfully` });
           setTimeout(() => {
             setMessage({ ...message, content: "" });
           }, 5000);
