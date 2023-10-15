@@ -7,7 +7,9 @@ export const ContactForm = ({ nameHandler, name, numberHandler, number, submitHa
       Number: <input onChange={numberHandler} value={number} />
     </div>
     <div>
-      <button type="submit">add</button>
+      <button type="submit" disabled={!name || !number}>
+        Add
+      </button>
     </div>
   </form>
 );
