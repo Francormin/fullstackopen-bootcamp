@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/contacts/652992eb9381b851d76c1f41
+Content-Type: application/json
+
+{
+  "name": "Dan Abramov",
+  "number": "12-43-234345"
+}

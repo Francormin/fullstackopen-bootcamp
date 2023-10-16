@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/contacts/6529476a68b827f02676c85d
