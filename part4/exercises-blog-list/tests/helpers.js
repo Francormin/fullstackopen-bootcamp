@@ -18,6 +18,13 @@ const initialBlogs = [
   }
 ];
 
+const updatedBlog = {
+  title: "Updated Title",
+  author: "Updated Author",
+  url: "https://updated-url.com",
+  likes: 100
+};
+
 const getAllBlogsAndTheirTitles = async () => {
   const response = await api.get("/api/blogs");
   return {
@@ -26,4 +33,4 @@ const getAllBlogsAndTheirTitles = async () => {
   };
 };
 
-module.exports = { api, initialBlogs, getAllBlogsAndTheirTitles };
+module.exports = { api, initialBlogs, updatedBlog, getAllBlogsAndTheirTitles };
