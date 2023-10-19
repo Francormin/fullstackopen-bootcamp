@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Testing with Jest",
+  "author": "653197f0a32e56605f94127e",
+  "url": "www.midudev.com",
+  "likes": 25
+}
