@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/Blog");
-const { api, initialBlogs, getAllBlogsAndTheirTitles } = require("./helpers");
+const { api, initialBlogs, updatedBlog, getAllBlogsAndTheirTitles } = require("./helpers");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -29,6 +29,27 @@ describe("GET /api/blogs", () => {
     const { response } = await getAllBlogsAndTheirTitles();
     const result = response.body.every(blog => blog.id);
     expect(result).toBe(true);
+  });
+});
+
+describe("GET /api/blogs/:id", () => {
+  test("a blog can be retrieved by its id", async () => {
+    const { response } = await getAllBlogsAndTheirTitles();
+    const { body: blogs } = response;
+    const blogToRetrieve = blogs[0];
+
+    await api
+      .get(`/api/blogs/${blogToRetrieve.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("if blog does not exist server will respond with status 404", async () => {
+    await api.get(`/api/blogs/6531349eae8527db4bbf7131`).expect(404);
+  });
+
+  test("if an invalid id is provided server will respond with status 400", async () => {
+    await api.get(`/api/blogs/1234`).expect(400);
   });
 });
 
@@ -75,7 +96,7 @@ describe("POST /api/blogs", () => {
     expect(titles).toContain(newBlog.title);
   });
 
-  test("if title and url fields are not provided server will respond with status 400", async () => {
+  test("if title or url fields are not provided server will respond with status 400", async () => {
     const newBlog = {
       author: "Michael Doe",
       likes: 15
@@ -89,7 +110,7 @@ describe("POST /api/blogs", () => {
   });
 });
 
-describe("DELETE api/blogs/:id", () => {
+describe("DELETE /api/blogs/:id", () => {
   test("a blog can be deleted", async () => {
     const { response: firstResponse } = await getAllBlogsAndTheirTitles();
     const { body: blogs } = firstResponse;
@@ -103,8 +124,8 @@ describe("DELETE api/blogs/:id", () => {
     expect(titles).not.toContain(blogToDelete.title);
   });
 
-  test("a blog that do not exist can not be deleted", async () => {
-    await api.delete("/api/blogs/65303920b351d52ae2e1def2").expect(404);
+  test("if blog does not exist server will respond with status 404", async () => {
+    await api.delete("/api/blogs/6531349eae8527db4bbf7131").expect(404);
 
     const { response } = await getAllBlogsAndTheirTitles();
 
@@ -117,6 +138,36 @@ describe("DELETE api/blogs/:id", () => {
     const { response } = await getAllBlogsAndTheirTitles();
 
     expect(response.body).toHaveLength(initialBlogs.length);
+  });
+});
+
+describe("PUT /api/blogs/:id", () => {
+  test("a blog can be updated", async () => {
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+    const { body: blogs } = firstResponse;
+    const blogToUpdate = blogs[0];
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("if no body is provided server will respond with status 400", async () => {
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+    const { body: blogs } = firstResponse;
+    const blogToUpdate = blogs[0];
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({}).expect(400);
+  });
+
+  test("if blog does not exist server will respond with status 404", async () => {
+    await api.put("/api/blogs/6531349eae8527db4bbf7131").send(updatedBlog).expect(404);
+  });
+
+  test("if an invalid id is provided server will respond with status 400", async () => {
+    await api.put("/api/blogs/1234").send(updatedBlog).expect(400);
   });
 });
 
