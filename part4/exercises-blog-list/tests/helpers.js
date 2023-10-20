@@ -1,26 +1,43 @@
 const supertest = require("supertest");
+const mongoose = require("mongoose");
 const app = require("../app");
+const User = require("../models/User");
 
 const api = supertest(app);
 
+const newId = new mongoose.mongo.ObjectId();
+
 const initialBlogs = [
   {
-    title: "Learning JS",
-    author: "John Doe",
-    url: "https://learning-js.com",
-    likes: 20
+    title: "Test Blog",
+    author: newId,
+    url: "https://test-url.com",
+    likes: 10
   },
   {
-    title: "Learning Testing",
-    author: "Mary Doe",
-    url: "https://learning-testing.com",
-    likes: 10
+    title: "Test Blog 2",
+    author: newId,
+    url: "https://test-url-2.com",
+    likes: 20
+  }
+];
+
+const initialUsers = [
+  {
+    username: "testuser",
+    name: "Test User",
+    passwordHash: "testpassword"
+  },
+  {
+    username: "testuser2",
+    name: "Test User 2",
+    passwordHash: "testpassword2"
   }
 ];
 
 const updatedBlog = {
   title: "Updated Title",
-  author: "Updated Author",
+  author: newId,
   url: "https://updated-url.com",
   likes: 100
 };
@@ -33,4 +50,23 @@ const getAllBlogsAndTheirTitles = async () => {
   };
 };
 
-module.exports = { api, initialBlogs, updatedBlog, getAllBlogsAndTheirTitles };
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map(user => user.toJSON());
+};
+
+const getFirstUserId = async () => {
+  const { body } = await api.get("/api/users");
+  const user = await User.findById(body[0].id);
+  return user._id;
+};
+
+module.exports = {
+  api,
+  initialBlogs,
+  initialUsers,
+  updatedBlog,
+  getAllBlogsAndTheirTitles,
+  usersInDb,
+  getFirstUserId
+};
