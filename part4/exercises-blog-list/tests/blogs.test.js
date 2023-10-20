@@ -1,9 +1,18 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/Blog");
-const { api, initialBlogs, updatedBlog, getAllBlogsAndTheirTitles } = require("./helpers");
+const User = require("../models/User");
+const {
+  api,
+  initialBlogs,
+  initialUsers,
+  updatedBlog,
+  getAllBlogsAndTheirTitles,
+  getFirstUserId
+} = require("./helpers");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
 
   // parallel
   // const blogObjects = initialBlogs.map(blog => new Blog(blog));
@@ -14,6 +23,11 @@ beforeEach(async () => {
   for (const blog of initialBlogs) {
     const blogObject = new Blog(blog);
     await blogObject.save();
+  }
+
+  for (const user of initialUsers) {
+    const userObject = new User(user);
+    await userObject.save();
   }
 });
 
@@ -57,7 +71,7 @@ describe("POST /api/blogs", () => {
   test("a new blog can be added", async () => {
     const newBlog = {
       title: "Understanding async/await",
-      author: "George Doe",
+      author: await getFirstUserId(),
       url: "https://understanding-async-await.com",
       likes: 5
     };
@@ -77,7 +91,7 @@ describe("POST /api/blogs", () => {
   test("if a new blog has not a property called likes it will be 0 by default", async () => {
     const newBlog = {
       title: "Understanding Express",
-      author: "Anna Doe",
+      author: await getFirstUserId(),
       url: "https://understanding-express.com"
     };
 
@@ -96,9 +110,10 @@ describe("POST /api/blogs", () => {
     expect(titles).toContain(newBlog.title);
   });
 
-  test("if title or url fields are not provided server will respond with status 400", async () => {
+  test("if title, author or url fields are not provided server will respond with status 400", async () => {
     const newBlog = {
-      author: "Michael Doe",
+      title: "Understanding Node.js",
+      url: "https://understanding-nodejs.com",
       likes: 15
     };
 
