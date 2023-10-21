@@ -50,9 +50,12 @@ const getAllBlogsAndTheirTitles = async () => {
   };
 };
 
-const usersInDb = async () => {
-  const users = await User.find({});
-  return users.map(user => user.toJSON());
+const getAllUsersAndTheirUsernames = async () => {
+  const response = await api.get("/api/users");
+  return {
+    usernames: response.body.map(user => user.username),
+    response
+  };
 };
 
 const getFirstUserId = async () => {
@@ -67,6 +70,6 @@ module.exports = {
   initialUsers,
   updatedBlog,
   getAllBlogsAndTheirTitles,
-  usersInDb,
+  getAllUsersAndTheirUsernames,
   getFirstUserId
 };
