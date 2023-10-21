@@ -56,4 +56,10 @@ const mostLikes = blogs => {
   return objectToReturn;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
+module.exports = {
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
+};
