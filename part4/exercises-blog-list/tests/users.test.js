@@ -1,60 +1,101 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const { api, usersInDb } = require("./helpers");
+// const Blog = require("../models/Blog");
+const { api, initialUsers, getAllUsersAndTheirUsernames } = require("./helpers");
 
-describe("when there is initially one user in db", () => {
-  beforeEach(async () => {
-    await User.deleteMany({});
+beforeEach(async () => {
+  // await Blog.deleteMany({});
+  await User.deleteMany({});
 
-    const passwordHash = await bcrypt.hash("sekret", 10);
-    const user = new User({ username: "root", passwordHash });
+  // for (const blog of initialBlogs) {
+  //   const blogObject = new Blog(blog);
+  //   await blogObject.save();
+  // }
 
-    await user.save();
-  });
+  for (const user of initialUsers) {
+    const passwordHash = await bcrypt.hash(user.passwordHash, 10);
+    const userObject = new User({ ...user, passwordHash });
+    await userObject.save();
+  }
+});
 
-  test("creation succeeds with a fresh username", async () => {
-    const usersAtStart = await usersInDb();
+test("creation succeeds with a fresh username", async () => {
+  const newUser = {
+    username: "mluukkai",
+    name: "Matti Luukkainen",
+    password: "salainen"
+  };
 
-    const newUser = {
-      username: "mluukkai",
-      name: "Matti Luukkainen",
-      password: "salainen"
-    };
+  await api
+    .post("/api/users")
+    .send(newUser)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
 
-    await api
-      .post("/api/users")
-      .send(newUser)
-      .expect(201)
-      .expect("Content-Type", /application\/json/);
+  const { usernames, response } = await getAllUsersAndTheirUsernames();
 
-    const usersAtEnd = await usersInDb();
-    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+  expect(response.body).toHaveLength(initialUsers.length + 1);
+  expect(usernames).toContain(newUser.username);
+});
 
-    const usernames = usersAtEnd.map(user => user.username);
-    expect(usernames).toContain(newUser.username);
-  });
+test("creation fails with proper status code and message if username or password is not provided", async () => {
+  const newUser = {
+    name: "Matti Luukkainen",
+    password: "salainen"
+  };
 
-  test("creation fails with proper statuscode and message if username already taken", async () => {
-    const usersAtStart = await usersInDb();
+  const result = await api
+    .post("/api/users")
+    .send(newUser)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
 
-    const newUser = {
-      username: "root",
-      name: "Superuser",
-      password: "salainen"
-    };
+  expect(result.body.error).toBe("username and password fields are both required");
 
-    const result = await api
-      .post("/api/users")
-      .send(newUser)
-      .expect(400)
-      .expect("Content-Type", /application\/json/);
+  const { response } = await getAllUsersAndTheirUsernames();
 
-    expect(result.body.error).toBe("Username must be unique and must have at least 3 letters");
+  expect(response.body).toHaveLength(initialUsers.length);
+});
 
-    const usersAtEnd = await usersInDb();
-    expect(usersAtEnd).toHaveLength(usersAtStart.length);
-  });
+test("creation fails with proper status code and message if the password provided is invalid", async () => {
+  const newUser = {
+    username: "mluukkai",
+    name: "Matti Luukkainen",
+    password: "sa"
+  };
+
+  const result = await api
+    .post("/api/users")
+    .send(newUser)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(result.body.error).toBe("password must be at least 3 characters long");
+
+  const { response } = await getAllUsersAndTheirUsernames();
+
+  expect(response.body).toHaveLength(initialUsers.length);
+});
+
+test("creation fails with proper status code and message if username is already taken", async () => {
+  const newUser = {
+    username: "testuser",
+    name: "Superuser",
+    password: "salainen"
+  };
+
+  const result = await api
+    .post("/api/users")
+    .send(newUser)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(result.body.error).toBe("Username must be unique and must have at least 3 letters");
+
+  const { response } = await getAllUsersAndTheirUsernames();
+
+  expect(response.body).toHaveLength(initialUsers.length);
 });
 
 afterAll(() => {
