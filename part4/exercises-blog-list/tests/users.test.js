@@ -20,7 +20,7 @@ beforeEach(async () => {
   }
 });
 
-test("creation succeeds with a fresh username", async () => {
+test("a new user can be added", async () => {
   const newUser = {
     username: "mluukkai",
     name: "Matti Luukkainen",
