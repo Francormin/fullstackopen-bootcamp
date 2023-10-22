@@ -1,9 +1,8 @@
-PUT http://localhost:3003/api/blogs/6531349eae8527db4bbf7131
+PUT http://localhost:3003/api/blogs/653540d41ee27b0b1bd83438
 Content-Type: application/json
 
 {
-  "title": "Testing with Jest",
-  "author": "Midudev",
-  "url": "www.midudev.com",
-  "likes": 25
+  "title": "Testing with Mocha",
+  "url": "https://testing-with-mocha.com",
+  "likes": 15
 }

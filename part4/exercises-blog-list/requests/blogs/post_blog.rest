@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "title": "Testing with Jest",
-  "author": "653197f0a32e56605f94127e",
-  "url": "www.midudev.com",
+  "author": "6535409e1ee27b0b1bd83431",
+  "url": "https://testing-with-jest.com",
   "likes": 25
 }
