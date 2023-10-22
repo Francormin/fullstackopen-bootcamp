@@ -15,7 +15,7 @@ blogsRouter.get("/:id", async (request, response, next) => {
   const { id } = request.params;
 
   try {
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(id).populate("author", { username: 1, name: 1 });
     return blog ? response.json(blog) : response.status(404).end();
   } catch (error) {
     next(error);
@@ -65,16 +65,15 @@ blogsRouter.delete("/:id", async (request, response, next) => {
 
 blogsRouter.put("/:id", async (request, response, next) => {
   const { id } = request.params;
-  const { title, author, url, likes } = request.body;
+  const { title, url, likes } = request.body;
 
-  if (!title && !author && !url && !likes)
+  if (!title && !url && !likes)
     return response.status(400).send({
       error: "nothing to update"
     });
 
   const blogToUpdate = {
     title,
-    author,
     url,
     likes
   };
