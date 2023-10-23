@@ -91,7 +91,7 @@ test("creation fails with proper status code and message if username is already 
     .expect(400)
     .expect("Content-Type", /application\/json/);
 
-  expect(result.body.error).toBe("Username must be unique and must have at least 3 letters");
+  expect(result.body.error).toBe("username must be unique and must have at least 3 letters");
 
   const { response } = await getAllUsersAndTheirUsernames();
 
