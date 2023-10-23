@@ -4,7 +4,11 @@ const User = require("../models/User");
 
 blogsRouter.get("/", async (request, response, next) => {
   try {
-    const blogs = await Blog.find({}).populate("author", { username: 1, name: 1 });
+    const blogs = await Blog.find({}).populate("author", {
+      username: 1,
+      name: 1
+    });
+
     response.json(blogs);
   } catch (error) {
     next(error);
@@ -15,7 +19,11 @@ blogsRouter.get("/:id", async (request, response, next) => {
   const { id } = request.params;
 
   try {
-    const blog = await Blog.findById(id).populate("author", { username: 1, name: 1 });
+    const blog = await Blog.findById(id).populate("author", {
+      username: 1,
+      name: 1
+    });
+
     return blog ? response.json(blog) : response.status(404).end();
   } catch (error) {
     next(error);
@@ -23,7 +31,7 @@ blogsRouter.get("/:id", async (request, response, next) => {
 });
 
 blogsRouter.post("/", async (request, response, next) => {
-  const { title, author, url, likes } = request.body;
+  const { title, author, url, likes = 0 } = request.body;
 
   if (!title || !author || !url)
     return response.status(400).send({
@@ -38,7 +46,7 @@ blogsRouter.post("/", async (request, response, next) => {
       title,
       author: user._id,
       url,
-      likes: likes || 0
+      likes
     });
 
     const savedBlog = await blog.save();
@@ -79,7 +87,10 @@ blogsRouter.put("/:id", async (request, response, next) => {
   };
 
   try {
-    const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, { new: true });
+    const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, {
+      new: true
+    });
+
     return updatedBlog ? response.json(updatedBlog) : response.status(404).end();
   } catch (error) {
     next(error);
