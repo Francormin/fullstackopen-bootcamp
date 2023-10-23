@@ -1,19 +1,32 @@
-module.exports = (error, request, response, next) => {
-  console.log("message:", error.message);
-
-  if (error.name === "CastError") {
+const ERROR_HANDLERS = {
+  CastError: response => {
     response.status(400).send({
-      error: "Malformatted id"
+      error: "malformatted id"
     });
-  } else if (error.name === "ValidationError") {
-    if (error.message.includes("username")) {
-      response.status(400).send({
-        error: "Username must be unique and must have at least 3 letters"
-      });
-    } else if (error.message.includes("passwordHash")) {
-      response.status(400).send({
-        error: "PasswordHash must have at least 3 letters"
-      });
-    }
-  } else response.status(500).end();
+  },
+  ValidationError: (response, error) => {
+    response.status(400).send({
+      error: error.message
+    });
+  },
+  JsonWebTokenError: response => {
+    response.status(401).send({
+      error: "invalid token"
+    });
+  },
+  TokenExpiredError: response => {
+    response.status(401).send({
+      error: "token expired"
+    });
+  },
+  defaultError: response => {
+    response.status(500).end();
+  }
+};
+
+module.exports = (error, response) => {
+  console.error("errorHandler:", error.message);
+
+  const handler = ERROR_HANDLERS[error.name] || ERROR_HANDLERS.defaultError;
+  handler(response, error);
 };
