@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NTM1NDA5ZTFlZTI3YjBiMWJkODM0MzEiLCJpYXQiOjE2OTgwOTQzNDl9.b_DsCtkgqO903LcniP6wGiOc9MJWIVQOgEZgi7ufMRY
 
 {
   "title": "Testing with Jest",
-  "author": "6535409e1ee27b0b1bd83431",
   "url": "https://testing-with-jest.com",
   "likes": 25
 }
