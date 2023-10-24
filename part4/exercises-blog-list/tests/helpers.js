@@ -5,18 +5,16 @@ const User = require("../models/User");
 
 const api = supertest(app);
 
-const newId = new mongoose.mongo.ObjectId();
-
 const initialBlogs = [
   {
     title: "Test Blog",
-    author: newId,
+    author: new mongoose.mongo.ObjectId(),
     url: "https://test-url.com",
     likes: 10
   },
   {
     title: "Test Blog 2",
-    author: newId,
+    author: new mongoose.mongo.ObjectId(),
     url: "https://test-url-2.com",
     likes: 20
   }
@@ -37,7 +35,6 @@ const initialUsers = [
 
 const updatedBlog = {
   title: "Updated Title",
-  author: newId,
   url: "https://updated-url.com",
   likes: 100
 };
