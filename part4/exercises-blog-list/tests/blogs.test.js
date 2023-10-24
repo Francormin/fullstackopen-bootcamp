@@ -6,6 +6,7 @@ const {
   initialBlogs,
   initialUsers,
   updatedBlog,
+  TOKEN_EXAMPLE,
   getAllBlogsAndTheirTitles,
   getFirstUserId
 } = require("./helpers");
@@ -41,7 +42,9 @@ describe("GET /api/blogs", () => {
 
   test("blogs must have an unique identifier property called id", async () => {
     const { response } = await getAllBlogsAndTheirTitles();
+
     const result = response.body.every(blog => blog.id);
+
     expect(result).toBe(true);
   });
 });
@@ -68,7 +71,7 @@ describe("GET /api/blogs/:id", () => {
 });
 
 describe("POST /api/blogs", () => {
-  test("a new blog can be added", async () => {
+  test("if no token is provided by headers server will respond with status 401", async () => {
     const newBlog = {
       title: "Understanding async/await",
       author: await getFirstUserId(),
@@ -76,9 +79,24 @@ describe("POST /api/blogs", () => {
       likes: 5
     };
 
+    await api.post(`/api/blogs`).send(newBlog).expect(401);
+
+    const { response } = await getAllBlogsAndTheirTitles();
+
+    expect(response.body).toHaveLength(initialBlogs.length);
+  });
+
+  test("a new blog can be added", async () => {
+    const newBlog = {
+      title: "Understanding async/await",
+      url: "https://understanding-async-await.com",
+      likes: 5
+    };
+
     await api
       .post(`/api/blogs`)
       .send(newBlog)
+      .set("Authorization", TOKEN_EXAMPLE)
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
@@ -98,6 +116,7 @@ describe("POST /api/blogs", () => {
     const postResponse = await api
       .post(`/api/blogs`)
       .send(newBlog)
+      .set("Authorization", TOKEN_EXAMPLE)
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
@@ -110,14 +129,13 @@ describe("POST /api/blogs", () => {
     expect(titles).toContain(newBlog.title);
   });
 
-  test("if title, author or url fields are not provided server will respond with status 400", async () => {
+  test("if title or url fields are not provided server will respond with status 400", async () => {
     const newBlog = {
       title: "Understanding Node.js",
-      url: "https://understanding-nodejs.com",
       likes: 15
     };
 
-    await api.post(`/api/blogs`).send(newBlog).expect(400);
+    await api.post(`/api/blogs`).send(newBlog).set("Authorization", TOKEN_EXAMPLE).expect(400);
 
     const { response } = await getAllBlogsAndTheirTitles();
 
@@ -126,12 +144,25 @@ describe("POST /api/blogs", () => {
 });
 
 describe("DELETE /api/blogs/:id", () => {
+  test("if no token is provided by headers server will respond with status 401", async () => {
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+    const { body: blogs } = firstResponse;
+    const blogToDelete = blogs[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(401);
+
+    const { titles, response: secondResponse } = await getAllBlogsAndTheirTitles();
+
+    expect(secondResponse.body).toHaveLength(initialBlogs.length);
+    expect(titles).toContain(blogToDelete.title);
+  });
+
   test("a blog can be deleted", async () => {
     const { response: firstResponse } = await getAllBlogsAndTheirTitles();
     const { body: blogs } = firstResponse;
     const blogToDelete = blogs[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api.delete(`/api/blogs/${blogToDelete.id}`).set("Authorization", TOKEN_EXAMPLE).expect(204);
 
     const { titles, response: secondResponse } = await getAllBlogsAndTheirTitles();
 
@@ -140,7 +171,7 @@ describe("DELETE /api/blogs/:id", () => {
   });
 
   test("if blog does not exist server will respond with status 404", async () => {
-    await api.delete("/api/blogs/6531349eae8527db4bbf7131").expect(404);
+    await api.delete("/api/blogs/6531349eae8527db4bbf7131").set("Authorization", TOKEN_EXAMPLE).expect(404);
 
     const { response } = await getAllBlogsAndTheirTitles();
 
@@ -148,7 +179,7 @@ describe("DELETE /api/blogs/:id", () => {
   });
 
   test("if an invalid id is provided server will respond with status 400", async () => {
-    await api.delete("/api/blogs/1234").expect(400);
+    await api.delete("/api/blogs/1234").set("Authorization", TOKEN_EXAMPLE).expect(400);
 
     const { response } = await getAllBlogsAndTheirTitles();
 
@@ -157,6 +188,18 @@ describe("DELETE /api/blogs/:id", () => {
 });
 
 describe("PUT /api/blogs/:id", () => {
+  test("if no token is provided by headers server will respond with status 401", async () => {
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+    const { body: blogs } = firstResponse;
+    const blogToUpdate = blogs[0];
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(updatedBlog).expect(401);
+
+    const { response: secondResponse } = await getAllBlogsAndTheirTitles();
+
+    expect(secondResponse.body).toEqual(firstResponse.body);
+  });
+
   test("a blog can be updated", async () => {
     const { response: firstResponse } = await getAllBlogsAndTheirTitles();
     const { body: blogs } = firstResponse;
@@ -165,8 +208,13 @@ describe("PUT /api/blogs/:id", () => {
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBlog)
+      .set("Authorization", TOKEN_EXAMPLE)
       .expect(200)
       .expect("Content-Type", /application\/json/);
+
+    const { titles } = await getAllBlogsAndTheirTitles();
+
+    expect(titles).not.toContain(blogToUpdate.title);
   });
 
   test("if no body is provided server will respond with status 400", async () => {
@@ -174,15 +222,35 @@ describe("PUT /api/blogs/:id", () => {
     const { body: blogs } = firstResponse;
     const blogToUpdate = blogs[0];
 
-    await api.put(`/api/blogs/${blogToUpdate.id}`).send({}).expect(400);
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({}).set("Authorization", TOKEN_EXAMPLE).expect(400);
+
+    const { response: secondResponse } = await getAllBlogsAndTheirTitles();
+
+    expect(secondResponse.body).toEqual(firstResponse.body);
   });
 
   test("if blog does not exist server will respond with status 404", async () => {
-    await api.put("/api/blogs/6531349eae8527db4bbf7131").send(updatedBlog).expect(404);
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+
+    await api
+      .put("/api/blogs/6531349eae8527db4bbf7131")
+      .send(updatedBlog)
+      .set("Authorization", TOKEN_EXAMPLE)
+      .expect(404);
+
+    const { response: secondResponse } = await getAllBlogsAndTheirTitles();
+
+    expect(secondResponse.body).toEqual(firstResponse.body);
   });
 
   test("if an invalid id is provided server will respond with status 400", async () => {
-    await api.put("/api/blogs/1234").send(updatedBlog).expect(400);
+    const { response: firstResponse } = await getAllBlogsAndTheirTitles();
+
+    await api.put("/api/blogs/1234").send(updatedBlog).set("Authorization", TOKEN_EXAMPLE).expect(400);
+
+    const { response: secondResponse } = await getAllBlogsAndTheirTitles();
+
+    expect(secondResponse.body).toEqual(firstResponse.body);
   });
 });
 
