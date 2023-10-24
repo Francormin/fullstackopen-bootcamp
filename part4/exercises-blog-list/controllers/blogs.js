@@ -83,6 +83,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response, next) => {
 blogsRouter.put("/:id", userExtractor, async (request, response, next) => {
   const { id } = request.params;
   const { title, url, likes } = request.body;
+  const { userId } = request;
 
   if (!title && !url && !likes)
     return response.status(400).send({
@@ -96,6 +97,12 @@ blogsRouter.put("/:id", userExtractor, async (request, response, next) => {
   };
 
   try {
+    const blog = await Blog.findById(id);
+
+    if (blog && blog.author.toString() !== userId.toString()) {
+      return response.status(401).end();
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, {
       new: true
     });
