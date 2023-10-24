@@ -1,5 +1,6 @@
 PUT http://localhost:3003/api/blogs/653540d41ee27b0b1bd83438
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NTM1NDA5ZTFlZTI3YjBiMWJkODM0MzEiLCJpYXQiOjE2OTgxMDA5NjcsImV4cCI6MTY5ODcwNTc2N30.E_y9GAQZ1ZoC3blpK5gVMIRwtXMqH8QyLcawnlv8I9Q
 
 {
   "title": "Testing with Mocha",
