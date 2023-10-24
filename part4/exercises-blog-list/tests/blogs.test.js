@@ -93,10 +93,15 @@ describe("POST /api/blogs", () => {
       likes: 5
     };
 
+    const userId = await getFirstUserId();
+
     await api
       .post(`/api/blogs`)
+      .set({
+        Authorization: TOKEN_EXAMPLE,
+        userId
+      })
       .send(newBlog)
-      .set("Authorization", TOKEN_EXAMPLE)
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
@@ -109,14 +114,18 @@ describe("POST /api/blogs", () => {
   test("if a new blog has not a property called likes it will be 0 by default", async () => {
     const newBlog = {
       title: "Understanding Express",
-      author: await getFirstUserId(),
       url: "https://understanding-express.com"
     };
+
+    const userId = await getFirstUserId();
 
     const postResponse = await api
       .post(`/api/blogs`)
       .send(newBlog)
-      .set("Authorization", TOKEN_EXAMPLE)
+      .set({
+        Authorization: TOKEN_EXAMPLE,
+        userId
+      })
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
