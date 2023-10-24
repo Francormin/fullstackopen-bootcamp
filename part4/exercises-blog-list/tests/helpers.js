@@ -42,6 +42,9 @@ const updatedBlog = {
   likes: 100
 };
 
+const TOKEN_EXAMPLE =
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NTM1NDA5ZTFlZTI3YjBiMWJkODM0MzEiLCJpYXQiOjE2OTgwOTQzNDl9.b_DsCtkgqO903LcniP6wGiOc9MJWIVQOgEZgi7ufMRY";
+
 const getAllBlogsAndTheirTitles = async () => {
   const response = await api.get("/api/blogs");
   return {
@@ -69,6 +72,7 @@ module.exports = {
   initialBlogs,
   initialUsers,
   updatedBlog,
+  TOKEN_EXAMPLE,
   getAllBlogsAndTheirTitles,
   getAllUsersAndTheirUsernames,
   getFirstUserId
