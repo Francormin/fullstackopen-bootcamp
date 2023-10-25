@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
-import Error from "./components/Error";
+import Message from "./components/Message";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -11,7 +11,7 @@ const App = () => {
   const [password, setPassword] = useState("");
 
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [message, setMessage] = useState({ content: null, error: false });
 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -33,9 +33,9 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setErrorMessage(exception.response.data.error);
+      setMessage({ content: exception.response.data.error, error: true });
       setTimeout(() => {
-        setErrorMessage(null);
+        setMessage({ content: null, error: false });
       }, 5000);
     }
   };
@@ -54,18 +54,18 @@ const App = () => {
         url
       });
 
-      setErrorMessage(`a new blog ${title} by ${user.name} added`);
+      setMessage({ content: `a new blog ${title} by ${user.name} added`, error: false });
       setTimeout(() => {
-        setErrorMessage(null);
+        setMessage({ content: null, error: false });
       }, 5000);
 
       setBlogs(blogs.concat(returnedBlog));
       setTitle("");
       setUrl("");
     } catch (exception) {
-      setErrorMessage(exception.response.data.error);
+      setMessage({ content: exception.response.data.error, error: true });
       setTimeout(() => {
-        setErrorMessage(null);
+        setMessage({ content: null, error: false });
       }, 5000);
     }
   };
@@ -89,7 +89,7 @@ const App = () => {
         <div>
           <h2>Log in to application</h2>
 
-          {errorMessage && <Error message={errorMessage} />}
+          {message.content && <Message message={message} />}
 
           <form onSubmit={handleLogin}>
             <div>
@@ -112,7 +112,7 @@ const App = () => {
               />
             </div>
 
-            <button type="submit" disabled={!username || !password || errorMessage}>
+            <button type="submit" disabled={!username || !password || message.content}>
               Login
             </button>
           </form>
@@ -121,7 +121,7 @@ const App = () => {
         <div>
           <h2>Blogs</h2>
 
-          {errorMessage && <Error message={errorMessage} />}
+          {message.content && <Message message={message} />}
 
           <span>
             {user.name} logged-in<button onClick={handleLogout}>Logout</button>
@@ -138,7 +138,7 @@ const App = () => {
               Url: <input type="text" value={url} name="Url" onChange={({ target }) => setUrl(target.value)} />
             </div>
 
-            <button type="submit" disabled={!title || !url || errorMessage}>
+            <button type="submit" disabled={!title || !url || message.content}>
               Create
             </button>
           </form>
