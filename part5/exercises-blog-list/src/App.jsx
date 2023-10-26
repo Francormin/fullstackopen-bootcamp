@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import Message from "./components/Message";
+import BlogForm from "./components/BlogForm";
+import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -11,10 +13,15 @@ const App = () => {
   const [password, setPassword] = useState("");
 
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState({ content: null, error: false });
+  const [message, setMessage] = useState({
+    content: null,
+    error: false
+  });
 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+
+  const blogFormRef = useRef();
 
   const handleLogin = async event => {
     event.preventDefault();
@@ -33,9 +40,16 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setMessage({ content: exception.response.data.error, error: true });
+      setMessage({
+        content: exception.response.data.error,
+        error: true
+      });
+
       setTimeout(() => {
-        setMessage({ content: null, error: false });
+        setMessage({
+          content: null,
+          error: false
+        });
       }, 5000);
     }
   };
@@ -47,6 +61,7 @@ const App = () => {
 
   const handleCreate = async event => {
     event.preventDefault();
+    blogFormRef.current.toggleVisibility();
 
     try {
       const returnedBlog = await blogService.create({
@@ -54,24 +69,42 @@ const App = () => {
         url
       });
 
-      setMessage({ content: `a new blog ${title} by ${user.name} added`, error: false });
+      setMessage({
+        content: `a new blog ${title} by ${user.name} added`,
+        error: false
+      });
+
       setTimeout(() => {
-        setMessage({ content: null, error: false });
+        setMessage({
+          content: null,
+          error: false
+        });
       }, 5000);
 
       setBlogs(blogs.concat(returnedBlog));
       setTitle("");
       setUrl("");
     } catch (exception) {
-      setMessage({ content: exception.response.data.error, error: true });
+      setMessage({
+        content: exception.response.data.error,
+        error: true
+      });
+
       setTimeout(() => {
-        setMessage({ content: null, error: false });
+        setMessage({
+          content: null,
+          error: false
+        });
       }, 5000);
     }
   };
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs));
+    const fetchBlogs = async () => {
+      const returnedBlogs = await blogService.getAll();
+      setBlogs(returnedBlogs);
+    };
+    fetchBlogs();
   }, []);
 
   useEffect(() => {
@@ -91,31 +124,14 @@ const App = () => {
 
           {message.content && <Message message={message} />}
 
-          <form onSubmit={handleLogin}>
-            <div>
-              Username:{" "}
-              <input
-                type="text"
-                value={username}
-                name="Username"
-                onChange={({ target }) => setUsername(target.value)}
-              />
-            </div>
-
-            <div>
-              Password:{" "}
-              <input
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-              />
-            </div>
-
-            <button type="submit" disabled={!username || !password || message.content}>
-              Login
-            </button>
-          </form>
+          <LoginForm
+            username={username}
+            handleUsernameChange={setUsername}
+            password={password}
+            handlePasswordChange={setPassword}
+            handleSubmit={handleLogin}
+            message={message}
+          />
         </div>
       ) : (
         <div>
@@ -123,28 +139,23 @@ const App = () => {
 
           {message.content && <Message message={message} />}
 
-          <span>
+          <p>
             {user.name} logged-in<button onClick={handleLogout}>Logout</button>
-          </span>
+          </p>
 
-          <h2>Create a new blog</h2>
+          <BlogForm
+            title={title}
+            handleTitleChange={setTitle}
+            url={url}
+            handleUrlChange={setUrl}
+            handleSubmit={handleCreate}
+            message={message}
+            ref={blogFormRef}
+          />
 
-          <form onSubmit={handleCreate}>
-            <div>
-              Title: <input type="text" value={title} name="Title" onChange={({ target }) => setTitle(target.value)} />
-            </div>
-
-            <div>
-              Url: <input type="text" value={url} name="Url" onChange={({ target }) => setUrl(target.value)} />
-            </div>
-
-            <button type="submit" disabled={!title || !url || message.content}>
-              Create
-            </button>
-          </form>
-
+          <br />
           {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} userName={user.name} />
           ))}
         </div>
       )}
