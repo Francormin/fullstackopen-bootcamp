@@ -104,11 +104,13 @@ const App = () => {
       const returnedBlogs = await blogService.getAll();
       setBlogs(returnedBlogs);
     };
+
     fetchBlogs();
   }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
