@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import blogService from "./services/blogs";
 import Blog from "./components/Blog";
 import Message from "./components/Message";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
-import blogService from "./services/blogs";
+import Logout from "./components/Logout";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,11 +17,6 @@ const App = () => {
   });
 
   const blogFormRef = useRef();
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogappUser");
-    setUser(null);
-  };
 
   const createBlog = newBlog => {
     blogFormRef.current.toggleVisibility();
@@ -57,7 +53,7 @@ const App = () => {
           {message.content && <Message message={message} />}
 
           <p>
-            {user.name} logged-in <button onClick={handleLogout}>Logout</button>
+            {user.name} logged-in <Logout handleUserChange={setUser} />
           </p>
 
           <BlogForm
