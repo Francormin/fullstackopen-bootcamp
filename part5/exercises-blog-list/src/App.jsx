@@ -4,105 +4,33 @@ import Message from "./components/Message";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
-import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   const [user, setUser] = useState(null);
+
   const [message, setMessage] = useState({
     content: null,
     error: false
   });
 
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
-
   const blogFormRef = useRef();
-
-  const handleLogin = async event => {
-    event.preventDefault();
-
-    try {
-      const user = await loginService.login({
-        username,
-        password
-      });
-
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-
-      setUser(user);
-      blogService.setToken(user.token);
-
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setMessage({
-        content: exception.response.data.error,
-        error: true
-      });
-
-      setTimeout(() => {
-        setMessage({
-          content: null,
-          error: false
-        });
-      }, 5000);
-    }
-  };
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
   };
 
-  const handleCreate = async event => {
-    event.preventDefault();
+  const createBlog = newBlog => {
     blogFormRef.current.toggleVisibility();
-
-    try {
-      const returnedBlog = await blogService.create({
-        title,
-        url
-      });
-
-      setMessage({
-        content: `a new blog ${title} by ${user.name} added`,
-        error: false
-      });
-
-      setTimeout(() => {
-        setMessage({
-          content: null,
-          error: false
-        });
-      }, 5000);
-
-      setBlogs(blogs.concat(returnedBlog));
-      setTitle("");
-      setUrl("");
-    } catch (exception) {
-      setMessage({
-        content: exception.response.data.error,
-        error: true
-      });
-
-      setTimeout(() => {
-        setMessage({
-          content: null,
-          error: false
-        });
-      }, 5000);
-    }
+    setBlogs(blogs.concat(newBlog));
   };
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const returnedBlogs = await blogService.getAll();
-      setBlogs(returnedBlogs);
+      const blogsInDatabase = await blogService.getAll();
+      setBlogs(blogsInDatabase);
     };
 
     fetchBlogs();
@@ -121,20 +49,7 @@ const App = () => {
   return (
     <div>
       {user === null ? (
-        <div>
-          <h2>Log in to application</h2>
-
-          {message.content && <Message message={message} />}
-
-          <LoginForm
-            username={username}
-            handleUsernameChange={setUsername}
-            password={password}
-            handlePasswordChange={setPassword}
-            handleSubmit={handleLogin}
-            message={message}
-          />
-        </div>
+        <LoginForm message={message} handleMessageChange={setMessage} handleUserChange={setUser} />
       ) : (
         <div>
           <h2>Blogs</h2>
@@ -146,12 +61,9 @@ const App = () => {
           </p>
 
           <BlogForm
-            title={title}
-            handleTitleChange={setTitle}
-            url={url}
-            handleUrlChange={setUrl}
-            handleSubmit={handleCreate}
+            createBlog={createBlog}
             message={message}
+            handleMessageChange={setMessage}
             reference={blogFormRef}
           />
 
