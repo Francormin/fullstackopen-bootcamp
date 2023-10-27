@@ -142,7 +142,7 @@ const App = () => {
           {message.content && <Message message={message} />}
 
           <p>
-            {user.name} logged-in<button onClick={handleLogout}>Logout</button>
+            {user.name} logged-in <button onClick={handleLogout}>Logout</button>
           </p>
 
           <BlogForm
@@ -152,7 +152,7 @@ const App = () => {
             handleUrlChange={setUrl}
             handleSubmit={handleCreate}
             message={message}
-            ref={blogFormRef}
+            reference={blogFormRef}
           />
 
           <br />
