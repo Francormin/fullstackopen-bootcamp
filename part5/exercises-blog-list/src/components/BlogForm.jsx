@@ -1,7 +1,7 @@
 import Togglable from "./Togglable";
 
-const BlogForm = ({ title, handleTitleChange, url, handleUrlChange, handleSubmit, message, ref }) => (
-  <Togglable buttonLabel="New blog" ref={ref}>
+const BlogForm = ({ title, handleTitleChange, url, handleUrlChange, handleSubmit, message, reference }) => (
+  <Togglable buttonLabel="New blog" ref={reference}>
     <div>
       <h2>Create a new blog</h2>
 
