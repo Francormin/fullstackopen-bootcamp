@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import blogService from "../services/blogs";
 import Togglable from "./Togglable";
 
-const BlogForm = ({ createBlog, message, handleMessageChange, reference }) => {
+const BlogForm = ({ createBlog, message, handleMessageChange }) => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+
+  const toggableRef = useRef();
 
   const handleTitleChange = event => {
     setTitle(event.target.value);
@@ -39,6 +41,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange, reference }) => {
 
       setTitle("");
       setUrl("");
+      toggableRef.current.toggleVisibility();
     } catch (exception) {
       handleMessageChange({
         content: exception.response.data.error,
@@ -55,7 +58,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange, reference }) => {
   };
 
   return (
-    <Togglable buttonLabel="New blog" ref={reference}>
+    <Togglable buttonLabel="New blog" ref={toggableRef}>
       <div>
         <h2>Create a new blog</h2>
 
