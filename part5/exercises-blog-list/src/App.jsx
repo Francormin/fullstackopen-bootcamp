@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import blogService from "./services/blogs";
 import Blog from "./components/Blog";
 import Message from "./components/Message";
@@ -16,10 +16,7 @@ const App = () => {
     error: false
   });
 
-  const blogFormRef = useRef();
-
   const createBlog = newBlog => {
-    blogFormRef.current.toggleVisibility();
     setBlogs(blogs.concat(newBlog));
   };
 
@@ -56,12 +53,7 @@ const App = () => {
             {user.name} logged-in <Logout handleUserChange={setUser} />
           </p>
 
-          <BlogForm
-            createBlog={createBlog}
-            message={message}
-            handleMessageChange={setMessage}
-            reference={blogFormRef}
-          />
+          <BlogForm createBlog={createBlog} message={message} handleMessageChange={setMessage} />
 
           <br />
           {blogs.map(blog => (
