@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 
-const Togglable = forwardRef(({ children, buttonLabel }, ref) => {
+const Togglable = forwardRef(({ children, buttonLabel, buttonLabel2 }, ref) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? "none" : "" };
@@ -24,7 +24,7 @@ const Togglable = forwardRef(({ children, buttonLabel }, ref) => {
 
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisibility}>Cancel</button>
+        <button onClick={toggleVisibility}>{buttonLabel2}</button>
       </div>
     </div>
   );
