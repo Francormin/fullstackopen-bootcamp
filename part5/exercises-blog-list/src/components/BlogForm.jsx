@@ -58,7 +58,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
   };
 
   return (
-    <Togglable buttonLabel="New blog" ref={toggableRef}>
+    <Togglable buttonLabel="New blog" buttonLabel2="Cancel" ref={toggableRef}>
       <div>
         <h2>Create a new blog</h2>
 
