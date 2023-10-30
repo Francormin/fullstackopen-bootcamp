@@ -28,7 +28,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
 
       createBlog(newBlog);
 
-      displayMessage(handleMessageChange, { title, authorName: newBlog.author.name }, false);
+      displayMessage(handleMessageChange, `A new blog ${title} by ${newBlog.author.name} added`, false);
 
       setTitle("");
       setUrl("");
