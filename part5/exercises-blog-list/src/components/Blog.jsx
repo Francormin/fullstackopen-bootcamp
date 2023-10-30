@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import blogService from "../services/blogs";
 import displayMessage from "../utils/displayMessage";
 import Togglable from "./Togglable";
@@ -53,6 +54,14 @@ const Blog = ({ blog, updateBlog, removeBlog, handleMessageChange, user }) => {
       </Togglable>
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+  handleMessageChange: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default Blog;
