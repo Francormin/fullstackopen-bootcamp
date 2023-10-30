@@ -2,6 +2,7 @@ import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import Message from "./Message";
+import displayMessage from "../utils/displayMessage";
 
 const LoginForm = ({ message, handleMessageChange, handleUserChange }) => {
   const [username, setUsername] = useState("");
@@ -32,17 +33,7 @@ const LoginForm = ({ message, handleMessageChange, handleUserChange }) => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      handleMessageChange({
-        content: exception.response.data.error,
-        error: true
-      });
-
-      setTimeout(() => {
-        handleMessageChange({
-          content: null,
-          error: false
-        });
-      }, 5000);
+      displayMessage(handleMessageChange, exception.response.data.error, true);
     }
   };
 
