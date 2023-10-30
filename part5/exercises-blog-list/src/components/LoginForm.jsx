@@ -1,8 +1,9 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
-import Message from "./Message";
 import displayMessage from "../utils/displayMessage";
+import Message from "./Message";
 
 const LoginForm = ({ message, handleMessageChange, handleUserChange }) => {
   const [username, setUsername] = useState("");
@@ -58,6 +59,12 @@ const LoginForm = ({ message, handleMessageChange, handleUserChange }) => {
       </form>
     </div>
   );
+};
+
+LoginForm.propTypes = {
+  message: PropTypes.object.isRequired,
+  handleMessageChange: PropTypes.func.isRequired,
+  handleUserChange: PropTypes.func.isRequired
 };
 
 export default LoginForm;
