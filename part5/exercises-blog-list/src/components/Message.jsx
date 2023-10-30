@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Message = ({ message }) => {
   const errorStyle = {
     color: "red",
@@ -24,6 +26,10 @@ const Message = ({ message }) => {
   ) : (
     <div style={infoStyle}>{message.content}</div>
   );
+};
+
+Message.propTypes = {
+  message: PropTypes.object.isRequired
 };
 
 export default Message;
