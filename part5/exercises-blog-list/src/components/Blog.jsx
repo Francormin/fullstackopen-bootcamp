@@ -1,6 +1,6 @@
 import Togglable from "./Togglable";
 
-const Blog = ({ blog, userName }) => {
+const Blog = ({ blog }) => {
   const blogStyle = {
     padding: 10,
     border: "1px solid",
@@ -15,7 +15,7 @@ const Blog = ({ blog, userName }) => {
         <p>
           Likes: {blog.likes} <button>Like</button>
         </p>
-        <p>Author: {blog.author.name || userName}</p>
+        <p>Author: {blog.author.name}</p>
       </Togglable>
     </div>
   );
