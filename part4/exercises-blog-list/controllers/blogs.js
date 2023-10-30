@@ -84,7 +84,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response, next) => {
 blogsRouter.put("/:id", userExtractor, async (request, response, next) => {
   const { id } = request.params;
   const { title, url, likes } = request.body;
-  const { userId } = request;
+  // const { userId } = request;
 
   if (!title && !url && !likes)
     return response.status(400).send({
@@ -98,17 +98,18 @@ blogsRouter.put("/:id", userExtractor, async (request, response, next) => {
   };
 
   try {
-    const blog = await Blog.findById(id);
+    // const blog = await Blog.findById(id);
 
-    if (blog && blog.author.toString() !== userId.toString()) {
-      return response.status(401).end();
-    }
+    // if (blog && blog.author.toString() !== userId.toString()) {
+    //   return response.status(401).end();
+    // }
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, {
       new: true
     });
 
-    return updatedBlog ? response.json(updatedBlog) : response.status(404).end();
+    const populatedResponse = await updatedBlog.populate("author");
+    return updatedBlog ? response.json(populatedResponse) : response.status(404).end();
   } catch (error) {
     next(error);
   }
