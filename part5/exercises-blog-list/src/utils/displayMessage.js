@@ -1,12 +1,12 @@
-const displayMessage = (handleMessageChange, payload, error) => {
+const displayMessage = (handleMessageChange, message, error) => {
   if (error) {
     handleMessageChange({
-      content: payload,
+      content: message,
       error
     });
   } else {
     handleMessageChange({
-      content: `A new blog ${payload.title} by ${payload.authorName} added`,
+      content: message,
       error
     });
   }
