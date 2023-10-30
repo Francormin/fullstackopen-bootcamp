@@ -1,6 +1,35 @@
+import blogService from "../services/blogs";
+import displayMessage from "../utils/displayMessage";
 import Togglable from "./Togglable";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog, removeBlog, handleMessageChange, user }) => {
+  const handleLike = async () => {
+    try {
+      const updatedBlog = await blogService.update(blog.id, {
+        ...blog,
+        likes: blog.likes + 1
+      });
+
+      updateBlog(updatedBlog);
+    } catch (exception) {
+      displayMessage(handleMessageChange, exception.response.data.error, true);
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author.name}?`)) {
+        await blogService.remove(blog.id);
+
+        removeBlog(blog.id);
+
+        displayMessage(handleMessageChange, "The blog has been removed successfully", false);
+      }
+    } catch (exception) {
+      displayMessage(handleMessageChange, exception.response.statusText, true);
+    }
+  };
+
   const blogStyle = {
     padding: 10,
     border: "1px solid",
@@ -13,9 +42,14 @@ const Blog = ({ blog }) => {
       <Togglable buttonLabel="View" buttonLabel2="Hide">
         <p>Url: {blog.url}</p>
         <p>
-          Likes: {blog.likes} <button>Like</button>
+          Likes: {blog.likes} <button onClick={handleLike}>Like</button>
         </p>
         <p>Author: {blog.author.name}</p>
+        {blog.author.name === user.name && (
+          <button onClick={handleRemove} style={{ backgroundColor: "#0D61E4" }}>
+            Remove
+          </button>
+        )}
       </Togglable>
     </div>
   );
