@@ -32,6 +32,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
 
       setTitle("");
       setUrl("");
+
       toggableRef.current.toggleVisibility();
     } catch (exception) {
       displayMessage(handleMessageChange, exception.response.data.error, true);

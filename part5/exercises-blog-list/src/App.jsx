@@ -5,6 +5,7 @@ import Message from "./components/Message";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Logout from "./components/Logout";
+import displayMessage from "./utils/displayMessage";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -22,8 +23,12 @@ const App = () => {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const blogsInDatabase = await blogService.getAll();
-      setBlogs(blogsInDatabase);
+      try {
+        const blogsInDatabase = await blogService.getAll();
+        setBlogs(blogsInDatabase);
+      } catch (exception) {
+        displayMessage(setMessage, exception.response.data.error, true);
+      }
     };
 
     fetchBlogs();
@@ -57,7 +62,7 @@ const App = () => {
 
           <br />
           {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} userName={user.name} />
+            <Blog key={blog.id} blog={blog} />
           ))}
         </div>
       )}
