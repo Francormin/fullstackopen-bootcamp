@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
+import PropTypes from "prop-types";
 import blogService from "../services/blogs";
-import Togglable from "./Togglable";
 import displayMessage from "../utils/displayMessage";
+import Togglable from "./Togglable";
 
 const BlogForm = ({ createBlog, message, handleMessageChange }) => {
   const [title, setTitle] = useState("");
@@ -60,6 +61,12 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
       </div>
     </Togglable>
   );
+};
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired,
+  handleMessageChange: PropTypes.func.isRequired
 };
 
 export default BlogForm;
