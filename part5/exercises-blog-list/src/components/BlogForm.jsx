@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import blogService from "../services/blogs";
 import Togglable from "./Togglable";
+import displayMessage from "../utils/displayMessage";
 
 const BlogForm = ({ createBlog, message, handleMessageChange }) => {
   const [title, setTitle] = useState("");
@@ -27,33 +28,13 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
 
       createBlog(newBlog);
 
-      handleMessageChange({
-        content: `a new blog ${title} by ${newBlog.author.name} added`,
-        error: false
-      });
-
-      setTimeout(() => {
-        handleMessageChange({
-          content: null,
-          error: false
-        });
-      }, 5000);
+      displayMessage(handleMessageChange, { title, authorName: newBlog.author.name }, false);
 
       setTitle("");
       setUrl("");
       toggableRef.current.toggleVisibility();
     } catch (exception) {
-      handleMessageChange({
-        content: exception.response.data.error,
-        error: true
-      });
-
-      setTimeout(() => {
-        handleMessageChange({
-          content: null,
-          error: false
-        });
-      }, 5000);
+      displayMessage(handleMessageChange, exception.response.data.error, true);
     }
   };
 
