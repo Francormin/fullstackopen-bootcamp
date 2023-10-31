@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import blogService from "./services/blogs";
+import displayMessage from "./utils/displayMessage";
 import Blog from "./components/Blog";
 import Message from "./components/Message";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Logout from "./components/Logout";
-import displayMessage from "./utils/displayMessage";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
