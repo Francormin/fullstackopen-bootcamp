@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import blogService from "../services/blogs";
 import displayMessage from "../utils/displayMessage";
@@ -39,14 +40,14 @@ const Blog = ({ blog, updateBlog, removeBlog, handleMessageChange, user }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title}
+      <div className="blog">{blog.title}</div>
       <Togglable buttonLabel="View" buttonLabel2="Hide">
         <p>Url: {blog.url}</p>
         <p>
           Likes: {blog.likes} <button onClick={handleLike}>Like</button>
         </p>
         <p>Author: {blog.author.name}</p>
-        {blog.author.name === user.name && (
+        {blog.author.name === user?.name && (
           <button onClick={handleRemove} style={{ backgroundColor: "#0D61E4" }}>
             Remove
           </button>
