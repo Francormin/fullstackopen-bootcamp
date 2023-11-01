@@ -46,11 +46,11 @@ const LoginForm = ({ message, handleMessageChange, handleUserChange }) => {
 
       <form onSubmit={handleSubmit}>
         <div>
-          Username: <input type="text" value={username} name="Username" onChange={handleUsernameChange} />
+          Username: <input type="text" value={username} name="username" onChange={handleUsernameChange} />
         </div>
 
         <div>
-          Password: <input type="password" value={password} name="Password" onChange={handlePasswordChange} />
+          Password: <input type="password" value={password} name="password" onChange={handlePasswordChange} />
         </div>
 
         <button type="submit" disabled={!username || !password || message.content}>
