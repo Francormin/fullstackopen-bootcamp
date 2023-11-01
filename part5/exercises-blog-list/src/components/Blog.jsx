@@ -20,12 +20,12 @@ const Blog = ({ blog, updateBlog, removeBlog, handleMessageChange, user }) => {
 
   const handleRemove = async () => {
     try {
-      if (window.confirm(`Remove blog ${blog.title} by ${blog.author.name}?`)) {
+      if (window.confirm(`Delete blog ${blog.title} by ${blog.author.name}?`)) {
         await blogService.remove(blog.id);
 
         removeBlog(blog.id);
 
-        displayMessage(handleMessageChange, "The blog has been removed successfully", false);
+        displayMessage(handleMessageChange, "The blog has been deleted successfully", false);
       }
     } catch (exception) {
       displayMessage(handleMessageChange, exception.response.statusText, true);
@@ -46,10 +46,10 @@ const Blog = ({ blog, updateBlog, removeBlog, handleMessageChange, user }) => {
         <p>
           Likes: {blog.likes} <button onClick={handleLike}>Like</button>
         </p>
-        <p>Author: {blog.author.name}</p>
-        {blog.author.name === user?.name && (
+        <p>Author: {blog.author?.name}</p>
+        {blog.author?.name === user?.name && (
           <button onClick={handleRemove} style={{ backgroundColor: "#0D61E4" }}>
-            Remove
+            Delete
           </button>
         )}
       </Togglable>
