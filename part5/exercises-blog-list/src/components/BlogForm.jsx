@@ -7,6 +7,7 @@ import Togglable from "./Togglable";
 const BlogForm = ({ createBlog, message, handleMessageChange }) => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [likes, setLikes] = useState(0);
 
   const toggableRef = useRef();
 
@@ -18,13 +19,18 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
     setUrl(event.target.value);
   };
 
+  const handleLikesChange = event => {
+    setLikes(event.target.value);
+  };
+
   const handleSubmit = async event => {
     event.preventDefault();
 
     try {
       const newBlog = await blogService.create({
         title,
-        url
+        url,
+        likes
       });
 
       createBlog(newBlog);
@@ -33,6 +39,7 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
 
       setTitle("");
       setUrl("");
+      setLikes(0);
 
       toggableRef.current.toggleVisibility();
     } catch (exception) {
@@ -47,11 +54,16 @@ const BlogForm = ({ createBlog, message, handleMessageChange }) => {
 
         <form onSubmit={handleSubmit}>
           <div>
-            Title: <input type="text" value={title} name="Title" onChange={handleTitleChange} />
+            Title: <input type="text" value={title} name="title" onChange={handleTitleChange} />
           </div>
 
           <div>
-            Url: <input type="text" value={url} name="Url" onChange={handleUrlChange} />
+            Url: <input type="text" value={url} name="url" onChange={handleUrlChange} />
+          </div>
+
+          <div>
+            Likes:
+            <input type="number" value={likes} min="0" name="likes" onChange={handleLikesChange} />
           </div>
 
           <button type="submit" disabled={!title || !url || message.content}>
