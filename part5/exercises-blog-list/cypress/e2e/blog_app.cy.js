@@ -86,5 +86,29 @@ describe("Blog app", function () {
       cy.contains("test title").should("not.exist");
       cy.contains("test url").should("not.exist");
     });
+
+    it("users cannot delete blogs that do not own", function () {
+      cy.contains("New blog").click();
+
+      cy.get("form").within(() => {
+        cy.get("input[name='title']").type("test title");
+        cy.get("input[name='url']").type("test url");
+        cy.get("button[type='submit']").click();
+      });
+
+      // Log in as a different user
+      cy.login({
+        username: "johnny67",
+        password: "awesomepass"
+      });
+
+      // That user will not see the Delete button on other people's blogs
+      cy.contains("View").click();
+      cy.contains("Delete").should("not.exist");
+
+      // Verify that the blog was not deleted
+      cy.contains("test title").should("exist");
+      cy.contains("test url").should("exist");
+    });
   });
 });
