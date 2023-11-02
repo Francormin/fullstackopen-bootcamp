@@ -74,5 +74,17 @@ describe("Blog app", function () {
       cy.get("button").contains("Like").click();
       cy.contains("Likes: 1");
     });
+
+    it("a blog can be deleted", function () {
+      cy.createBlogCypress({
+        title: "test title",
+        url: "test url"
+      });
+
+      cy.contains("Delete").click();
+      cy.on("window:alert", alert => alert.accept());
+      cy.contains("test title").should("not.exist");
+      cy.contains("test url").should("not.exist");
+    });
   });
 });
