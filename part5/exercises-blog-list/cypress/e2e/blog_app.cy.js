@@ -64,5 +64,15 @@ describe("Blog app", function () {
       cy.contains("test url");
       cy.contains("Author: Matti Luukkainen");
     });
+
+    it("a blog can be liked", function () {
+      cy.createBlogCypress({
+        title: "test title",
+        url: "test url"
+      });
+
+      cy.get("button").contains("Like").click();
+      cy.contains("Likes: 1");
+    });
   });
 });
