@@ -110,5 +110,31 @@ describe("Blog app", function () {
       cy.contains("test title").should("exist");
       cy.contains("test url").should("exist");
     });
+
+    it("blogs are ordered according to likes", function () {
+      // Create three blogs with different likes
+      cy.createBlog({
+        title: "Blog with 5 likes",
+        url: "http://example.com/blog1",
+        likes: 5
+      });
+
+      cy.createBlog({
+        title: "Blog with 3 likes",
+        url: "http://example.com/blog2",
+        likes: 3
+      });
+
+      cy.createBlog({
+        title: "Blog with 8 likes",
+        url: "http://example.com/blog3",
+        likes: 8
+      });
+
+      // Verify that the blogs are ordered correctly
+      cy.get(".blog").eq(0).contains("Blog with 8 likes");
+      cy.get(".blog").eq(1).contains("Blog with 5 likes");
+      cy.get(".blog").eq(2).contains("Blog with 3 likes");
+    });
   });
 });
