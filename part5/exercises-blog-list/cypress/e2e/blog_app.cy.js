@@ -1,5 +1,22 @@
 describe("Blog app", function () {
   beforeEach(function () {
+    cy.request("POST", "http://localhost:3003/api/testing/reset");
+
+    const firstUser = {
+      name: "Matti Luukkainen",
+      username: "mluukkai",
+      password: "salainen"
+    };
+
+    const secondUser = {
+      name: "John Doe",
+      username: "johnny67",
+      password: "awesomepass"
+    };
+
+    cy.request("POST", "http://localhost:3003/api/users", firstUser);
+    cy.request("POST", "http://localhost:3003/api/users", secondUser);
+
     cy.visit("http://localhost:5173");
   });
 
