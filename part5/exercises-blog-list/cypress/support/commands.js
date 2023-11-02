@@ -33,3 +33,15 @@ Cypress.Commands.add("login", ({ username, password }) => {
     cy.visit("http://localhost:5173");
   });
 });
+
+Cypress.Commands.add("createBlogCypress", ({ title, url }) => {
+  cy.contains("New blog").click();
+
+  cy.get("form").within(() => {
+    cy.get("input[name='title']").type(title);
+    cy.get("input[name='url']").type(url);
+    cy.get("button[type='submit']").click();
+  });
+
+  cy.contains("View").click();
+});
