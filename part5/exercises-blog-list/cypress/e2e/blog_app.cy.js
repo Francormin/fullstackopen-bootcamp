@@ -28,4 +28,24 @@ describe("Blog app", function () {
         .and("have.css", "border-style", "solid");
     });
   });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.login({
+        username: "mluukkai",
+        password: "salainen"
+      });
+    });
+
+    it("a blog can be created", function () {
+      cy.createBlogCypress({
+        title: "test title",
+        url: "test url"
+      });
+
+      cy.contains("test title");
+      cy.contains("test url");
+      cy.contains("Author: Matti Luukkainen");
+    });
+  });
 });
