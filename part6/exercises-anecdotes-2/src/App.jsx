@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
-import { getAnecdotes, updateAnecdote } from "./../requests";
+
+import { getAnecdotes, updateAnecdote } from "../requests";
 import { useNotificationDispatch } from "../NotificationContext";
 
 const App = () => {
