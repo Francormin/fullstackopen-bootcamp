@@ -136,10 +136,12 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+
       <Menu />
       <AnecdoteList anecdotes={anecdotes} />
-      <About />
       <CreateNew addNew={addNew} />
+      <About />
+
       <Footer />
     </div>
   );
