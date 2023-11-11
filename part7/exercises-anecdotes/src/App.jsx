@@ -22,6 +22,14 @@ const Menu = () => {
   );
 };
 
+const Notification = ({ notification }) => {
+  return notification ? (
+    <div>
+      <p>{notification}</p>
+    </div>
+  ) : null;
+};
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -141,11 +149,15 @@ const App = () => {
     }
   ]);
 
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState(null);
 
   const addNew = anecdote => {
     anecdote.id = Math.round(Math.random() * 10000);
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(`a new anecdote ${anecdote.content} created!`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 10000);
   };
 
   const anecdoteById = id => anecdotes.find(a => a.id === id);
@@ -167,6 +179,7 @@ const App = () => {
 
       <Router>
         <Menu />
+        <Notification notification={notification} />
 
         <Routes>
           <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />} />
