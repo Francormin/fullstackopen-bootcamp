@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
+import { useField } from "./hooks";
 
 const Menu = () => {
   const padding = {
@@ -47,7 +48,7 @@ const Anecdote = ({ anecdotes }) => {
   const id = useParams().id;
   const anecdote = anecdotes.find(n => n.id === Number(id));
 
-  return (
+  return anecdote ? (
     <div>
       <h2>{anecdote.content}</h2>
       <div>has {anecdote.votes} votes</div>
@@ -55,13 +56,13 @@ const Anecdote = ({ anecdotes }) => {
         for more info see <a href={anecdote.info}>{anecdote.info}</a>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 const CreateNew = props => {
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [info, setInfo] = useState("");
+  const content = useField("text");
+  const author = useField("text");
+  const info = useField("text");
 
   const navigate = useNavigate();
 
@@ -69,13 +70,19 @@ const CreateNew = props => {
     e.preventDefault();
 
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     });
 
     navigate("/");
+  };
+
+  const handleReset = () => {
+    content.onReset();
+    author.onReset();
+    info.onReset();
   };
 
   return (
@@ -85,20 +92,23 @@ const CreateNew = props => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name="content" value={content} onChange={e => setContent(e.target.value)} />
+          <input name="content" type={content.type} value={content.value} onChange={content.onChange} />
         </div>
 
         <div>
           author
-          <input name="author" value={author} onChange={e => setAuthor(e.target.value)} />
+          <input name="author" type={author.type} value={author.value} onChange={author.onChange} />
         </div>
 
         <div>
           url for more info
-          <input name="info" value={info} onChange={e => setInfo(e.target.value)} />
+          <input name="info" type={info.type} value={info.value} onChange={info.onChange} />
         </div>
 
-        <button>create</button>
+        <button type="submit">create</button>
+        <button type="button" onClick={handleReset}>
+          reset
+        </button>
       </form>
     </div>
   );
