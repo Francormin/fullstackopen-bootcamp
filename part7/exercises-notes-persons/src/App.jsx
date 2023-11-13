@@ -1,57 +1,6 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
-const useField = type => {
-  const [value, setValue] = useState("");
-
-  const onChange = event => {
-    setValue(event.target.value);
-  };
-
-  const onReset = () => {
-    setValue("");
-  };
-
-  return {
-    type,
-    value,
-    onChange,
-    onReset
-  };
-};
-
-const useResource = baseUrl => {
-  const [resources, setResources] = useState([]);
-
-  const getAll = () => {
-    axios
-      .get(baseUrl)
-      .then(response => {
-        setResources(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  const create = resource => {
-    axios
-      .post(baseUrl, resource)
-      .then(() => {
-        getAll();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  const service = {
-    getAll,
-    create
-  };
-
-  return [resources, service];
-};
+import { useEffect } from "react";
+import { useField } from "./hooks/useField";
+import { useResource } from "./hooks/useResource";
 
 const App = () => {
   const content = useField("text");
