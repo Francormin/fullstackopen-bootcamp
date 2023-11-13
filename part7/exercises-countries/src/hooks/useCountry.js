@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { axios } from "axios";
+import axios from "axios";
 
 export const useCountry = name => {
   const [country, setCountry] = useState(null);
