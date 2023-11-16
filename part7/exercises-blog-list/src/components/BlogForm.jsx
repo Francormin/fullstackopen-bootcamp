@@ -1,18 +1,17 @@
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 
+import { createBlog } from "./../redux/reducers/blogReducer";
 import { setNotification } from "../redux/reducers/notificationReducer";
-import blogService from "../services/blogs";
-
 import Togglable from "./Togglable";
 
-const BlogForm = ({ createBlog, notificationToShow }) => {
+const BlogForm = ({ notificationToShow }) => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [likes, setLikes] = useState(0);
-  const dispatch = useDispatch();
-
   const toggableRef = useRef();
+
+  const dispatch = useDispatch();
 
   const handleTitleChange = event => {
     setTitle(event.target.value);
@@ -29,27 +28,21 @@ const BlogForm = ({ createBlog, notificationToShow }) => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    try {
-      const newBlog = await blogService.create({
+    dispatch(
+      createBlog({
         title,
         url,
         likes
-      });
+      })
+    );
 
-      createBlog(newBlog);
+    dispatch(setNotification(`A new blog '${title}' added`, false, 5));
 
-      dispatch(setNotification(`A new blog ${title} by ${newBlog.author.name} added`, false, 5));
+    setTitle("");
+    setUrl("");
+    setLikes(0);
 
-      setTitle("");
-      setUrl("");
-      setLikes(0);
-
-      toggableRef.current.toggleVisibility();
-    } catch (exception) {
-      exception.response?.data.error
-        ? dispatch(setNotification(exception.response.data.error, true, 5))
-        : dispatch(setNotification(exception.message, true, 5));
-    }
+    toggableRef.current.toggleVisibility();
   };
 
   return (
