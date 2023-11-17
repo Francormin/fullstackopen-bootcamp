@@ -2,14 +2,27 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3003/api/blogs";
 
-let token = null;
+const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+let { token } = !!loggedUserJSON && JSON.parse(loggedUserJSON);
 let config = {};
 
-export const setToken = newToken => {
-  token = `bearer ${newToken}`;
+if (token) {
   config = {
-    headers: { Authorization: token }
+    headers: { Authorization: `bearer ${token}` }
   };
+}
+
+export const setToken = user => {
+  token = user.token;
+  if (token) {
+    config = {
+      headers: { Authorization: `bearer ${token}` }
+    };
+    window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
+  } else {
+    config = {};
+    window.localStorage.removeItem("loggedBlogappUser");
+  }
 };
 
 export const getBlogs = () => axios.get(BASE_URL).then(res => res.data);
