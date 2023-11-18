@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3003/api/blogs";
 
-const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+export const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
 let { token } = !!loggedUserJSON && JSON.parse(loggedUserJSON);
 let config = {};
 
