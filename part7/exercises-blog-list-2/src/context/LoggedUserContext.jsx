@@ -29,4 +29,8 @@ export const useLoggedUserDispatch = () => {
   return loggedUserAndDispatch[1];
 };
 
+export const setLoggedUser = (dispatch, user) => {
+  dispatch({ type: "SET_LOGGED_USER", payload: user });
+};
+
 export default LoggedUserContext;
