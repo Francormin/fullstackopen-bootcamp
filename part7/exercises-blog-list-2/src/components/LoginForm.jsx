@@ -5,7 +5,7 @@ import { login } from "../services/login";
 import { setToken } from "../services/blogs";
 
 import { setNotification, useNotificationDispatch, useNotificationValue } from "../context/NotificationContext";
-import { useLoggedUserDispatch } from "../context/LoggedUserContext";
+import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 
 import Notification from "./Notification";
 
@@ -36,20 +36,16 @@ const LoginForm = () => {
         password
       },
       {
-        onSuccess: user => {
-          dispatchLogin({
-            type: "SET_LOGGED_USER",
-            payload: user
-          });
-
-          setToken(user);
-
-          setUsername("");
-          setPassword("");
-        },
-        onError: error => {
-          setNotification(dispatchNotification, error.response.data.error, true);
-          setPassword("");
+        onSuccess: responseObj => {
+          if (responseObj.response?.status === 401) {
+            setNotification(dispatchNotification, responseObj.response.data.error, true);
+            setPassword("");
+          } else {
+            setLoggedUser(dispatchLogin, responseObj);
+            setToken(responseObj);
+            setUsername("");
+            setPassword("");
+          }
         }
       }
     );
