@@ -38,7 +38,6 @@ loginRouter.post("/", async (request, response, next) => {
       name: user.name
     });
   } catch (error) {
-    console.log("error:", error);
     next(error);
   }
 });
