@@ -16,6 +16,22 @@ usersRouter.get("/", async (request, response, next) => {
   }
 });
 
+usersRouter.get("/:id", async (request, response, next) => {
+  const { id } = request.params;
+
+  try {
+    const user = await User.findById(id).populate("blogs", {
+      title: 1,
+      url: 1,
+      likes: 1
+    });
+
+    return user ? response.json(user) : response.status(404).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
 usersRouter.post("/", async (request, response, next) => {
   const { username, name, password } = request.body;
 
