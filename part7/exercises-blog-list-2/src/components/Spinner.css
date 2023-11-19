@@ -1,0 +1,18 @@
+.spinner {
+  animation: spin infinite 2.5s linear;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  height: 120px;
+  width: 120px;
+  margin-top: 50px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
