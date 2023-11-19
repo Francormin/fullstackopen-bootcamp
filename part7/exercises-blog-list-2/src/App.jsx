@@ -10,6 +10,7 @@ import Blogs from "./components/Blogs";
 import User from "./components/User";
 import ErrorPage from "./components/ErrorPage";
 import Home from "./components/Home";
+import Logout from "./components/Logout";
 
 const App = () => {
   const loggedUser = useLoggedUserValue();
@@ -32,7 +33,7 @@ const App = () => {
         <LoginForm />
       ) : (
         <BrowserRouter>
-          <header>
+          <header style={{ backgroundColor: "lightgrey", padding: 10 }}>
             <Link to="/" style={inlineStyles}>
               Home
             </Link>
@@ -42,10 +43,13 @@ const App = () => {
             <Link to="/blogs" style={inlineStyles}>
               Blogs
             </Link>
+            <span style={inlineStyles}>
+              {loggedUser.name} logged-in <Logout />
+            </span>
           </header>
 
           <Routes>
-            <Route path="/" element={<Home loggedUser={loggedUser} />}></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/users" element={<Users />}></Route>
             <Route path="/users/:id" element={<User />}></Route>
             <Route path="/blogs" element={<Blogs />}></Route>
