@@ -10,7 +10,8 @@ const Notification = () => {
     borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20
+    marginBottom: 20,
+    marginTop: 20
   };
 
   const infoStyle = {
@@ -20,7 +21,8 @@ const Notification = () => {
     borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20
+    marginBottom: 20,
+    marginTop: 20
   };
 
   return (
