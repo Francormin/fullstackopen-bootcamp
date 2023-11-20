@@ -40,8 +40,6 @@ export const createBlog = newBlog => axios.post(BASE_URL, newBlog, config).then(
 export const commentBlog = ({ id, comment }) =>
   axios.post(`${BASE_URL}/${id}/comments`, { comment }, config).then(res => res.data);
 
-// export const likeBlog = id => axios.put(`${BASE_URL}/${id}/like`, {}, config).then(res => res.data);
-
 export const likeBlog = updatedBlog =>
   axios.put(`${BASE_URL}/${updatedBlog.id}`, updatedBlog, config).then(res => res.data);
 
