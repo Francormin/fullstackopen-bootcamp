@@ -27,9 +27,22 @@ export const setToken = user => {
 
 export const getBlogs = () => axios.get(BASE_URL).then(res => res.data);
 
+export const getBlog = id =>
+  axios
+    .get(`${BASE_URL}/${id}`)
+    .then(res => res.data)
+    .catch(error =>
+      error.response.status === 404 || error.response.status === 400 ? { message: "blog not found" } : null
+    );
+
 export const createBlog = newBlog => axios.post(BASE_URL, newBlog, config).then(res => res.data);
 
-export const updateBlog = updatedBlog =>
+export const commentBlog = ({ id, comment }) =>
+  axios.post(`${BASE_URL}/${id}/comments`, { comment }, config).then(res => res.data);
+
+// export const likeBlog = id => axios.put(`${BASE_URL}/${id}/like`, {}, config).then(res => res.data);
+
+export const likeBlog = updatedBlog =>
   axios.put(`${BASE_URL}/${updatedBlog.id}`, updatedBlog, config).then(res => res.data);
 
 export const removeBlog = id => axios.delete(`${BASE_URL}/${id}`, config);
