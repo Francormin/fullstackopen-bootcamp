@@ -8,9 +8,11 @@ import LoginForm from "./components/LoginForm";
 import Users from "./components/Users";
 import Blogs from "./components/Blogs";
 import User from "./components/User";
+import Blog from "./components/Blog";
 import ErrorPage from "./components/ErrorPage";
 import Home from "./components/Home";
 import Logout from "./components/Logout";
+import Notification from "./components/Notification";
 
 const App = () => {
   const loggedUser = useLoggedUserValue();
@@ -48,11 +50,14 @@ const App = () => {
             </span>
           </header>
 
+          <Notification />
+
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/users" element={<Users />}></Route>
             <Route path="/users/:id" element={<User />}></Route>
             <Route path="/blogs" element={<Blogs />}></Route>
+            <Route path="/blogs/:id" element={<Blog />}></Route>
             <Route path="*" element={<ErrorPage />}></Route>
           </Routes>
         </BrowserRouter>
