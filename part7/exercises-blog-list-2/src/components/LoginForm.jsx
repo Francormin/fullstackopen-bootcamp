@@ -30,6 +30,8 @@ const LoginForm = () => {
   const handleSubmit = async event => {
     event.preventDefault();
 
+    if (!username.length || !password.length) return;
+
     loginMutation.mutate(
       {
         username,
@@ -59,16 +61,14 @@ const LoginForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div>
-          Username: <input type="text" value={username} name="username" onChange={handleUsernameChange} />
+          Username: <input type="text" value={username} name="username" onChange={handleUsernameChange} required />
         </div>
 
         <div>
-          Password: <input type="password" value={password} name="password" onChange={handlePasswordChange} />
+          Password: <input type="password" value={password} name="password" onChange={handlePasswordChange} required />
         </div>
 
-        <button type="submit" disabled={!username || !password || notification.content}>
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );
