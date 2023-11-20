@@ -52,12 +52,33 @@ blogsRouter.post("/", userExtractor, async (request, response, next) => {
     });
 
     const savedBlog = await blog.save();
-
     user.blogs = user.blogs.concat(savedBlog._id);
     await user.save();
 
     const populatedResponse = await savedBlog.populate("author");
     response.status(201).json(populatedResponse);
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogsRouter.post("/:id/comments", userExtractor, async (request, response, next) => {
+  const { id } = request.params;
+  const { comment } = request.body;
+
+  if (!comment)
+    return response.status(400).send({
+      error: "comment field is required"
+    });
+
+  try {
+    const blog = await Blog.findById(id);
+
+    if (!blog) return response.status(404).end();
+
+    blog.comments = blog.comments.concat(comment);
+    const savedBlog = await blog.save();
+    response.status(201).json(savedBlog);
   } catch (error) {
     next(error);
   }
@@ -70,9 +91,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response, next) => {
   try {
     const blog = await Blog.findById(id);
 
-    if (blog && blog.author.toString() !== userId.toString()) {
-      return response.status(401).end();
-    }
+    if (blog && blog.author.toString() !== userId.toString()) return response.status(401).end();
 
     const deletedBlog = await Blog.findByIdAndDelete(id);
     return deletedBlog ? response.status(204).end() : response.status(404).end();
