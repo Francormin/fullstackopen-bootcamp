@@ -10,7 +10,7 @@ const User = () => {
   const { id } = useParams();
   const isLoading = useSpinner();
 
-  let { data: user } = useQuery("user", () => getUser(id), {
+  const { data: user } = useQuery("user", () => getUser(id), {
     refetchOnWindowFocus: false,
     retry: 1
   });
