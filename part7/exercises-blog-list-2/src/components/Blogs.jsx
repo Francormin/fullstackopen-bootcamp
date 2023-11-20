@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 import { useSpinner } from "../hooks/useSpinner";
 import { getBlogs } from "../services/blogs";
 
-import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Spinner from "./Spinner";
 import "./Blogs.css";
@@ -37,8 +37,10 @@ const Blogs = () => {
           <BlogForm />
 
           <br />
-          {sortedBlogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+          {sortedBlogs?.map(blog => (
+            <p key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </p>
           ))}
         </div>
       )}
