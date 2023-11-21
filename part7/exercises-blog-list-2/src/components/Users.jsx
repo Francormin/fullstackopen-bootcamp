@@ -15,7 +15,15 @@ const Users = () => {
   });
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "90vh"
+      }}
+    >
       {isLoading ? (
         <Spinner className="spinner" />
       ) : status === "error" ? (
