@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import { login } from "../services/login";
 import { setToken } from "../services/blogs";
@@ -8,6 +9,7 @@ import { setNotification, useNotificationDispatch, useNotificationValue } from "
 import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 
 import Notification from "./Notification";
+import "./LoginForm.css";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -18,6 +20,7 @@ const LoginForm = () => {
   const dispatchLogin = useLoggedUserDispatch();
 
   const loginMutation = useMutation(login);
+  const navigate = useNavigate();
 
   const handleUsernameChange = event => {
     setUsername(event.target.value);
@@ -47,6 +50,7 @@ const LoginForm = () => {
             setToken(responseObj);
             setUsername("");
             setPassword("");
+            navigate("/");
           }
         }
       }
@@ -54,8 +58,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
-      <h2>Log in to application</h2>
+    <div className="loginFormContainer">
+      <h2 className="title">Log in to application</h2>
 
       {notification.content && <Notification />}
 
@@ -68,7 +72,9 @@ const LoginForm = () => {
           Password: <input type="password" value={password} name="password" onChange={handlePasswordChange} required />
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" className="loginButton">
+          Login
+        </button>
       </form>
     </div>
   );
