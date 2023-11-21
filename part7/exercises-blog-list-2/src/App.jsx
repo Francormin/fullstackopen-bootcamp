@@ -13,6 +13,7 @@ import ErrorPage from "./components/ErrorPage";
 import Home from "./components/Home";
 import Logout from "./components/Logout";
 import Notification from "./components/Notification";
+import "./App.css";
 
 const App = () => {
   const loggedUser = useLoggedUserValue();
@@ -30,12 +31,12 @@ const App = () => {
   };
 
   return (
-    <div>
+    <BrowserRouter>
       {!Object.keys(loggedUser).length ? (
         <LoginForm />
       ) : (
-        <BrowserRouter>
-          <header style={{ backgroundColor: "lightgrey", padding: 10 }}>
+        <div>
+          <header className="header">
             <Link to="/" style={inlineStyles}>
               Home
             </Link>
@@ -54,15 +55,16 @@ const App = () => {
 
           <Routes>
             <Route path="/" element={<Home />}></Route>
+            <Route path="/login" element={<LoginForm />}></Route>
             <Route path="/users" element={<Users />}></Route>
             <Route path="/users/:id" element={<User />}></Route>
             <Route path="/blogs" element={<Blogs />}></Route>
             <Route path="/blogs/:id" element={<Blog />}></Route>
             <Route path="*" element={<ErrorPage />}></Route>
           </Routes>
-        </BrowserRouter>
+        </div>
       )}
-    </div>
+    </BrowserRouter>
   );
 };
 
