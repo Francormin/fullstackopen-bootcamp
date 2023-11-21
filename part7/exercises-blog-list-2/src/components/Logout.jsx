@@ -1,5 +1,6 @@
 import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 import { setToken } from "../services/blogs";
+import "./Logout.css";
 
 const Logout = () => {
   const dispatchLogout = useLoggedUserDispatch();
@@ -9,7 +10,17 @@ const Logout = () => {
     setToken({});
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <button
+      onClick={handleLogout}
+      style={{
+        padding: 10
+      }}
+      className="logoutButton"
+    >
+      Logout
+    </button>
+  );
 };
 
 export default Logout;
