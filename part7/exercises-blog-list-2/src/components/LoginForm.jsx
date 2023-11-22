@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { Button, FloatingLabel, Form } from "react-bootstrap";
 
 import { login } from "../services/login";
 import { setToken } from "../services/blogs";
@@ -63,19 +64,35 @@ const LoginForm = () => {
 
       {notification.content && <Notification />}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          Username: <input type="text" value={username} name="username" onChange={handleUsernameChange} required />
-        </div>
+      <Form onSubmit={handleSubmit} className="loginForm">
+        <FloatingLabel label="Username">
+          <Form.Control
+            type="text"
+            value={username}
+            name="username"
+            onChange={handleUsernameChange}
+            className="mb-3"
+            placeholder="Username"
+            required
+          />
+        </FloatingLabel>
 
-        <div>
-          Password: <input type="password" value={password} name="password" onChange={handlePasswordChange} required />
-        </div>
+        <FloatingLabel label="Password">
+          <Form.Control
+            type="password"
+            value={password}
+            name="password"
+            onChange={handlePasswordChange}
+            className="mb-4"
+            placeholder="Password"
+            required
+          />
+        </FloatingLabel>
 
-        <button type="submit" className="loginButton">
+        <Button type="submit" variant="outline-light" className="w-100">
           Login
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };
