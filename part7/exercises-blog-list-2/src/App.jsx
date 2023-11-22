@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { Nav, Navbar } from "react-bootstrap";
 
 import { setLoggedUser, useLoggedUserDispatch, useLoggedUserValue } from "./context/LoggedUserContext";
 import { loggedUserJSON } from "./services/blogs";
@@ -26,30 +27,31 @@ const App = () => {
     }
   }, [dispatchLogin]);
 
-  const inlineStyles = {
-    padding: 20
-  };
-
   return (
     <BrowserRouter>
       {!Object.keys(loggedUser).length ? (
         <LoginForm />
       ) : (
         <div>
-          <header className="header">
-            <Link to="/" style={inlineStyles}>
-              Home
-            </Link>
-            <Link to="/users" style={inlineStyles}>
-              Users
-            </Link>
-            <Link to="/blogs" style={inlineStyles}>
-              Blogs
-            </Link>
-            <span style={inlineStyles}>
-              {loggedUser.name} logged-in <Logout />
-            </span>
-          </header>
+          <Navbar collapseOnSelect expand="sm">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse>
+              <Nav>
+                <Nav.Link>
+                  <Link to="/">Home</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/users">Users</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/blogs">Blogs</Link>
+                </Nav.Link>
+                <span>
+                  {loggedUser.name} logged-in <Logout />
+                </span>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
 
           <Notification />
 
