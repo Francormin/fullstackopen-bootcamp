@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import Table from "react-bootstrap/Table";
 
 import { useSpinner } from "../hooks/useSpinner";
 import { getBlogs } from "../services/blogs";
@@ -45,11 +46,17 @@ const Blogs = () => {
           <BlogForm />
 
           <br />
-          {sortedBlogs?.map(blog => (
-            <p key={blog.id}>
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            </p>
-          ))}
+          <Table striped>
+            <tbody>
+              {sortedBlogs?.map(blog => (
+                <tr key={blog.id}>
+                  <td>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </div>
       )}
     </div>
