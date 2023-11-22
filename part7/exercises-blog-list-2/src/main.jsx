@@ -5,6 +5,7 @@ import { NotificationContextProvider } from "./context/NotificationContext";
 import { LoggedUserContextProvider } from "./context/LoggedUserContext";
 
 import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const queryClient = new QueryClient();
 
