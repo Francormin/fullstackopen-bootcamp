@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import Button from "react-bootstrap/Button";
 
 import { createBlog } from "../services/blogs";
-import { setNotification, useNotificationDispatch, useNotificationValue } from "../context/NotificationContext";
+import { setNotification, useNotificationDispatch } from "../context/NotificationContext";
 
 import Togglable from "./Togglable";
 
@@ -12,7 +13,6 @@ const BlogForm = () => {
   const [likes, setLikes] = useState(0);
   const toggableRef = useRef();
 
-  const notification = useNotificationValue();
   const dispatchNotification = useNotificationDispatch();
 
   const queryClient = useQueryClient();
@@ -64,11 +64,12 @@ const BlogForm = () => {
 
         <form onSubmit={handleSubmit}>
           <div>
-            Title: <input type="text" value={title} name="title" onChange={handleTitleChange} autoComplete="off" />
+            Title:{" "}
+            <input type="text" value={title} name="title" onChange={handleTitleChange} autoComplete="off" required />
           </div>
 
           <div>
-            Url: <input type="text" value={url} name="url" onChange={handleUrlChange} autoComplete="off" />
+            Url: <input type="text" value={url} name="url" onChange={handleUrlChange} autoComplete="off" required />
           </div>
 
           <div>
@@ -76,9 +77,9 @@ const BlogForm = () => {
             <input type="number" value={likes} min="0" name="likes" onChange={handleLikesChange} />
           </div>
 
-          <button type="submit" disabled={!title || !url || notification.content}>
+          <Button type="submit" variant="success" className="m-3">
             Create
-          </button>
+          </Button>
         </form>
       </div>
     </Togglable>
