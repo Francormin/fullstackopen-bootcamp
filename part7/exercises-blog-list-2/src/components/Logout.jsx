@@ -1,3 +1,5 @@
+import Button from "react-bootstrap/Button";
+
 import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 import { setToken } from "../services/blogs";
 import "./Logout.css";
@@ -11,15 +13,9 @@ const Logout = () => {
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      style={{
-        padding: 10
-      }}
-      className="logoutButton"
-    >
+    <Button variant="danger" size="sm" onClick={handleLogout}>
       Logout
-    </button>
+    </Button>
   );
 };
 
