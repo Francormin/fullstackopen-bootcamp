@@ -32,23 +32,29 @@ const App = () => {
       {!Object.keys(loggedUser).length ? (
         <LoginForm />
       ) : (
-        <div>
-          <Navbar collapseOnSelect expand="sm">
+        <div style={{ height: "inherit" }}>
+          <Navbar collapseOnSelect expand="sm" bg="light" data-bs-theme="light">
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse>
               <Nav>
                 <Nav.Link>
-                  <Link to="/">Home</Link>
+                  <Link to="/" className="navLink">
+                    Home
+                  </Link>
                 </Nav.Link>
                 <Nav.Link>
-                  <Link to="/users">Users</Link>
+                  <Link to="/users" className="navLink">
+                    Users
+                  </Link>
                 </Nav.Link>
                 <Nav.Link>
-                  <Link to="/blogs">Blogs</Link>
+                  <Link to="/blogs" className="navLink">
+                    Blogs
+                  </Link>
                 </Nav.Link>
-                <span>
+                <Navbar.Text>
                   {loggedUser.name} logged-in <Logout />
-                </span>
+                </Navbar.Text>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
