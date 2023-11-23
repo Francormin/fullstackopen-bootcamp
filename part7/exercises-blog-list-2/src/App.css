@@ -1,6 +1,12 @@
-.header {
-  background-color: lightgrey;
-  padding: 1rem;
+.navbarContainer {
   text-align: center;
-  font-size: 18px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: black;
+}
+
+.navLink:hover {
+  text-decoration: underline;
 }
