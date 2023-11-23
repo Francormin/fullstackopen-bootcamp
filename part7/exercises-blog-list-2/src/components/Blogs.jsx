@@ -28,21 +28,13 @@ const Blogs = () => {
   });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "90vh"
-      }}
-    >
+    <div className="blogsOuterContainer">
       {isLoading ? (
         <Spinner className="spinner" />
       ) : status === "error" ? (
         <div>blog service not available due to problems in server</div>
       ) : (
-        <div className="blogsComponent">
+        <div className="blogsInnerContainer">
           <BlogForm />
 
           <br />
