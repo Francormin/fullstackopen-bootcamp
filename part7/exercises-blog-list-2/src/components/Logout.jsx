@@ -2,7 +2,6 @@ import Button from "react-bootstrap/Button";
 
 import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 import { setToken } from "../services/blogs";
-import "./Logout.css";
 
 const Logout = () => {
   const dispatchLogout = useLoggedUserDispatch();
