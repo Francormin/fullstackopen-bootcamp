@@ -4,8 +4,8 @@ import Button from "react-bootstrap/Button";
 const Togglable = forwardRef(({ children, buttonLabel, buttonLabel2 }, ref) => {
   const [visible, setVisible] = useState(false);
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const hideWhenVisible = { display: visible ? "none" : "", marginTop: "-80px", marginBottom: "-10px" };
+  const showWhenVisible = { display: visible ? "" : "none", marginTop: "100px", marginBottom: "10px" };
 
   const toggleVisibility = () => {
     setVisible(!visible);
