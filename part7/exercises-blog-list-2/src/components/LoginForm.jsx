@@ -13,6 +13,7 @@ import Notification from "./Notification";
 import "./LoginForm.css";
 
 const LoginForm = () => {
+  console.log("entra al login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
