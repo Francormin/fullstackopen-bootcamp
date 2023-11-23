@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import Button from "react-bootstrap/Button";
+import { Button, Form } from "react-bootstrap";
 
 import { createBlog } from "../services/blogs";
 import { setNotification, useNotificationDispatch } from "../context/NotificationContext";
@@ -62,25 +62,49 @@ const BlogForm = () => {
       <div>
         <h2>Create a new blog</h2>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            Title:{" "}
-            <input type="text" value={title} name="title" onChange={handleTitleChange} autoComplete="off" required />
-          </div>
+        <Form onSubmit={handleSubmit} className="mt-4">
+          <Form.Group>
+            <Form.Label>Blog title</Form.Label>
+            <Form.Control
+              type="text"
+              name="title"
+              value={title}
+              onChange={handleTitleChange}
+              autoComplete="off"
+              required
+              className="text-center"
+            />
+          </Form.Group>
 
-          <div>
-            Url: <input type="text" value={url} name="url" onChange={handleUrlChange} autoComplete="off" required />
-          </div>
+          <Form.Group>
+            <Form.Label>Blog url</Form.Label>
+            <Form.Control
+              type="text"
+              name="url"
+              value={url}
+              onChange={handleUrlChange}
+              autoComplete="off"
+              required
+              className="text-center"
+            />
+          </Form.Group>
 
-          <div>
-            Likes:
-            <input type="number" value={likes} min="0" name="likes" onChange={handleLikesChange} />
-          </div>
+          <Form.Group>
+            <Form.Label>Blog likes</Form.Label>
+            <Form.Control
+              type="number"
+              name="likes"
+              value={likes}
+              min="0"
+              onChange={handleLikesChange}
+              className="text-center"
+            />
+          </Form.Group>
 
           <Button type="submit" variant="success" className="m-3">
             Create
           </Button>
-        </form>
+        </Form>
       </div>
     </Togglable>
   );
