@@ -62,7 +62,7 @@ const BlogForm = () => {
       <div>
         <h2>Create a new blog</h2>
 
-        <Form onSubmit={handleSubmit} className="mt-4">
+        <Form onSubmit={handleSubmit} className="mt-4 mx-auto w-75">
           <Form.Group>
             <Form.Label>Blog title</Form.Label>
             <Form.Control
@@ -72,7 +72,7 @@ const BlogForm = () => {
               onChange={handleTitleChange}
               autoComplete="off"
               required
-              className="text-center"
+              className="text-center bg-light"
             />
           </Form.Group>
 
@@ -85,7 +85,7 @@ const BlogForm = () => {
               onChange={handleUrlChange}
               autoComplete="off"
               required
-              className="text-center"
+              className="text-center bg-light"
             />
           </Form.Group>
 
@@ -97,7 +97,7 @@ const BlogForm = () => {
               value={likes}
               min="0"
               onChange={handleLikesChange}
-              className="text-center"
+              className="text-center bg-light"
             />
           </Form.Group>
 
