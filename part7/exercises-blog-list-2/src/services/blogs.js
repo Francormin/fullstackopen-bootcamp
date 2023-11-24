@@ -1,14 +1,15 @@
 import axios from "axios";
+import { getLoggedUser } from "../context/LoggedUserContext";
 
 const BASE_URL = "http://localhost:3003/api/blogs";
 
-export const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
-let { token } = !!loggedUserJSON && JSON.parse(loggedUserJSON);
+const user = getLoggedUser();
+let token;
 let config = {};
 
-if (token) {
+if (user?.token) {
   config = {
-    headers: { Authorization: `bearer ${token}` }
+    headers: { Authorization: `bearer ${user?.token}` }
   };
 }
 
@@ -18,10 +19,8 @@ export const setToken = user => {
     config = {
       headers: { Authorization: `bearer ${token}` }
     };
-    window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
   } else {
     config = {};
-    window.localStorage.removeItem("loggedBlogappUser");
   }
 };
 
