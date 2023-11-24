@@ -1,14 +1,17 @@
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 
-import { setLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
+import { removeLoggedUser, useLoggedUserDispatch } from "../context/LoggedUserContext";
 import { setToken } from "../services/blogs";
 
 const Logout = () => {
+  const navigate = useNavigate();
   const dispatchLogout = useLoggedUserDispatch();
 
   const handleLogout = () => {
-    setLoggedUser(dispatchLogout, {});
+    removeLoggedUser(dispatchLogout);
     setToken({});
+    navigate("/login");
   };
 
   return (
