@@ -2,11 +2,6 @@
   text-align: center;
 }
 
-.navLink {
-  text-decoration: none;
-  color: black;
-}
-
 .navLink:hover {
   text-decoration: underline;
 }
