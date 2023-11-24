@@ -30,7 +30,31 @@ export const useLoggedUserDispatch = () => {
 };
 
 export const setLoggedUser = (dispatch, user) => {
+  window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
   dispatch({ type: "SET_LOGGED_USER", payload: user });
+};
+
+export const removeLoggedUser = dispatch => {
+  window.localStorage.removeItem("loggedBlogappUser");
+  dispatch({ type: "SET_LOGGED_USER", payload: {} });
+};
+
+export const getLoggedUser = () => {
+  const loggedUser = window.localStorage.getItem("loggedBlogappUser");
+  if (loggedUser) {
+    return JSON.parse(loggedUser);
+  }
+};
+
+export const useLoggedUser = () => {
+  let loggedUser;
+
+  const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+  if (loggedUserJSON) {
+    loggedUser = JSON.parse(loggedUserJSON);
+  }
+
+  return loggedUser;
 };
 
 export default LoggedUserContext;
