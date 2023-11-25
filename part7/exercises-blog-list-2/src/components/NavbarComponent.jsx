@@ -1,7 +1,10 @@
 import { Nav, Navbar } from "react-bootstrap";
+import { useLoggedUser } from "../context/LoggedUserContext";
 import Logout from "./Logout";
 
 const NavbarComponent = () => {
+  const loggedUser = useLoggedUser();
+
   return (
     <Navbar collapseOnSelect expand="sm" bg="light" data-bs-theme="light">
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -17,7 +20,7 @@ const NavbarComponent = () => {
             Blogs
           </Nav.Link>
           <Navbar.Text>
-            logged-in <Logout />
+            {loggedUser.name} logged-in <Logout />
           </Navbar.Text>
         </Nav>
       </Navbar.Collapse>
