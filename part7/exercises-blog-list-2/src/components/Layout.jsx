@@ -7,7 +7,7 @@ import LoginForm from "./LoginForm";
 const Layout = () => {
   const loggedUser = useLoggedUser();
 
-  if (loggedUser === undefined) return <LoginForm />;
+  if (!loggedUser) return <LoginForm />;
 
   return (
     <>
