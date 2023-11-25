@@ -13,6 +13,7 @@ import Notification from "./Notification";
 import "./LoginForm.css";
 
 const LoginForm = () => {
+  console.log("entra al login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,7 +32,7 @@ const LoginForm = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async event => {
+  const handleLogin = async event => {
     event.preventDefault();
 
     if (!username.length || !password.length) return;
@@ -64,7 +65,7 @@ const LoginForm = () => {
 
       {notification.content && <Notification />}
 
-      <Form onSubmit={handleSubmit} className="loginForm">
+      <Form onSubmit={handleLogin} className="loginForm">
         <FloatingLabel label="Username">
           <Form.Control
             type="text"
