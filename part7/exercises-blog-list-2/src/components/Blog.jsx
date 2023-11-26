@@ -1,19 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, Button, Form } from "react-bootstrap";
 
 import { getBlog, removeBlog, likeBlog, commentBlog } from "../services/blogs";
 import { useSpinner } from "../hooks/useSpinner";
 import { setNotification, useNotificationDispatch } from "../context/NotificationContext";
-import { useLoggedUserValue } from "../context/LoggedUserContext";
+import { useLoggedUser } from "../context/LoggedUserContext";
 
 import Spinner from "./Spinner";
+import "./Blog.css";
 
 const Blog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isLoading = useSpinner();
 
-  const loggedUser = useLoggedUserValue();
+  const loggedUser = useLoggedUser();
   const dispatchNotification = useNotificationDispatch();
 
   const queryClient = useQueryClient();
@@ -74,12 +76,6 @@ const Blog = () => {
     );
   };
 
-  const blogStyle = {
-    padding: 10,
-    border: "1px solid",
-    marginBottom: 5
-  };
-
   return (
     <div>
       {isLoading ? (
@@ -87,30 +83,30 @@ const Blog = () => {
       ) : blog.message ? (
         <div>{blog.message}</div>
       ) : (
-        <div style={blogStyle}>
-          <h2>{blog.title}</h2>
-          <p>Url: {blog.url}</p>
-          <p>
-            Likes: {blog.likes} <button onClick={handleLike}>Like</button>
-          </p>
-          <p>Author: {blog.author?.name}</p>
-          {blog.author?.name === loggedUser?.name && (
-            <button onClick={handleRemove} style={{ backgroundColor: "#0D61E4" }}>
-              Delete
-            </button>
-          )}
-
-          <h3>Comments</h3>
-          <ul>
-            {blog.comments?.map((comment, key) => (
-              <li key={key}>{comment}</li>
-            ))}
-          </ul>
-
-          <form onSubmit={handleComment}>
-            <input type="text" name="comment" autoComplete="off" />
-            <button type="submit">Add comment</button>
-          </form>
+        <div className="blogContainer">
+          <Card className="cardContainer">
+            <Card.Body>
+              <Card.Title className="titleStyle">{blog.title}</Card.Title>
+              <Card.Text>Url: {blog.url}</Card.Text>
+              <Card.Text>
+                Likes: {blog.likes} <Button onClick={handleLike}>Like</Button>
+              </Card.Text>
+              <Card.Text>Author: {blog.author?.name}</Card.Text>
+              {blog.author?.name === loggedUser?.name && (
+                <Button variant="danger" onClick={handleRemove}>
+                  Delete
+                </Button>
+              )}
+            </Card.Body>
+            <Card.Footer>
+              <Card.Title>Comments</Card.Title>
+              <ul>
+                {blog.comments?.map((comment, key) => (
+                  <li key={key}>{comment}</li>
+                ))}
+              </ul>
+            </Card.Footer>
+          </Card>
         </div>
       )}
     </div>
@@ -118,3 +114,14 @@ const Blog = () => {
 };
 
 export default Blog;
+
+{
+  /* <Card style={{ width: "18rem" }}>
+  <Card.Body>
+    <Card.Text>
+      Some quick example text to build on the card title and make up the bulk of the card's content.
+    </Card.Text>
+    <Button variant="primary">Go somewhere</Button>
+  </Card.Body>
+</Card>; */
+}
