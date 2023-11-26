@@ -107,6 +107,13 @@ const Blog = () => {
               </ul>
             </Card.Footer>
           </Card>
+
+          <Form onSubmit={handleComment} className="commentForm">
+            <Form.Control as="textarea" type="text" name="comment" autoComplete="off" className="textareaStyle" />
+            <Button type="submit" className="mt-3">
+              Add comment
+            </Button>
+          </Form>
         </div>
       )}
     </div>
@@ -114,14 +121,3 @@ const Blog = () => {
 };
 
 export default Blog;
-
-{
-  /* <Card style={{ width: "18rem" }}>
-  <Card.Body>
-    <Card.Text>
-      Some quick example text to build on the card title and make up the bulk of the card's content.
-    </Card.Text>
-    <Button variant="primary">Go somewhere</Button>
-  </Card.Body>
-</Card>; */
-}
