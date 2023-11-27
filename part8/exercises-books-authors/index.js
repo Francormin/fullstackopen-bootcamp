@@ -94,6 +94,7 @@ const typeDefs = `#graphql
     name: String!
     id: ID!
     born: Int
+    bookCount: Int
   }
 
   type Book {
@@ -117,7 +118,12 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: () => books,
-    allAuthors: () => authors
+    allAuthors: () => {
+      return authors.map(author => ({
+        name: author.name,
+        bookCount: books.filter(book => book.author === author.name).length
+      }));
+    }
   }
 };
 
