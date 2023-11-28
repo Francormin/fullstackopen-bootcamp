@@ -1,5 +1,6 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const { v1: uuid } = require("uuid");
 
 let authors = [
   {
@@ -105,6 +106,15 @@ const typeDefs = `#graphql
     genres: [String!]!
   }
 
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
@@ -117,7 +127,7 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    allBooks: (_, args) => {
       const { genre, author } = args;
 
       if (genre && author) {
@@ -149,6 +159,41 @@ const resolvers = {
         name: author.name,
         bookCount: books.filter(book => book.author === author.name).length
       }));
+    }
+  },
+  Mutation: {
+    addBook: (_, args) => {
+      const { title, published, author, genres } = args;
+
+      // Check if the author already exists
+      let existingAuthor = authors.find(a => a.name === author);
+
+      if (!existingAuthor) {
+        existingAuthor = {
+          name: author,
+          id: uuid(),
+          born: null,
+          bookCount: 1
+        };
+
+        authors.push(existingAuthor);
+      }
+
+      // Add the book to the system
+      const newBook = {
+        title,
+        published,
+        author: existingAuthor,
+        id: uuid(),
+        genres
+      };
+
+      books.push(newBook);
+
+      // Update the book count for the author
+      existingAuthor.bookCount++;
+
+      return newBook;
     }
   }
 };
