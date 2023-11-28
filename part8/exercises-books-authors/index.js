@@ -115,6 +115,13 @@ const typeDefs = `#graphql
     ): Book
   }
 
+  type Mutation {
+    editAuthor(
+      name: String!,
+      setBornTo: Int!
+    ): Author
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
@@ -194,6 +201,17 @@ const resolvers = {
       existingAuthor.bookCount++;
 
       return newBook;
+    },
+    editAuthor: (_, args) => {
+      const { name, setBornTo } = args;
+
+      const author = authors.find(author => author.name === name);
+      if (author) {
+        author.born = setBornTo;
+        return author;
+      } else {
+        return null;
+      }
     }
   }
 };
