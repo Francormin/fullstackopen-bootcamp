@@ -113,9 +113,7 @@ const typeDefs = `#graphql
       author: String!
       genres: [String!]!
     ): Book
-  }
 
-  type Mutation {
     editAuthor(
       name: String!,
       setBornTo: Int!
