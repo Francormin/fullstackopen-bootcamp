@@ -182,21 +182,21 @@ const resolvers = {
         };
 
         authors.push(existingAuthor);
+      } else {
+        // If the author already exists, increment book count
+        existingAuthor.bookCount++;
       }
 
       // Add the book to the system
       const newBook = {
         title,
         published,
-        author: existingAuthor,
+        author: existingAuthor.name,
         id: uuid(),
         genres
       };
 
       books.push(newBook);
-
-      // Update the book count for the author
-      existingAuthor.bookCount++;
 
       return newBook;
     },
