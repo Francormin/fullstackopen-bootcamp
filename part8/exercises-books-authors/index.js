@@ -204,6 +204,7 @@ const resolvers = {
       const { name, setBornTo } = args;
 
       const author = authors.find(author => author.name === name);
+
       if (author) {
         author.born = setBornTo;
         return author;
