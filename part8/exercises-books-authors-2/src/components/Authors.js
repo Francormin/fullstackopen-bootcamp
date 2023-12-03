@@ -2,11 +2,13 @@ const Authors = props => {
   if (!props.show) {
     return null;
   }
+
   const authors = [];
 
   return (
     <div>
       <h2>authors</h2>
+
       <table>
         <tbody>
           <tr>
