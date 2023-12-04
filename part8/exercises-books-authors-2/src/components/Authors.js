@@ -1,30 +1,40 @@
 import { useState } from "react";
+import Select from "react-select";
 import { useMutation, useQuery } from "@apollo/client";
+
 import { ALL_AUTHORS, UPDATE_AUTHOR } from "../queries";
 
 const Authors = props => {
-  const [name, setName] = useState("");
+  const [selectedName, setSelectedName] = useState(null);
   const [born, setBorn] = useState("");
-  const result = useQuery(ALL_AUTHORS);
+
+  const { loading, data } = useQuery(ALL_AUTHORS);
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }]
   });
 
-  if (result.loading) {
+  if (loading) {
     return <div>loading...</div>;
   }
 
-  const authors = result.data?.allAuthors || [];
+  const authors = data?.allAuthors || [];
 
-  const updateBorn = async () => {
-    if (name === "" || born === "") {
+  const submit = async event => {
+    event.preventDefault();
+
+    if (selectedName === null || born === "") {
       return;
     }
 
-    await updateAuthor({ variables: { name, setBornTo: Number(born) } });
+    await updateAuthor({
+      variables: {
+        name: selectedName.value,
+        setBornTo: Number(born)
+      }
+    });
 
-    setName("");
+    setSelectedName(null);
     setBorn("");
   };
 
@@ -55,27 +65,16 @@ const Authors = props => {
 
       <h2>Set birthyear</h2>
 
-      <form
-        onSubmit={event => {
-          event.preventDefault();
-          updateBorn();
-        }}
-      >
+      <form onSubmit={submit}>
         <div>
           name
-          <select
-            value={name === "" ? "Select author" : name}
-            onChange={({ target }) => {
-              setName(target.value);
-            }}
-          >
-            <option disabled={true}>Select author</option>
-            {authors.map(a => (
-              <option key={a.name} value={a.name}>
-                {a.name}
-              </option>
-            ))}
-          </select>
+          <Select
+            value={selectedName || ""}
+            onChange={setSelectedName}
+            options={authors.map(a => {
+              return { value: a.name, label: a.name };
+            })}
+          />
         </div>
         <div>
           born
