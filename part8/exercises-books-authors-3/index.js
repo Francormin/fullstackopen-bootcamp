@@ -58,8 +58,8 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
-    bookCount: () => async () => Book.collection.countDocuments(),
-    authorCount: () => async () => Author.collection.countDocuments(),
+    bookCount: async () => await Book.collection.countDocuments(),
+    authorCount: async () => await Author.collection.countDocuments(),
     allBooks: async (_, args) => {
       const { genre, author } = args;
 
@@ -68,7 +68,7 @@ const resolvers = {
 
         if (matchedAuthor) {
           return Book.find({
-            author: matchedAuthor.name,
+            author: matchedAuthor.id,
             genres: {
               $in: genre
             }
@@ -90,7 +90,7 @@ const resolvers = {
         const matchedAuthor = await Author.findOne({ name: author });
 
         if (matchedAuthor) {
-          return Book.find({ author: matchedAuthor.name });
+          return Book.find({ author: matchedAuthor.id });
         } else {
           return [];
         }
@@ -100,6 +100,22 @@ const resolvers = {
     },
     allAuthors: async () => Author.find({})
   },
+
+  Author: {
+    name: parent => parent.name,
+    id: parent => parent.id,
+    born: parent => parent.born,
+    bookCount: async parent => {
+      return (await Book.find({ author: parent.id })).length;
+    }
+  },
+
+  Book: {
+    author: async parent => {
+      return await Author.findById(parent.author);
+    }
+  },
+
   Mutation: {
     addBook: async (_, args) => {
       const { title, published, author, genres } = args;
