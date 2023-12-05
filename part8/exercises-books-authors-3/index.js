@@ -1,6 +1,5 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
-const { v1: uuid } = require("uuid");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -98,7 +97,7 @@ const resolvers = {
 
       return Book.find({});
     },
-    allAuthors: async () => Author.find({})
+    allAuthors: async () => await Author.find({})
   },
 
   Author: {
@@ -125,7 +124,6 @@ const resolvers = {
       if (!existingAuthor) {
         existingAuthor = new Author({
           name: author,
-          id: uuid(),
           born: null,
           bookCount: 1
         });
@@ -139,8 +137,7 @@ const resolvers = {
       const newBook = new Book({
         title,
         published,
-        author: existingAuthor.name,
-        id: uuid(),
+        author: existingAuthor.id,
         genres
       });
 
