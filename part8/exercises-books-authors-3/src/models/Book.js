@@ -8,13 +8,18 @@ const schema = new mongoose.Schema({
     minlength: 2
   },
   published: {
-    type: Number
+    type: Number,
+    required: true,
+    min: 301
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Author"
   },
-  genres: [{ type: String }]
+  genres: {
+    type: [String],
+    required: true
+  }
 });
 
 module.exports = mongoose.model("Book", schema);
