@@ -2,6 +2,7 @@ const { gql } = require("apollo-server");
 
 const { authorCount, allAuthors } = require("./queries/authorQueries");
 const { bookCount, allBooks } = require("./queries/bookQueries");
+const me = require("./queries/me");
 
 const authorResolver = require("./resolvers/authorResolver");
 const bookResolver = require("./resolvers/bookResolver");
@@ -23,9 +24,21 @@ const typeDefs = gql`
     genres: [String!]!
   }
 
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Mutation {
     addBook(title: String!, published: Int!, author: String!, genres: [String!]!): Book
     editAuthor(name: String!, setBornTo: Int!): Author
+    createUser(username: String!, favoriteGenre: String!): User
+    login(username: String!, password: String!): Token
   }
 
   type Query {
@@ -33,6 +46,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    me: User
   }
 `;
 
@@ -41,7 +55,8 @@ const resolvers = {
     bookCount,
     authorCount,
     allBooks,
-    allAuthors
+    allAuthors,
+    me
   },
   Author: authorResolver,
   Book: bookResolver,
