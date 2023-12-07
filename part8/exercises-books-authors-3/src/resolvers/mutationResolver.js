@@ -1,36 +1,44 @@
-const {
-  validateBookTitle,
-  validateAuthorName,
-  validateBookPublished,
-  validateAuthorBorn
-} = require("../utils/validation");
+const jwt = require("jsonwebtoken");
+
 const Author = require("../models/Author");
 const Book = require("../models/Book");
+const User = require("../models/User");
+
+const {
+  validateAuth,
+  validateBookCreation,
+  validateAuthorEdition,
+  validateUserCreation,
+  validateLoginCredentials
+} = require("../utils/validation");
+const errorCatching = require("../utils/errorCatching");
 
 const mutationResolver = {
-  addBook: async (_, args) => {
+  addBook: async (_, args, { currentUser }) => {
     const { title, published, author, genres } = args;
 
-    validateBookTitle(title);
-    validateBookPublished(published);
-    validateAuthorName(author);
-
-    let existingAuthor = await Author.findOne({ name: author });
-
-    if (!existingAuthor) {
-      existingAuthor = new Author({
-        name: author,
-        born: null,
-        bookCount: 1
-      });
-
-      await existingAuthor.save();
-    } else {
-      existingAuthor.bookCount += 1;
-      await existingAuthor.save();
-    }
+    validateAuth(currentUser);
 
     try {
+      const existingBook = await Book.findOne({ title });
+
+      validateBookCreation(existingBook, title, published, author);
+
+      let existingAuthor = await Author.findOne({ name: author });
+
+      if (!existingAuthor) {
+        existingAuthor = new Author({
+          name: author,
+          born: null,
+          bookCount: 1
+        });
+
+        await existingAuthor.save();
+      } else {
+        existingAuthor.bookCount += 1;
+        await existingAuthor.save();
+      }
+
       const newBook = new Book({
         title,
         published,
@@ -40,22 +48,63 @@ const mutationResolver = {
 
       return newBook.save();
     } catch (error) {
-      console.error(error);
+      errorCatching(error, "Creating the book failed");
     }
   },
 
-  editAuthor: async (_, args) => {
+  editAuthor: async (_, args, { currentUser }) => {
     const { name, setBornTo } = args;
 
-    validateAuthorBorn(setBornTo);
+    validateAuth(currentUser);
 
-    const author = await Author.findOne({ name });
+    try {
+      const author = await Author.findOne({ name });
 
-    if (author) {
+      validateAuthorEdition(author, name, setBornTo);
+
       author.born = setBornTo;
+
       return author.save();
-    } else {
-      return null;
+    } catch (error) {
+      errorCatching(error, "Editing the author failed");
+    }
+  },
+
+  createUser: async (_, args) => {
+    const { username, favoriteGenre } = args;
+
+    try {
+      const existingUser = await User.findOne({ username });
+
+      validateUserCreation(existingUser, username);
+
+      const newUser = new User({
+        username,
+        favoriteGenre
+      });
+
+      return newUser.save();
+    } catch (error) {
+      errorCatching(error, "Creating the user failed");
+    }
+  },
+
+  login: async (_, args) => {
+    const { username, password } = args;
+
+    try {
+      const user = await User.findOne({ username });
+
+      validateLoginCredentials(user, password);
+
+      const userForToken = {
+        username: user.username,
+        id: user._id
+      };
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
+    } catch (error) {
+      errorCatching(error, "Login failed");
     }
   }
 };
