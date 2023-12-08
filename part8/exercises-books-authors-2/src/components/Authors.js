@@ -11,7 +11,29 @@ const Authors = props => {
   const { loading, data } = useQuery(ALL_AUTHORS);
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }]
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: ({ networkError }) => {
+      props.setError(networkError.result.errors[0].message);
+
+      setTimeout(() => {
+        props.setError(null);
+      }, 5000);
+    },
+    onCompleted: () => {
+      props.setError(null);
+
+      setSelectedName(null);
+      setBorn("");
+    },
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        return {
+          allAuthors: allAuthors.map(author =>
+            author.name === response.data.editAuthor.name ? response.data.editAuthor : author
+          )
+        };
+      });
+    }
   });
 
   if (loading) {
@@ -20,22 +42,23 @@ const Authors = props => {
 
   const authors = data?.allAuthors || [];
 
-  const submit = async event => {
+  const submit = event => {
     event.preventDefault();
 
-    if (selectedName === null || born === "") {
-      return;
+    if (selectedName === null) {
+      props.setError("There is no selected author");
+
+      return setTimeout(() => {
+        props.setError(null);
+      }, 5000);
     }
 
-    await updateAuthor({
+    updateAuthor({
       variables: {
-        name: selectedName.value,
+        name: selectedName?.value,
         setBornTo: Number(born)
       }
     });
-
-    setSelectedName(null);
-    setBorn("");
   };
 
   if (!props.show) {
@@ -63,30 +86,34 @@ const Authors = props => {
         </tbody>
       </table>
 
-      <h2>Set birthyear</h2>
+      {props.token && (
+        <div>
+          <h2>Set birthyear</h2>
 
-      <form onSubmit={submit}>
-        <div>
-          name
-          <Select
-            value={selectedName || ""}
-            onChange={setSelectedName}
-            options={authors.map(a => {
-              return { value: a.name, label: a.name };
-            })}
-          />
+          <form onSubmit={submit}>
+            <div>
+              name
+              <Select
+                value={selectedName || ""}
+                onChange={setSelectedName}
+                options={authors.map(a => {
+                  return { value: a.name, label: a.name };
+                })}
+              />
+            </div>
+            <div>
+              born
+              <input
+                value={born}
+                onChange={({ target }) => {
+                  setBorn(target.value);
+                }}
+              />
+            </div>
+            <button type="submit">update author</button>
+          </form>
         </div>
-        <div>
-          born
-          <input
-            value={born}
-            onChange={({ target }) => {
-              setBorn(target.value);
-            }}
-          />
-        </div>
-        <button type="submit">update author</button>
-      </form>
+      )}
     </div>
   );
 };
