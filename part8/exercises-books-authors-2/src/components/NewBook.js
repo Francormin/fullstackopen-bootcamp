@@ -10,18 +10,57 @@ const NewBook = props => {
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
-    onError: error => {
-      console.log(error);
+    onError: ({ networkError }) => {
+      props.setError(networkError.result.errors[0].message);
+
+      setTimeout(() => {
+        props.setError(null);
+      }, 5000);
+    },
+    onCompleted: () => {
+      props.setError(null);
+
+      setTitle("");
+      setPublished("");
+      setAuthor("");
+      setGenres([]);
+      setGenre("");
+    },
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook)
+        };
+      });
+
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        // Assuming that response.data.addBook.author holds the author information
+        const updatedAuthors = [...allAuthors];
+
+        // Check if the author is already in the list
+        const existingAuthor = updatedAuthors.find(author => author.name === response.data.addBook.author);
+
+        // If the author exists, increment the book count; otherwise, add a new author
+        if (existingAuthor) {
+          existingAuthor.bookCount += 1;
+        } else {
+          updatedAuthors.push({
+            name: response.data.addBook.author,
+            bookCount: 1
+          });
+        }
+
+        return {
+          allAuthors: updatedAuthors
+        };
+      });
     }
   });
 
-  const submit = async event => {
+  const submit = event => {
     event.preventDefault();
 
-    console.log("add book...");
-
-    await createBook({
+    createBook({
       variables: {
         title,
         author,
@@ -29,12 +68,6 @@ const NewBook = props => {
         genres
       }
     });
-
-    setTitle("");
-    setPublished("");
-    setAuthor("");
-    setGenres([]);
-    setGenre("");
   };
 
   const addGenre = () => {
@@ -55,13 +88,13 @@ const NewBook = props => {
         </div>
 
         <div>
-          author
-          <input value={author} onChange={({ target }) => setAuthor(target.value)} />
+          published
+          <input type="number" value={published} onChange={({ target }) => setPublished(target.value)} />
         </div>
 
         <div>
-          published
-          <input type="number" value={published} onChange={({ target }) => setPublished(target.value)} />
+          author
+          <input value={author} onChange={({ target }) => setAuthor(target.value)} />
         </div>
 
         <div>
