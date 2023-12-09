@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
 
-const Books = props => {
+import useBooksQuery from "../hooks/useBooksQuery";
+import Genres from "./Genres";
+import BookTable from "./BookTable";
+
+const Books = ({ show }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
-  const [genres, setGenres] = useState([
+  const genres = [
     "refactoring",
     "agile",
     "patterns",
@@ -17,17 +19,15 @@ const Books = props => {
     "fantasy",
     "drama",
     "sci-fi"
-  ]);
+  ];
 
-  const result = useQuery(ALL_BOOKS);
+  const { loading, books } = useBooksQuery();
 
-  if (result.loading) {
+  if (loading) {
     return <div>loading...</div>;
   }
 
-  const books = result.data?.allBooks || [];
-
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
@@ -39,33 +39,14 @@ const Books = props => {
         in genre <strong>{selectedGenre === null ? "all genres" : selectedGenre}</strong>
       </p>
 
-      <table>
-        <tbody>
-          <tr>
-            <th>title</th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books
-            .filter(book => selectedGenre === null || (book.genres && book.genres.includes(selectedGenre)))
-            .map(book => (
-              <tr key={book.title}>
-                <td>{book.title}</td>
-                <td>{book.author.name}</td>
-                <td>{book.published}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {/* Extracted Genres component */}
+      <Genres genres={genres} onGenreClick={setSelectedGenre} />
 
-      <div>
-        <button onClick={() => setSelectedGenre(null)}>all genres</button>
-        {genres.map(genre => (
-          <button key={genre} onClick={() => setSelectedGenre(genre)}>
-            {genre}
-          </button>
-        ))}
-      </div>
+      {/* Extracted BookTable component */}
+      <BookTable
+        books={books}
+        filterFunction={book => selectedGenre === null || (book.genres && book.genres.includes(selectedGenre))}
+      />
     </div>
   );
 };
