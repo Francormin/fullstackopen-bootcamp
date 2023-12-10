@@ -1,36 +1,30 @@
-import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../queries";
+import { useEffect, useState } from "react";
+import useLoginMutation from "../hooks/useLoginMutation";
 
-const LoginForm = props => {
+const LoginForm = ({ show, error, setError, setPage, setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [login] = useMutation(LOGIN, {
-    onError: error => {
-      if (error.networkError) {
-        props.setError(error.networkError.result.errors[0].message);
+  const { login } = useLoginMutation({
+    onCompleted: data => handleLoginSuccess(data),
+    onError: error => handleLoginError(error)
+  });
 
-        setTimeout(() => {
-          props.setError(null);
-        }, 5000);
+  const handleLoginSuccess = data => {
+    setToken(data.login.value);
+    window.localStorage.setItem("user-token", data.login.value);
+    setPage("authors");
+    setUsername("");
+    setPassword("");
+    setError(null);
+  };
 
-        setPassword("");
-      }
-
-      console.error(error);
-    },
-    onCompleted: data => {
-      props.setToken(data.login.value);
-      window.localStorage.setItem("user-token", data.login.value);
-
-      props.setPage("authors");
-      props.setError(null);
-
-      setUsername("");
+  const handleLoginError = error => {
+    if (error.networkError) {
+      setError(error.networkError.result.errors[0].message);
       setPassword("");
     }
-  });
+  };
 
   const submit = async event => {
     event.preventDefault();
@@ -43,7 +37,16 @@ const LoginForm = props => {
     });
   };
 
-  if (!props.show) {
+  useEffect(() => {
+    const errorTimeout = setTimeout(() => {
+      setError(null);
+    }, 5000);
+
+    return () => clearTimeout(errorTimeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  if (!show) {
     return null;
   }
 
