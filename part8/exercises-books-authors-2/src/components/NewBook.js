@@ -1,61 +1,34 @@
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../queries";
+import useCreateBookMutation from "../hooks/useCreateBokkMutation";
 
-const NewBook = props => {
+const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
 
-  const [createBook] = useMutation(CREATE_BOOK, {
-    onError: ({ networkError }) => {
-      props.setError(networkError.result.errors[0].message);
-
-      setTimeout(() => {
-        props.setError(null);
-      }, 5000);
-    },
-    onCompleted: () => {
-      props.setError(null);
-
-      setTitle("");
-      setPublished("");
-      setAuthor("");
-      setGenres([]);
-      setGenre("");
-    },
-    update: (cache, response) => {
-      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook)
-        };
-      });
-
-      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-        // Assuming that response.data.addBook.author holds the author information
-        const updatedAuthors = [...allAuthors];
-
-        // Check if the author is already in the list
-        const existingAuthor = updatedAuthors.find(author => author.name === response.data.addBook.author);
-
-        // If the author exists, increment the book count; otherwise, add a new author
-        if (existingAuthor) {
-          existingAuthor.bookCount += 1;
-        } else {
-          updatedAuthors.push({
-            name: response.data.addBook.author,
-            bookCount: 1
-          });
-        }
-
-        return {
-          allAuthors: updatedAuthors
-        };
-      });
-    }
+  const { createBook } = useCreateBookMutation({
+    onCompleted: () => handleCreateBookSuccess(),
+    onError: error => handleCreateBookError(error)
   });
+
+  const handleCreateBookSuccess = () => {
+    setError(null);
+    setTitle("");
+    setPublished("");
+    setAuthor("");
+    setGenres([]);
+    setGenre("");
+  };
+
+  const handleCreateBookError = ({ networkError }) => {
+    setError(networkError.result.errors[0].message);
+
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  };
 
   const submit = event => {
     event.preventDefault();
@@ -71,11 +44,11 @@ const NewBook = props => {
   };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre));
+    setGenres(prevGenres => [...prevGenres, genre]);
     setGenre("");
   };
 
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
