@@ -3,11 +3,20 @@ import { ALL_BOOKS, GET_CURRENT_USER } from "../queries";
 
 const useRecommendationsQuery = () => {
   const { loading: booksLoading, data: { allBooks = [] } = {} } = useQuery(ALL_BOOKS);
-  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_CURRENT_USER);
+
+  // Check if the user is authenticated before making the query
+  const token = localStorage.getItem("user-token");
+  const {
+    loading: userLoading,
+    error: userError,
+    data: userData
+  } = useQuery(GET_CURRENT_USER, {
+    skip: !token // Skip the query if the token doesn't exist
+  });
 
   // Check for errors in user query
   if (userError) {
-    console.error("Error fetching user data:", userError);
+    console.error("error:", userError);
     return { loading: false, favoriteGenre: "", recommendedBooks: [] };
   }
 
