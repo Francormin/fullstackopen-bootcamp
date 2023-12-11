@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useAuthorsQuery from "../hooks/useAuthorsQuery";
 import useUpdateAuthorMutation from "../hooks/useUpdateAuthorMutation";
@@ -42,6 +42,11 @@ const Authors = ({ show, setError, token }) => {
         }, 5000);
       });
   };
+
+  useEffect(() => {
+    setSelectedName(null);
+    setBorn("");
+  }, [token]);
 
   if (loading) {
     return <div>loading...</div>;
