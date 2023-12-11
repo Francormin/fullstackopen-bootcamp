@@ -8,7 +8,7 @@ const Recommendations = ({ show }) => {
     return <div>loading...</div>;
   }
 
-  if (!show || !favoriteGenre) {
+  if (!show) {
     return null;
   }
 
@@ -16,12 +16,18 @@ const Recommendations = ({ show }) => {
     <div>
       <h2>recommendations</h2>
 
-      <p>
-        books in your favorite genre <strong>{favoriteGenre}</strong>
-      </p>
+      {!favoriteGenre ? (
+        <p>no favorite genre added</p>
+      ) : (
+        <>
+          <p>
+            books in your favorite genre <strong>{favoriteGenre}</strong>
+          </p>
 
-      {/* Extracted BookTable component */}
-      <BookTable books={recommendedBooks} />
+          {/* Extracted BookTable component */}
+          <BookTable books={recommendedBooks} />
+        </>
+      )}
     </div>
   );
 };
