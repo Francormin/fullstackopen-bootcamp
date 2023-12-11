@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useBooksQuery from "../hooks/useBooksQuery";
 import Genres from "./Genres";
 import BookTable from "./BookTable";
 
-const Books = ({ show }) => {
+const Books = ({ show, token }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const genres = [
     "refactoring",
@@ -22,6 +22,10 @@ const Books = ({ show }) => {
   ];
 
   const { loading, books } = useBooksQuery();
+
+  useEffect(() => {
+    setSelectedGenre(null);
+  }, [token]);
 
   if (loading) {
     return <div>loading...</div>;
