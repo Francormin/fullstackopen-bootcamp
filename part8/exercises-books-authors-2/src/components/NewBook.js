@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCreateBookMutation from "../hooks/useCreateBookMutation";
 
-const NewBook = ({ show, setError }) => {
+const NewBook = ({ show, setError, token }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -47,6 +47,14 @@ const NewBook = ({ show, setError }) => {
     setGenres(prevGenres => [...prevGenres, genre]);
     setGenre("");
   };
+
+  useEffect(() => {
+    setTitle("");
+    setPublished("");
+    setAuthor("");
+    setGenres([]);
+    setGenre("");
+  }, [token]);
 
   if (!show) {
     return null;
