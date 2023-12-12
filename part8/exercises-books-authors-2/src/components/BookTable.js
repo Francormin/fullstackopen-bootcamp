@@ -1,6 +1,4 @@
-const BookTable = ({ books, filterFunction }) => {
-  const filteredBooks = filterFunction ? books.filter(filterFunction) : books;
-
+const BookTable = ({ books }) => {
   return (
     <table>
       <tbody>
@@ -9,7 +7,7 @@ const BookTable = ({ books, filterFunction }) => {
           <th>author</th>
           <th>published</th>
         </tr>
-        {filteredBooks.map(book => (
+        {books.map(book => (
           <tr key={book.title}>
             <td>{book.title}</td>
             <td>{book.author.name}</td>
