@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS, GET_CURRENT_USER } from "../queries";
+import { ALL_BOOKS, CURRENT_USER } from "../queries";
 
 const useRecommendationsQuery = () => {
   const { loading: booksLoading, data: { allBooks = [] } = {} } = useQuery(ALL_BOOKS);
@@ -10,7 +10,7 @@ const useRecommendationsQuery = () => {
     loading: userLoading,
     error: userError,
     data: userData
-  } = useQuery(GET_CURRENT_USER, {
+  } = useQuery(CURRENT_USER, {
     skip: !token // Skip the query if the token doesn't exist
   });
 
