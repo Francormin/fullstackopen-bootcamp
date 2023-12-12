@@ -1,12 +1,16 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
+import { ALL_BOOKS, BOOKS_BY_GENRE } from "../queries";
 
-const useBooksQuery = () => {
-  const result = useQuery(ALL_BOOKS);
+const useBooksQuery = genre => {
+  const { loading, data } = useQuery(genre ? BOOKS_BY_GENRE : ALL_BOOKS, {
+    variables: {
+      genre
+    }
+  });
 
   return {
-    loading: result.loading,
-    books: result.data?.allBooks || []
+    loading: loading,
+    books: data?.allBooks || []
   };
 };
 
