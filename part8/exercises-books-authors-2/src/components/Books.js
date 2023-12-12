@@ -7,7 +7,7 @@ import BookTable from "./BookTable";
 const Books = ({ show, token }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
 
-  const { loading, books } = useBooksQuery();
+  const { loading, books } = useBooksQuery(selectedGenre);
 
   useEffect(() => {
     setSelectedGenre(null);
@@ -33,10 +33,7 @@ const Books = ({ show, token }) => {
       <Genres onGenreClick={setSelectedGenre} />
 
       {/* Extracted BookTable component */}
-      <BookTable
-        books={books}
-        filterFunction={book => selectedGenre === null || (book.genres && book.genres.includes(selectedGenre))}
-      />
+      <BookTable books={books} />
     </div>
   );
 };
