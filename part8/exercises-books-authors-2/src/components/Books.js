@@ -6,20 +6,6 @@ import BookTable from "./BookTable";
 
 const Books = ({ show, token }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
-  const genres = [
-    "refactoring",
-    "agile",
-    "patterns",
-    "design",
-    "crime",
-    "classic",
-    "revolution",
-    "programming",
-    "logic",
-    "fantasy",
-    "drama",
-    "sci-fi"
-  ];
 
   const { loading, books } = useBooksQuery();
 
@@ -44,7 +30,7 @@ const Books = ({ show, token }) => {
       </p>
 
       {/* Extracted Genres component */}
-      <Genres genres={genres} onGenreClick={setSelectedGenre} />
+      <Genres onGenreClick={setSelectedGenre} />
 
       {/* Extracted BookTable component */}
       <BookTable
