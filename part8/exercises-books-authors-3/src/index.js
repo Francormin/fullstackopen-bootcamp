@@ -41,6 +41,10 @@ const typeDefs = gql`
     login(username: String!, password: String!): Token
   }
 
+  type Subscription {
+    bookAdded: Book!
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
@@ -60,7 +64,12 @@ const resolvers = {
   },
   Author: authorResolver,
   Book: bookResolver,
-  Mutation: mutationResolver
+  Mutation: mutationResolver,
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
+    }
+  }
 };
 
 module.exports = { typeDefs, resolvers };
