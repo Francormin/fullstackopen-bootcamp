@@ -51,7 +51,7 @@ const server = new ApolloServer({
   ]
 });
 
-const randomFn = async () => {
+const startServer = async () => {
   await server.start();
 
   app.use(
@@ -71,7 +71,7 @@ const randomFn = async () => {
     })
   );
 };
-randomFn();
+startServer();
 
 const PORT = process.env.PORT || 4000;
 // Now that our HTTP server is fully set up, we can listen to it.
