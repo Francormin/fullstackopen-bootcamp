@@ -67,7 +67,7 @@ const resolvers = {
   Mutation: mutationResolver,
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(["BOOK_ADDED"])
     }
   }
 };
