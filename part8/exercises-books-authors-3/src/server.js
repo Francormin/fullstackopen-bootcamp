@@ -3,6 +3,7 @@ const { ApolloServer } = require("@apollo/server");
 const { expressMiddleware } = require("@apollo/server/express4");
 const { ApolloServerPluginDrainHttpServer } = require("@apollo/server/plugin/drainHttpServer");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { PubSub } = require("graphql-subscriptions");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const { WebSocketServer } = require("ws");
 const { createServer } = require("http");
@@ -13,6 +14,9 @@ const jwt = require("jsonwebtoken");
 
 const { typeDefs, resolvers } = require("./index");
 const User = require("./models/User");
+
+// Create an instance of PubSub
+const pubsub = new PubSub();
 
 // Create the schema, which will be used separately by ApolloServer and
 // the WebSocket server.
@@ -65,7 +69,7 @@ const startServer = async () => {
         if (auth && auth.startsWith("Bearer ")) {
           const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
           const currentUser = await User.findById(decodedToken.id);
-          return { currentUser };
+          return { currentUser, pubsub };
         }
       }
     })
