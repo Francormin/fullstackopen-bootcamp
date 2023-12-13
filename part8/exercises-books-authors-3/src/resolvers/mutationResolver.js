@@ -1,3 +1,4 @@
+const { PubSub } = require("graphql-subscriptions");
 const jwt = require("jsonwebtoken");
 
 const Author = require("../models/Author");
@@ -12,6 +13,8 @@ const {
   validateLoginCredentials
 } = require("../utils/validation");
 const errorCatching = require("../utils/errorCatching");
+
+const pubsub = new PubSub();
 
 const mutationResolver = {
   addBook: async (_, args, { currentUser }) => {
@@ -45,6 +48,8 @@ const mutationResolver = {
         author: existingAuthor.id,
         genres
       });
+
+      pubsub.publish("BOOK_ADDED", { bookAdded: newBook });
 
       return newBook.save();
     } catch (error) {
