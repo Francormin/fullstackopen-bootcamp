@@ -56,24 +56,34 @@ const server = new ApolloServer({
 });
 
 const startServer = async () => {
-  await server.start();
+  try {
+    await server.start();
 
-  app.use(
-    "/graphql",
-    cors(),
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        const auth = req ? req.headers.authorization : null;
+    app.use(
+      "/graphql",
+      cors(),
+      express.json(),
+      expressMiddleware(server, {
+        context: async ({ req }) => {
+          try {
+            const auth = req ? req.headers.authorization : null;
 
-        if (auth && auth.startsWith("Bearer ")) {
-          const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
-          const currentUser = await User.findById(decodedToken.id);
-          return { currentUser, pubsub };
+            if (auth && auth.startsWith("Bearer ")) {
+              const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
+              const currentUser = await User.findById(decodedToken.id);
+              return { currentUser, pubsub };
+            }
+          } catch (error) {
+            console.error("Error in context function:", error);
+            throw error;
+          }
         }
-      }
-    })
-  );
+      })
+    );
+  } catch (error) {
+    console.error("Error starting the server:", error);
+    throw error;
+  }
 };
 startServer();
 
