@@ -13,6 +13,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const { typeDefs, resolvers } = require("./index");
+const { validateAuth } = require("./utils/validation");
 const User = require("./models/User");
 
 // Create an instance of PubSub
@@ -65,33 +66,36 @@ const startServer = async () => {
       express.json(),
       expressMiddleware(server, {
         context: async ({ req }) => {
-          try {
-            const auth = req ? req.headers.authorization : null;
+          const auth = req ? req.headers.authorization : null;
 
-            if (auth && auth.startsWith("Bearer ")) {
-              const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
+          if (auth && auth.startsWith("Bearer ")) {
+            const token = auth.substring(7);
+
+            try {
+              const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
               const currentUser = await User.findById(decodedToken.id);
               return { currentUser, pubsub };
+            } catch (error) {
+              console.error("Error verifying JWT:", error.message);
+              validateAuth();
             }
-          } catch (error) {
-            console.error("Error in context function:", error);
-            throw error;
           }
         }
       })
     );
+
+    const PORT = process.env.PORT || 4000;
+    // Now that our HTTP server is fully set up, we can listen to it.
+    httpServer.listen(PORT, () => {
+      console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+    });
   } catch (error) {
-    console.error("Error starting the server:", error);
-    throw error;
+    console.error("Error starting the server:", error.message);
+    throw error.message;
   }
 };
-startServer();
 
-const PORT = process.env.PORT || 4000;
-// Now that our HTTP server is fully set up, we can listen to it.
-httpServer.listen(PORT, () => {
-  console.log(`Server is now running on http://localhost:${PORT}/graphql`);
-});
+startServer();
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -100,4 +104,5 @@ mongoose
   })
   .catch(error => {
     console.error("Error connecting to MongoDB:", error.message);
+    throw error.message;
   });
