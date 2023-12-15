@@ -6,10 +6,10 @@ const { PubSub } = require("graphql-subscriptions");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
 const { createServer } = require("http");
 const express = require("express");
-const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const { typeDefs, resolvers } = require("./index");
+const { connectDatabase } = require("./database");
 const User = require("./models/User");
 
 const app = express();
@@ -52,15 +52,7 @@ async function startServer() {
       path: server.graphqlPath
     }
   );
-
-  mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {
-      console.log("Connected to MongoDB");
-    })
-    .catch(error => {
-      console.error("Error connecting to MongoDB:", error.message);
-    });
 }
 
 startServer();
+connectDatabase();
