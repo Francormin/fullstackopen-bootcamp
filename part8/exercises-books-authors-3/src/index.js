@@ -1,4 +1,5 @@
-const { gql } = require("apollo-server");
+const { PubSub } = require("graphql-subscriptions");
+const gql = require("graphql-tag");
 
 const { authorCount, allAuthors } = require("./queries/authorQueries");
 const { bookCount, allBooks } = require("./queries/bookQueries");
@@ -7,6 +8,8 @@ const me = require("./queries/me");
 const authorResolver = require("./resolvers/authorResolver");
 const bookResolver = require("./resolvers/bookResolver");
 const mutationResolver = require("./resolvers/mutationResolver");
+
+const pubsub = new PubSub();
 
 const typeDefs = gql`
   type Author {
@@ -67,7 +70,7 @@ const resolvers = {
   Mutation: mutationResolver,
   Subscription: {
     bookAdded: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(["BOOK_ADDED"])
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
     }
   }
 };
