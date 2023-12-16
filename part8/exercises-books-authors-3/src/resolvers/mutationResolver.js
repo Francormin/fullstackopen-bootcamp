@@ -1,3 +1,4 @@
+const { PubSub } = require("graphql-subscriptions");
 const jwt = require("jsonwebtoken");
 
 const Author = require("../models/Author");
@@ -13,8 +14,10 @@ const {
 } = require("../utils/validation");
 const errorCatching = require("../utils/errorCatching");
 
+const pubsub = new PubSub();
+
 const mutationResolver = {
-  addBook: async (_, args, { currentUser, pubsub }) => {
+  addBook: async (_, args, { currentUser }) => {
     const { title, published, author, genres } = args;
 
     validateAuth(currentUser);
