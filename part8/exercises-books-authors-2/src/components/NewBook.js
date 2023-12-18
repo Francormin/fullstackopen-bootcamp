@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useCreateBookMutation from "../hooks/useCreateBookMutation";
 
-const NewBook = ({ show, setError, token }) => {
+const NewBook = ({ show, setError, token, setPage }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -20,10 +20,11 @@ const NewBook = ({ show, setError, token }) => {
     setAuthor("");
     setGenres([]);
     setGenre("");
+    setPage("books");
   };
 
-  const handleCreateBookError = ({ networkError }) => {
-    setError(networkError.result.errors[0].message);
+  const handleCreateBookError = error => {
+    !error.networkError.result ? setError(error.message) : setError(error.networkError.result.errors[0].message);
 
     setTimeout(() => {
       setError(null);
