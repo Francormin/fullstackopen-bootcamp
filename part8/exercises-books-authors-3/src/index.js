@@ -75,4 +75,8 @@ const resolvers = {
   }
 };
 
-module.exports = { typeDefs, resolvers };
+module.exports = {
+  typeDefs,
+  resolvers,
+  pubsub
+};
