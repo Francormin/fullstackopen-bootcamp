@@ -7,7 +7,7 @@ const BookTable = ({ books }) => {
           <th>author</th>
           <th>published</th>
         </tr>
-        {books.map(book => (
+        {books?.map(book => (
           <tr key={book.title}>
             <td>{book.title}</td>
             <td>{book.author.name}</td>

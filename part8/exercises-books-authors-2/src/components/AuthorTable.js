@@ -6,7 +6,7 @@ const AuthorTable = ({ authors }) => (
         <th>born</th>
         <th>books</th>
       </tr>
-      {authors.map(author => (
+      {authors?.map(author => (
         <tr key={author.name}>
           <td>{author.name}</td>
           <td>{author.born}</td>
