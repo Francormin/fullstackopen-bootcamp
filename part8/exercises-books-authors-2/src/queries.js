@@ -75,3 +75,16 @@ export const CURRENT_USER = gql`
     }
   }
 `;
+
+export const BOOK_ADDED = gql`
+  subscription OnBookAdded {
+    bookAdded {
+      title
+      author {
+        name
+      }
+      published
+      genres
+    }
+  }
+`;
