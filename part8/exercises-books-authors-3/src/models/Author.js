@@ -10,6 +10,11 @@ const schema = new mongoose.Schema({
   born: {
     type: Number,
     min: 201
+  },
+  bookCount: {
+    type: Number,
+    min: 0,
+    default: 0
   }
 });
 
