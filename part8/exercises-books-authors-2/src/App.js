@@ -18,15 +18,17 @@ const App = () => {
   useAddedBookSubscription(client);
 
   const logoutHandler = () => {
-    setToken(null);
-    setPage("authors");
+    setPage("login");
     setError(null);
+    setToken(null);
+
     window.localStorage.removeItem("user-token");
     client.resetStore();
   };
 
   useEffect(() => {
     const token = window.localStorage.getItem("user-token");
+
     if (token) {
       setToken(token);
     }
