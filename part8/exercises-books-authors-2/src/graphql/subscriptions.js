@@ -1,14 +1,11 @@
 import { gql } from "@apollo/client";
+import { BOOK_DETAILS } from "./fragments";
 
 export const BOOK_ADDED = gql`
   subscription OnBookAdded {
     bookAdded {
-      title
-      author {
-        name
-      }
-      published
-      genres
+      ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
 `;
