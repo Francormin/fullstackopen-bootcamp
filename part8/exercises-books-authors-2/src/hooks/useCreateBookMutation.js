@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { CREATE_BOOK } from "../queries";
+import { CREATE_BOOK } from "../graphql/mutations";
 
 const useCreateBookMutation = ({ onCompleted, onError }) => {
   const [createBook] = useMutation(CREATE_BOOK, {

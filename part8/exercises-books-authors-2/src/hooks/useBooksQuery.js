@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS, BOOKS_BY_GENRE } from "../queries";
+import { ALL_BOOKS, BOOKS_BY_GENRE } from "../graphql/queries";
 
 const useBooksQuery = genre => {
   const { loading, data } = useQuery(genre ? BOOKS_BY_GENRE : ALL_BOOKS, {

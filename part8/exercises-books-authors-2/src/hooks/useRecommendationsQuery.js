@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from "@apollo/client";
-import { ALL_BOOKS, CURRENT_USER } from "../queries";
+import { ALL_BOOKS, CURRENT_USER } from "../graphql/queries";
 
 const useRecommendationsQuery = () => {
   const client = useApolloClient();

@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { UPDATE_AUTHOR } from "../queries";
+import { UPDATE_AUTHOR } from "../graphql/mutations";
 
 const useUpdateAuthorMutation = () => {
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {

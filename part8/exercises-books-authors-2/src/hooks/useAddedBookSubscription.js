@@ -1,5 +1,5 @@
 import { useSubscription } from "@apollo/client";
-import { BOOK_ADDED } from "../queries";
+import { BOOK_ADDED } from "../graphql/subscriptions";
 
 export const useAddedBookSubscription = client => {
   useSubscription(BOOK_ADDED, {
