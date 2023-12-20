@@ -3,7 +3,7 @@ interface BmiCalculatorValues {
   weight: number;
 }
 
-const parseArguments = (args: string[]): BmiCalculatorValues => {
+const parseArguments = (args: string[]): BmiCalculatorValues | Error => {
   if (args.length < 4) throw new Error("Not enough arguments.");
   if (args.length > 4) throw new Error("Too many arguments.");
 
@@ -40,18 +40,21 @@ const calculateBmi = (height: number, weight: number, partialMessage: string): v
 };
 
 try {
-  const { height, weight } = parseArguments(process.argv);
+  const result = parseArguments(process.argv);
 
+  if (result instanceof Error) throw result;
+
+  const { height, weight } = result;
   calculateBmi(
     height,
     weight,
     `
-    Height: ${height}cm
-    Weight: ${weight}kg
-    BMI result:`
+      Height: ${height}cm
+      Weight: ${weight}kg
+      BMI result:`
   );
 } catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
+  let errorMessage: string = "Something bad happened.";
 
   if (error instanceof Error) {
     errorMessage += ` Error: ${error.message}`;
