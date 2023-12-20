@@ -1,3 +1,28 @@
+interface ExerciseCalculatorValues {
+  days: number[];
+  targetValue: number;
+}
+
+const parseArguments1 = (args: string[]): ExerciseCalculatorValues | Error => {
+  if (args.length < 4) throw new Error("Not enough arguments.");
+
+  const [_, __, targetValue, ...rest] = args;
+
+  const daysArr: number[] = [];
+  for (const day of rest) {
+    if (isNaN(Number(targetValue)) && isNaN(Number(day))) {
+      throw new Error("Provided values were not numbers!");
+    } else {
+      daysArr.push(Number(day));
+    }
+  }
+
+  return {
+    days: daysArr,
+    targetValue: Number(targetValue)
+  };
+};
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -8,13 +33,13 @@ interface Result {
   ratingDescription: string;
 }
 
-function calculateExercises(days: number[], targetValue: number): Result {
-  const periodLength = days.length;
-  const trainingDays = days.filter(day => day > 0).length;
-  const average = days.reduce((a, b) => a + b, 0) / days.length;
-  const success = average >= targetValue;
-  let rating = 0;
-  let ratingDescription = "";
+function calculateExercises(days: number[], targetValue: number): void {
+  const periodLength: number = days.length;
+  const trainingDays: number = days.filter(day => day > 0).length;
+  const average: number = days.reduce((a, b) => a + b, 0) / days.length;
+  const success: boolean = average >= targetValue;
+  let rating: number = 0;
+  let ratingDescription: string = "";
 
   if (success) {
     rating = 3;
@@ -27,7 +52,7 @@ function calculateExercises(days: number[], targetValue: number): Result {
     ratingDescription = "bad";
   }
 
-  return {
+  console.log({
     periodLength,
     trainingDays,
     target: targetValue,
@@ -35,7 +60,23 @@ function calculateExercises(days: number[], targetValue: number): Result {
     success,
     rating,
     ratingDescription
-  };
+  });
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const result: ExerciseCalculatorValues | Error = parseArguments1(process.argv);
+
+  if (result instanceof Error) throw result;
+
+  const { days, targetValue } = result;
+
+  calculateExercises(days, targetValue);
+} catch (error: unknown) {
+  let errorMessage: string = "Something bad happened.";
+
+  if (error instanceof Error) {
+    errorMessage += ` Error: ${error.message}`;
+  }
+
+  console.log(errorMessage);
+}
