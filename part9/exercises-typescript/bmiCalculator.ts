@@ -40,11 +40,12 @@ const calculateBmi = (height: number, weight: number, partialMessage: string): v
 };
 
 try {
-  const result = parseArguments(process.argv);
+  const result: BmiCalculatorValues | Error = parseArguments(process.argv);
 
   if (result instanceof Error) throw result;
 
   const { height, weight } = result;
+
   calculateBmi(
     height,
     weight,
