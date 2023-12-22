@@ -1,28 +1,3 @@
-interface ExerciseCalculatorValues {
-  days: number[];
-  targetValue: number;
-}
-
-const parseArguments1 = (args: string[]): ExerciseCalculatorValues | Error => {
-  if (args.length < 4) throw new Error("Not enough arguments.");
-
-  const [, , targetValue, ...rest] = args;
-
-  const daysArr: number[] = [];
-  for (const day of rest) {
-    if (isNaN(Number(targetValue)) && isNaN(Number(day))) {
-      throw new Error("Provided values were not numbers!");
-    } else {
-      daysArr.push(Number(day));
-    }
-  }
-
-  return {
-    days: daysArr,
-    targetValue: Number(targetValue)
-  };
-};
-
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -33,7 +8,7 @@ interface Result {
   ratingDescription: string;
 }
 
-function calculateExercises(days: number[], targetValue: number): Result {
+export function calculateExercises(days: number[], targetValue: number): Result {
   const periodLength = days.length;
   const trainingDays = days.filter(day => day > 0).length;
   const average = days.reduce((a, b) => a + b, 0) / days.length;
@@ -61,22 +36,4 @@ function calculateExercises(days: number[], targetValue: number): Result {
     rating,
     ratingDescription
   };
-}
-
-try {
-  const result = parseArguments1(process.argv);
-
-  if (result instanceof Error) throw result;
-
-  const { days, targetValue } = result;
-
-  calculateExercises(days, targetValue);
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-
-  if (error instanceof Error) {
-    errorMessage += ` Error: ${error.message}`;
-  }
-
-  throw errorMessage;
 }
