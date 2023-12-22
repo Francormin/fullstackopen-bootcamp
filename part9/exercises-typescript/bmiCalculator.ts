@@ -1,4 +1,10 @@
-export const calculateBmi = (height: number, weight: number) => {
+interface ObjResponse {
+  height: string;
+  weight: string;
+  BMI: string;
+}
+
+export const calculateBmi = (height: number, weight: number): ObjResponse => {
   const bmi = Number((weight / (height / 100) ** 2).toFixed(1));
   const objResponse = {
     height: `${height}cm`,
