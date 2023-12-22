@@ -6,7 +6,7 @@ interface ExerciseCalculatorValues {
 const parseArguments1 = (args: string[]): ExerciseCalculatorValues | Error => {
   if (args.length < 4) throw new Error("Not enough arguments.");
 
-  const [_, __, targetValue, ...rest] = args;
+  const [, , targetValue, ...rest] = args;
 
   const daysArr: number[] = [];
   for (const day of rest) {
@@ -33,7 +33,7 @@ interface Result {
   ratingDescription: string;
 }
 
-function calculateExercises(days: number[], targetValue: number): void {
+function calculateExercises(days: number[], targetValue: number): Result {
   const periodLength = days.length;
   const trainingDays = days.filter(day => day > 0).length;
   const average = days.reduce((a, b) => a + b, 0) / days.length;
@@ -52,7 +52,7 @@ function calculateExercises(days: number[], targetValue: number): void {
     ratingDescription = "bad";
   }
 
-  console.log({
+  return {
     periodLength,
     trainingDays,
     target: targetValue,
@@ -60,7 +60,7 @@ function calculateExercises(days: number[], targetValue: number): void {
     success,
     rating,
     ratingDescription
-  });
+  };
 }
 
 try {
@@ -78,5 +78,5 @@ try {
     errorMessage += ` Error: ${error.message}`;
   }
 
-  console.log(errorMessage);
+  throw errorMessage;
 }
