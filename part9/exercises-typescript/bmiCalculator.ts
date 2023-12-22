@@ -1,6 +1,6 @@
-export const calculateBmi = (height: number, weight: number): object => {
-  const bmi: number = Number((weight / (height / 100) ** 2).toFixed(1));
-  const objResponse: object = {
+export const calculateBmi = (height: number, weight: number) => {
+  const bmi = Number((weight / (height / 100) ** 2).toFixed(1));
+  const objResponse = {
     height: `${height}cm`,
     weight: `${weight}kg`
   };
