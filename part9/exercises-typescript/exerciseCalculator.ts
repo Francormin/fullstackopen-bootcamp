@@ -34,12 +34,12 @@ interface Result {
 }
 
 function calculateExercises(days: number[], targetValue: number): void {
-  const periodLength: number = days.length;
-  const trainingDays: number = days.filter(day => day > 0).length;
-  const average: number = days.reduce((a, b) => a + b, 0) / days.length;
-  const success: boolean = average >= targetValue;
-  let rating: number = 0;
-  let ratingDescription: string = "";
+  const periodLength = days.length;
+  const trainingDays = days.filter(day => day > 0).length;
+  const average = days.reduce((a, b) => a + b, 0) / days.length;
+  const success = average >= targetValue;
+  let rating = 0;
+  let ratingDescription = "";
 
   if (success) {
     rating = 3;
@@ -64,7 +64,7 @@ function calculateExercises(days: number[], targetValue: number): void {
 }
 
 try {
-  const result: ExerciseCalculatorValues | Error = parseArguments1(process.argv);
+  const result = parseArguments1(process.argv);
 
   if (result instanceof Error) throw result;
 
@@ -72,7 +72,7 @@ try {
 
   calculateExercises(days, targetValue);
 } catch (error: unknown) {
-  let errorMessage: string = "Something bad happened.";
+  let errorMessage = "Something bad happened.";
 
   if (error instanceof Error) {
     errorMessage += ` Error: ${error.message}`;
