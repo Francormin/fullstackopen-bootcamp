@@ -7,8 +7,31 @@ router.get("/", (_req, res) => {
   res.send(patientService.getNonSensitivePatients());
 });
 
-router.post("/", (_req, res) => {
-  res.send("Saving a patient!");
+router.post("/", (req, res) => {
+  const { name, dateOfBirth, gender, occupation } = req.body;
+
+  if (!name || !dateOfBirth || !gender || !occupation) {
+    return res.status(400).send({ error: "Missing name, dateOfBirth, gender, or occupation" });
+  }
+
+  try {
+    const newPatient = patientService.addPatient({
+      name,
+      dateOfBirth,
+      gender,
+      occupation
+    });
+
+    return res.send(newPatient);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong.";
+
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+
+    return res.status(400).send({ error: errorMessage });
+  }
 });
 
 export default router;
