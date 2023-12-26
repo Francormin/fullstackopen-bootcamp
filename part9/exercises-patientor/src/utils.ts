@@ -26,7 +26,7 @@ const parseSsn = (ssn: unknown): string => {
 
 const parseGender = (gender: unknown): Gender => {
   if (!isString(gender) || !isGender(gender)) {
-    throw new Error("Incorrect gender: " + gender);
+    throw new Error("Incorrect gender. It must be 'male', 'female' or 'other': " + gender);
   }
 
   return gender;
