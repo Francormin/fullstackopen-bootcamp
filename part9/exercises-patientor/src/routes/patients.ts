@@ -22,7 +22,7 @@ router.post("/", (req, res) => {
       occupation
     });
 
-    return res.send(newPatient);
+    return res.json(newPatient);
   } catch (error: unknown) {
     let errorMessage = "Something went wrong.";
 
@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
       errorMessage += " Error: " + error.message;
     }
 
-    return res.status(400).send({ error: errorMessage });
+    return res.status(400).send(errorMessage);
   }
 });
 
