@@ -1,5 +1,6 @@
 import express from "express";
 import patientService from "../services/patientService";
+import toNewPatientEntry from "../utils";
 
 const router = express.Router();
 
@@ -8,21 +9,12 @@ router.get("/", (_req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { name, dateOfBirth, gender, occupation } = req.body;
-
-  if (!name || !dateOfBirth || !gender || !occupation) {
-    return res.status(400).send({ error: "Missing name, dateOfBirth, gender, or occupation" });
-  }
-
   try {
-    const newPatient = patientService.addPatient({
-      name,
-      dateOfBirth,
-      gender,
-      occupation
-    });
+    const newPatient = toNewPatientEntry(req.body);
 
-    return res.json(newPatient);
+    const addedPatient = patientService.addPatient(newPatient);
+
+    return res.json(addedPatient);
   } catch (error: unknown) {
     let errorMessage = "Something went wrong.";
 
