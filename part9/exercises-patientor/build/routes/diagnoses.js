@@ -7,9 +7,10 @@ const express_1 = __importDefault(require("express"));
 const diagnoseService_1 = __importDefault(require("../services/diagnoseService"));
 const router = express_1.default.Router();
 router.get("/", (_req, res) => {
-    res.send(diagnoseService_1.default.getDiagnoses());
+    const diagnoses = diagnoseService_1.default.getDiagnoses() || [];
+    return res.json(diagnoses);
 });
 router.post("/", (_req, res) => {
-    res.send("Saving a diagnose!");
+    return res.send("Saving a diagnose!");
 });
 exports.default = router;
