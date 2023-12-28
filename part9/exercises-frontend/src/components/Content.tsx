@@ -3,11 +3,13 @@ import Part from "./Part";
 
 const Content = (props: ContentProps) => {
   return (
-    <div>
+    <>
       {props.parts.map(part => (
-        <Part part={part} />
+        <div key={part.name}>
+          <Part part={part} />
+        </div>
       ))}
-    </div>
+    </>
   );
 };
 
