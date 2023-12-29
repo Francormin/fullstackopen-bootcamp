@@ -1,5 +1,7 @@
 import { Gender, NewPatientEntry } from "./types";
 
+// Helper functions for creating new patient entries.
+
 const parseName = (name: unknown): string => {
   if (!isString(name)) {
     throw new Error("Incorrect name: " + name);
@@ -40,6 +42,8 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
+// Helper functions to check the type of a variable
+
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
 };
@@ -53,6 +57,8 @@ const isGender = (param: string): param is Gender => {
     .map(value => value.toString())
     .includes(param);
 };
+
+// Main function to export
 
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   if (!object || typeof object !== "object") {
