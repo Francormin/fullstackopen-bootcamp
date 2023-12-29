@@ -26,7 +26,7 @@ app.get("/bmi", (req: Request, res: Response) => {
   }
 });
 
-app.post("/exercises", (req: Request, res: Response): Response => {
+app.post("/exercises", (req: Request, res: Response) => {
   let { target, daily_exercises } = req.body;
 
   if (!target || !daily_exercises) {
