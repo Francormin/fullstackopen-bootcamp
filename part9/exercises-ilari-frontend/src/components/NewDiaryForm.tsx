@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { Diary, NewDiaryEntry } from "../types";
 
 interface NewDiaryFormState {
@@ -16,20 +16,50 @@ const INITIAL_STATE = {
   comment: ""
 };
 
+type NewDiaryFormReducerAction =
+  | {
+      type: "CHANGE_VALUE";
+      payload: {
+        inputName: string;
+        inputValue: string;
+      };
+    }
+  | {
+      type: "CLEAR";
+    };
+
+const formReducer = (state: NewDiaryFormState["inputValues"], action: NewDiaryFormReducerAction) => {
+  switch (action.type) {
+    case "CHANGE_VALUE":
+      const { inputName, inputValue } = action.payload;
+      return {
+        ...state,
+        [inputName]: inputValue
+      };
+    case "CLEAR":
+      return INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
 const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
-  const [inputValues, setInputValues] = useState<NewDiaryFormState["inputValues"]>(INITIAL_STATE);
+  const [inputValues, dispatch] = useReducer(formReducer, INITIAL_STATE);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
-    setInputValues({
-      ...inputValues,
-      [name]: value
+    dispatch({
+      type: "CHANGE_VALUE",
+      payload: {
+        inputName: name,
+        inputValue: value
+      }
     });
   };
 
   const handleClear = () => {
-    setInputValues(INITIAL_STATE);
+    dispatch({ type: "CLEAR" });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +70,7 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
       id: Math.floor(Math.random() * 1000)
     });
 
-    handleClear();
+    dispatch({ type: "CLEAR" });
   };
 
   return (
