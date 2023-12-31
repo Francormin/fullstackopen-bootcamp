@@ -81,7 +81,7 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
         <input onChange={handleChange} value={inputValues.date} type="date" name="date" placeholder="date" />
 
         <select onChange={handleChange} value={inputValues.weather} name="weather">
-          <option selected disabled value="">
+          <option disabled value="">
             Select weather conditions
           </option>
           <option value="sunny">Sunny</option>
@@ -92,7 +92,7 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
         </select>
 
         <select onChange={handleChange} value={inputValues.visibility} name="visibility">
-          <option selected disabled value="">
+          <option disabled value="">
             Select visibility conditions
           </option>
           <option value="great">Great</option>
