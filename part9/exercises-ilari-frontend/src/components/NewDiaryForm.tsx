@@ -1,50 +1,12 @@
-import { useReducer } from "react";
-import { Diary, NewDiaryEntry } from "../types";
-
-interface NewDiaryFormState {
-  inputValues: NewDiaryEntry;
-}
+import { Diary } from "../types";
+import useNewDiaryForm from "../hooks/useNewDiaryForm";
 
 interface NewDiaryFormProps {
   onNewDiary: (newDiary: Diary) => void;
 }
 
-const INITIAL_STATE = {
-  date: "",
-  weather: "",
-  visibility: "",
-  comment: ""
-};
-
-type NewDiaryFormReducerAction =
-  | {
-      type: "CHANGE_VALUE";
-      payload: {
-        inputName: string;
-        inputValue: string;
-      };
-    }
-  | {
-      type: "CLEAR";
-    };
-
-const formReducer = (state: NewDiaryFormState["inputValues"], action: NewDiaryFormReducerAction) => {
-  switch (action.type) {
-    case "CHANGE_VALUE":
-      const { inputName, inputValue } = action.payload;
-      return {
-        ...state,
-        [inputName]: inputValue
-      };
-    case "CLEAR":
-      return INITIAL_STATE;
-    default:
-      return state;
-  }
-};
-
 const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
-  const [inputValues, dispatch] = useReducer(formReducer, INITIAL_STATE);
+  const [inputValues, dispatch] = useNewDiaryForm();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
