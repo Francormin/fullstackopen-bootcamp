@@ -9,22 +9,6 @@ interface AppState {
   diaries: Array<Diary>;
 }
 
-const INITIAL_STATE = [
-  {
-    id: 1,
-    date: "2017-01-01",
-    weather: "sunny",
-    visibility: "great",
-    comment: "Such a lovely day!"
-  },
-  {
-    id: 2,
-    date: "2017-01-02",
-    weather: "cloudy",
-    visibility: "good"
-  }
-];
-
 function App() {
   const [diaries, setDiaries] = useState<AppState["diaries"]>([]);
 
@@ -33,7 +17,14 @@ function App() {
   };
 
   useEffect(() => {
-    setDiaries(INITIAL_STATE);
+    const fetchDiaries = async (): Promise<Array<Diary>> => {
+      const response = await window.fetch("http://localhost:3001/api/diaries");
+      return await response.json();
+    };
+
+    fetchDiaries()
+      .then(diaries => setDiaries(diaries))
+      .catch(error => console.error(error));
   }, []);
 
   return (
