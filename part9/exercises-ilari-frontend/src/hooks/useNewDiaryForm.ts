@@ -40,7 +40,30 @@ const formReducer = (state: NewDiaryFormState["inputValues"], action: NewDiaryFo
 };
 
 const useNewDiaryForm = () => {
-  return useReducer(formReducer, INITIAL_STATE);
+  const [inputValues, dispatch] = useReducer(formReducer, INITIAL_STATE);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    dispatch({
+      type: "CHANGE_VALUE",
+      payload: {
+        inputName: name,
+        inputValue: value
+      }
+    });
+  };
+
+  const resetForm = () => {
+    dispatch({
+      type: "CLEAR"
+    });
+  };
+
+  return {
+    inputValues,
+    handleInputChange,
+    resetForm
+  };
 };
 
 export default useNewDiaryForm;
