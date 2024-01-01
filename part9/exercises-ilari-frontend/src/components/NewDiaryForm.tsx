@@ -6,23 +6,12 @@ interface NewDiaryFormProps {
 }
 
 const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
-  const [inputValues, dispatch] = useNewDiaryForm();
+  const { inputValues, handleInputChange, resetForm } = useNewDiaryForm();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    handleInputChange(event);
 
-    dispatch({
-      type: "CHANGE_VALUE",
-      payload: {
-        inputName: name,
-        inputValue: value
-      }
-    });
-  };
-
-  const handleClear = () => {
-    dispatch({ type: "CLEAR" });
-  };
+  const handleClear = () => resetForm();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,7 +21,7 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
       id: Math.floor(Math.random() * 1000)
     });
 
-    dispatch({ type: "CLEAR" });
+    resetForm();
   };
 
   return (
