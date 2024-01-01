@@ -3,7 +3,7 @@ import Diaries from "./components/Diaries";
 import NewDiaryForm from "./components/NewDiaryForm";
 import "./App.css";
 
-function App() {
+const App = () => {
   const { diaries, handleNewDiary } = useDiaries();
 
   return (
@@ -13,6 +13,6 @@ function App() {
       <NewDiaryForm onNewDiary={handleNewDiary} />
     </div>
   );
-}
+};
 
 export default App;
