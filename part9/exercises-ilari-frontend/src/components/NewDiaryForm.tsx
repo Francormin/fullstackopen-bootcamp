@@ -6,20 +6,19 @@ interface NewDiaryFormProps {
 }
 
 const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
-  const { inputValues, handleInputChange, resetForm } = useNewDiaryForm();
+  const { inputValues, handleInputChange, resetForm, addNewDiary } = useNewDiaryForm();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     handleInputChange(event);
 
   const handleClear = () => resetForm();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    onNewDiary({
-      ...inputValues,
-      id: Math.floor(Math.random() * 1000)
-    });
+    const createdDiary = addNewDiary(inputValues);
+
+    onNewDiary(await createdDiary);
 
     resetForm();
   };
