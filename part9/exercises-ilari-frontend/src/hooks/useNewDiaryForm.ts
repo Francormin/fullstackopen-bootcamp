@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+import { createNewDiary } from "../services/createNewDiary";
 import { NewDiaryEntry } from "../types";
 
 interface NewDiaryFormState {
@@ -53,6 +54,11 @@ const useNewDiaryForm = () => {
     });
   };
 
+  const addNewDiary = (newDiaryEntry: NewDiaryEntry) => {
+    const newDiary = createNewDiary(newDiaryEntry);
+    return newDiary;
+  };
+
   const resetForm = () => {
     dispatch({
       type: "CLEAR"
@@ -62,7 +68,8 @@ const useNewDiaryForm = () => {
   return {
     inputValues,
     handleInputChange,
-    resetForm
+    resetForm,
+    addNewDiary
   };
 };
 
