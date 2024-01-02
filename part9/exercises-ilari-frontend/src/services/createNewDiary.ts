@@ -10,7 +10,7 @@ export const createNewDiary = async (newDiary: NewDiaryEntry): Promise<Diary> =>
       body: JSON.stringify(newDiary)
     });
 
-    return (await response.json()) as Diary;
+    return await response.json();
   } catch (error) {
     console.error(error);
     throw new Error("post diary error");
