@@ -54,15 +54,15 @@ const useNewDiaryForm = () => {
     });
   };
 
-  const addNewDiary = (newDiaryEntry: NewDiaryEntry) => {
-    const newDiary = createNewDiary(newDiaryEntry);
-    return newDiary;
-  };
-
   const resetForm = () => {
     dispatch({
       type: "CLEAR"
     });
+  };
+
+  const addNewDiary = (newDiaryEntry: NewDiaryEntry) => {
+    const newDiary = createNewDiary(newDiaryEntry);
+    return newDiary;
   };
 
   return {
