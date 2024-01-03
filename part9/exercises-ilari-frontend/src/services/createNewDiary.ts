@@ -1,18 +1,16 @@
+import axios from "axios";
 import { Diary, NewDiaryEntry } from "../types";
 
 export const createNewDiary = async (newDiary: NewDiaryEntry): Promise<Diary> => {
   try {
-    const response = await window.fetch("http://localhost:3001/api/diaries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newDiary)
-    });
-
-    return await response.json();
+    const { data } = await axios.post<Diary>("http://localhost:3001/api/diaries", newDiary);
+    return data;
   } catch (error) {
-    console.error(error);
-    throw new Error("post diary error");
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data;
+    } else {
+      console.error(error);
+      throw new Error("post diary error");
+    }
   }
 };
