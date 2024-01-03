@@ -60,8 +60,8 @@ const useNewDiaryForm = () => {
     });
   };
 
-  const addNewDiary = (newDiaryEntry: NewDiaryEntry) => {
-    const newDiary = createNewDiary(newDiaryEntry);
+  const addNewDiary = async (newDiaryEntry: NewDiaryEntry) => {
+    const newDiary = await createNewDiary(newDiaryEntry);
     return newDiary;
   };
 
