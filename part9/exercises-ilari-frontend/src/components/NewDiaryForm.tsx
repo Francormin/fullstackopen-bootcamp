@@ -15,11 +15,8 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const createdDiary = addNewDiary(inputValues);
-
-    onNewDiary(await createdDiary);
-
+    const createdDiary = await addNewDiary(inputValues);
+    onNewDiary(createdDiary);
     resetForm();
   };
 
