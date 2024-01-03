@@ -6,9 +6,14 @@ const useDiaries = () => {
   const [diaries, setDiaries] = useState<Array<Diary>>([]);
 
   useEffect(() => {
-    getAllDiaries()
-      .then(diaries => setDiaries(diaries))
-      .catch(error => console.error(error));
+    const fetchDiaries = async () => {
+      const diaries = await getAllDiaries();
+      if (diaries) {
+        setDiaries(diaries);
+      }
+    };
+
+    fetchDiaries();
   }, []);
 
   const handleNewDiary = (newDiary: Diary) => {
