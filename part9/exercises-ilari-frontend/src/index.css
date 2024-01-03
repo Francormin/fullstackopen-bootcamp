@@ -49,4 +49,8 @@ textarea {
   font-family: inherit;
   margin-bottom: 8px;
   padding-left: 10px;
+  min-width: 300px;
+  min-height: 100px;
+  max-width: 500px;
+  max-height: 200px;
 }
