@@ -3,7 +3,7 @@ import { Diary } from "../types";
 
 export const getAllDiaries = async (): Promise<Array<Diary>> => {
   try {
-    const { data } = await axios.get("http://localhost:3001/api/diaries");
+    const { data } = await axios.get<Array<Diary>>("http://localhost:3001/api/diaries");
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
