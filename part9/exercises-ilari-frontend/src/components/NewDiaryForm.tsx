@@ -24,10 +24,11 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
     } catch (error) {
       if (typeof error === "string") {
         setError(error);
-        setTimeout(() => {
+        return setTimeout(() => {
           setError("");
         }, 5000);
       }
+
       throw error;
     }
   };
@@ -39,7 +40,7 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
       {!!error.length && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <input onChange={handleChange} value={inputValues.date} type="date" name="date" placeholder="date" />
+        <input onChange={handleChange} value={inputValues.date} type="date" name="date" placeholder="date" required />
 
         <select onChange={handleChange} value={inputValues.weather} name="weather" required>
           <option disabled value="">
@@ -50,7 +51,6 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
           <option value="cloudy">Cloudy</option>
           <option value="stormy">Stormy</option>
           <option value="windy">Windy</option>
-          <option value="foggy">Foggy</option>
         </select>
 
         <select onChange={handleChange} value={inputValues.visibility} name="visibility" required>
@@ -61,7 +61,6 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
           <option value="good">Good</option>
           <option value="ok">Ok</option>
           <option value="poor">Poor</option>
-          <option value="unknown">Unknown</option>
         </select>
 
         <textarea
