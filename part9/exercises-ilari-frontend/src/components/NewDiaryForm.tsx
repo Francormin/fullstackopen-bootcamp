@@ -29,7 +29,12 @@ const NewDiaryForm = ({ onNewDiary }: NewDiaryFormProps) => {
         }, 5000);
       }
 
-      throw error;
+      if (error instanceof Error) {
+        setError(error.message);
+        return setTimeout(() => {
+          setError("");
+        }, 5000);
+      }
     }
   };
 
