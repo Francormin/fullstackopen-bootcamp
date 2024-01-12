@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import FemaleIcon from "@mui/icons-material/Female";
+import MaleIcon from "@mui/icons-material/Male";
 
 import { Patient } from "../../types";
 import patientService from "../../services/patients";
@@ -23,10 +25,22 @@ const PatientDetails = () => {
     <div>
       {patient ? (
         <div>
-          <h2>{patient.name}</h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px"
+            }}
+          >
+            <h2>{patient.name}</h2>
+            {patient.gender === "female" ? <FemaleIcon /> : <MaleIcon />}
+          </div>
           <div>
             <p>
               <b>ssn:</b> {patient.ssn}
+            </p>
+            <p>
+              <b>date of birth:</b> {patient.dateOfBirth}
             </p>
             <p>
               <b>occupation:</b> {patient.occupation}
