@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from "@mui/material";
 import axios from "axios";
 
@@ -14,13 +15,13 @@ interface Props {
 
 const PatientListPage = ({ patients, setPatients }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string>("");
 
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError(undefined);
+    setError("");
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
@@ -28,17 +29,17 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
       const patient = await patientService.create(values);
       setPatients(patients.concat(patient));
       setModalOpen(false);
-    } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace("Something went wrong. Error: ", "");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error?.response?.data && typeof error?.response?.data === "string") {
+          const message = error.response.data.replace("Something went wrong. Error: ", "");
           console.error(message);
           setError(message);
         } else {
           setError("Unrecognized axios error");
         }
       } else {
-        console.error("Unknown error", e);
+        console.error("Unknown error", error);
         setError("Unknown error");
       }
     }
@@ -63,7 +64,9 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell>
+                <Link to={`/patient/${patient.id}`}>{patient.name}</Link>
+              </TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
