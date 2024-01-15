@@ -46,6 +46,21 @@ const PatientDetails = () => {
               <b>occupation:</b> {patient.occupation}
             </p>
           </div>
+          <div>
+            <h3>entries</h3>
+            {patient.entries.map(entry => (
+              <div>
+                <p>
+                  {entry.date} <i>{entry.description}</i>
+                </p>
+                <ul>
+                  {entry.diagnosisCodes?.map(code => (
+                    <li>{code}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <p>Patient not found</p>
