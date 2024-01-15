@@ -1,8 +1,12 @@
+// ------------------------------ Diagnose stuff ------------------------------ //
+
 export interface Diagnose {
   code: string;
   name: string;
   latin?: string;
 }
+
+// ------------------------------ Patient stuff ------------------------------ //
 
 export enum Gender {
   Male = "male",
@@ -19,6 +23,12 @@ export interface Patient {
   occupation: string;
   entries: Entry[];
 }
+
+export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
+
+export type NewPatientEntry = Omit<Patient, "id" | "entries">;
+
+// ------------------------------ Entry stuff ------------------------------ //
 
 interface BaseEntry {
   id: string;
@@ -58,7 +68,3 @@ interface HospitalEntry extends BaseEntry {
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
-
-export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
-
-export type NewPatientEntry = Omit<Patient, "id" | "entries">;
