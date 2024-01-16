@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button } from "@mui/material";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 
 import { Diagnosis, Patient } from "../../types";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnoses";
+import EntryDetails from "./EntryDetails";
 
 const PatientDetails = () => {
   const [patient, setPatient] = useState<Patient>();
-  const [diagnoses, setDiagnoses] = useState<Array<Diagnosis>>([]);
+  const [, setDiagnoses] = useState<Array<Diagnosis>>([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -31,15 +33,6 @@ const PatientDetails = () => {
 
     getDiagnoses();
   }, []);
-
-  const getDiagnosisNames = (code: string) => {
-    const diagnosisName = diagnoses.filter(d => d.code === code).map(d => d.name);
-    return (
-      <li key={code}>
-        {code} {diagnosisName}
-      </li>
-    );
-  };
 
   return (
     <div>
@@ -69,14 +62,10 @@ const PatientDetails = () => {
           <div>
             <h3>entries</h3>
             {patient.entries.map(entry => (
-              <div key={entry.id}>
-                <p>
-                  {entry.date} <i>{entry.description}</i>
-                </p>
-                {entry.diagnosisCodes && <ul>{entry.diagnosisCodes.map(code => getDiagnosisNames(code))}</ul>}
-              </div>
+              <EntryDetails key={entry.id} entry={entry} />
             ))}
           </div>
+          <Button variant="contained">add new entry</Button>
         </div>
       ) : (
         <p>Patient not found</p>
