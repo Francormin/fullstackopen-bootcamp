@@ -71,7 +71,6 @@ interface HospitalEntry extends BaseEntry {
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
 
-// Define omit especial para uniones
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
-// Define NewEntry sin la propiedad 'id'
+
 export type NewEntry = UnionOmit<Entry, "id">;
