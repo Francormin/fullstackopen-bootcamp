@@ -38,6 +38,8 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
+export type NewBaseEntry = Omit<BaseEntry, "id">;
+
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -68,3 +70,8 @@ interface HospitalEntry extends BaseEntry {
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
+// Define omit especial para uniones
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+// Define NewEntry sin la propiedad 'id'
+export type NewEntry = UnionOmit<Entry, "id">;
