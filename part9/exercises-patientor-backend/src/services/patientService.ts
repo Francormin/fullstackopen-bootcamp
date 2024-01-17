@@ -37,7 +37,7 @@ const addEntryToPatient = (patientId: string, entry: NewEntry): Entry => {
 
   const patientFound = patients.filter(patient => patient.id === patientId);
 
-  if (!patientFound) throw Error("No such patient");
+  if (!patientFound.length) throw Error("No such patient");
   else patientFound[0].entries.push(newEntry);
 
   return newEntry;
