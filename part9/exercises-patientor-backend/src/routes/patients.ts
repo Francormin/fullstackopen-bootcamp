@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
 
     const addedPatient = patientService.addPatient(newPatient);
 
-    return res.json(addedPatient);
+    return res.status(201).json(addedPatient);
   } catch (error: unknown) {
     let errorMessage = "Something went wrong.";
 
@@ -39,7 +39,7 @@ router.post("/:id/entries", (req, res) => {
 
   const addedEntry = patientService.addEntryToPatient(id, newEntry);
 
-  return res.json(addedEntry);
+  return res.status(201).json(addedEntry);
 });
 
 export default router;
