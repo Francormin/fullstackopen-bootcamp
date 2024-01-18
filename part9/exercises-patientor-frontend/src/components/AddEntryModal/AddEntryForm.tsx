@@ -45,7 +45,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
           onChange={({ target }) => setDescription(target.value)}
         />
 
-        <TextField label="Date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
+        <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
 
         <TextField
           label="Specialist"
