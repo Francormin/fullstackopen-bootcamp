@@ -29,14 +29,12 @@ const PatientDetails = () => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
-      await patientService.addEntry(values);
-      // setPatients(patients.concat(patient));
+      await patientService.addEntry(id, values);
       setModalOpen(false);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error?.response?.data && typeof error?.response?.data === "string") {
           const message = error.response.data.replace("Something went wrong. Error: ", "");
-          console.error(message);
           setError(message);
         } else {
           setError("Unrecognized axios error");
@@ -57,7 +55,7 @@ const PatientDetails = () => {
 
       getPatient();
     }
-  }, [id]);
+  }, [id, patient]);
 
   useEffect(() => {
     const getDiagnoses = async () => {
