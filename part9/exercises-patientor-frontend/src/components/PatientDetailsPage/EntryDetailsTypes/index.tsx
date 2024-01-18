@@ -1,4 +1,4 @@
-import { Entry } from "../../types";
+import { Entry } from "../../../types";
 import HealthCheckEntryDetails from "./HealthCheckEntryDetails";
 import HospitalEntryDetails from "./HospitalEntryDetails";
 import OccupationalHealthcareEntryDetails from "./OccupationalHealthcareEntryDetails";
