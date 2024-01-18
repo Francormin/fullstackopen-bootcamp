@@ -17,13 +17,11 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatientEntry(req.body);
-
     const addedPatient = patientService.addPatient(newPatient);
 
     return res.status(201).json(addedPatient);
   } catch (error: unknown) {
     let errorMessage = "Something went wrong.";
-
     if (error instanceof Error) {
       errorMessage += " Error: " + error.message;
     }
@@ -35,11 +33,19 @@ router.post("/", (req, res) => {
 router.post("/:id/entries", (req, res) => {
   const { id } = req.params;
 
-  const newEntry = toNewEntryPatient(req.body);
+  try {
+    const newEntry = toNewEntryPatient(req.body);
+    const addedEntry = patientService.addEntryToPatient(id, newEntry);
 
-  const addedEntry = patientService.addEntryToPatient(id, newEntry);
+    return res.status(201).json(addedEntry);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
 
-  return res.status(201).json(addedEntry);
+    return res.status(400).send(errorMessage);
+  }
 });
 
 export default router;
