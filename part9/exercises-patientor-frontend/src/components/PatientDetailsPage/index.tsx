@@ -36,12 +36,18 @@ const PatientDetails = () => {
         if (error?.response?.data && typeof error?.response?.data === "string") {
           const message = error.response.data.replace("Something went wrong. Error: ", "");
           setError(message);
+          setTimeout(() => {
+            setError("");
+          }, 3500);
         } else {
           setError("Unrecognized axios error");
         }
       } else {
         console.error("Unknown error", error);
         setError("Unknown error");
+        setTimeout(() => {
+          setError("");
+        }, 3500);
       }
     }
   };
