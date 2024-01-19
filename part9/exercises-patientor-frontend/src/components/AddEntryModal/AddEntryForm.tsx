@@ -8,11 +8,11 @@ interface Props {
   diagnoses: Array<Diagnosis>;
 }
 
-const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
+const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [diagnosisCodes] = useState([]);
+  const [diagnosisCode, setDiagnosisCode] = useState(diagnoses[0].code);
   const [entryType, setEntryType] = useState(EntryType.HealthCheck);
 
   const addPatient = (event: SyntheticEvent) => {
@@ -21,7 +21,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
       description,
       date,
       specialist,
-      diagnosisCodes,
+      diagnosisCodes: [diagnosisCode],
       type: entryType
     });
   };
@@ -32,6 +32,14 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     const entryType = Object.values(EntryType).find(entryType => entryType === value);
     if (entryType) {
       setEntryType(entryType);
+    }
+  };
+
+  const onDiagnosisCodesChange = (event: SelectChangeEvent<string>) => {
+    event.preventDefault();
+    const { value } = event.target;
+    if (value) {
+      setDiagnosisCode(value);
     }
   };
 
@@ -54,14 +62,14 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
           onChange={({ target }) => setSpecialist(target.value)}
         />
 
-        {/* <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
-        <Select label="DiagnosisCodes" fullWidth value={diagnosisCodes}>
+        <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
+        <Select label="DiagnosisCodes" fullWidth value={diagnosisCode} onChange={onDiagnosisCodesChange}>
           {diagnoses.map(diagnose => (
             <MenuItem key={diagnose.code} value={diagnose.code}>
               {diagnose.code}
             </MenuItem>
           ))}
-        </Select> */}
+        </Select>
 
         <InputLabel style={{ marginTop: 20 }}>Entry Type</InputLabel>
         <Select label="EntryType" fullWidth value={entryType} onChange={onEntryTypeChange}>
