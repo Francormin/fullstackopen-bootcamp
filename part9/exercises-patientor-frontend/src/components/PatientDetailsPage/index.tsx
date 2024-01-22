@@ -5,7 +5,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import axios from "axios";
 
-import { Diagnosis, EntryFormValues, Patient } from "../../types";
+import { Diagnosis, EntryFormValues, EntryType, Patient } from "../../types";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnoses";
 import EntryDetails from "./EntryDetailsTypes";
@@ -18,6 +18,8 @@ const PatientDetails = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
+  const [entryType, setEntryType] = useState<EntryType | null>(null);
+
   const { id } = useParams();
 
   const openModal = (): void => setModalOpen(true);
@@ -25,6 +27,11 @@ const PatientDetails = () => {
   const closeModal = (): void => {
     setModalOpen(false);
     setError("");
+    setEntryType(null);
+  };
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEntryType(event.target.value as EntryType);
   };
 
   const submitNewEntry = async (values: EntryFormValues) => {
@@ -104,6 +111,8 @@ const PatientDetails = () => {
             ))}
           </div>
           <AddEntryModal
+            entryType={entryType}
+            onEntryTypeChange={handleRadioChange}
             modalOpen={modalOpen}
             onSubmit={submitNewEntry}
             error={error}
