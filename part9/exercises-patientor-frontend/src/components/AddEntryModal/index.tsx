@@ -28,10 +28,15 @@ const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSub
     <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
       <DialogTitle>Add a new entry</DialogTitle>
 
-      <FormControl onChange={onEntryTypeChange}>
+      <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">Please, select the entry type:</FormLabel>
 
-        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          name="radio-buttons-group"
+          value={entryType}
+          onChange={onEntryTypeChange}
+        >
           <FormControlLabel value={EntryType.HealthCheck} control={<Radio />} label="Health Check" />
           <FormControlLabel value={EntryType.Hospital} control={<Radio />} label="Hospital" />
           <FormControlLabel
