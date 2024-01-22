@@ -1,4 +1,15 @@
-import { Dialog, DialogTitle, DialogContent, Divider, Alert } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Divider,
+  Alert,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  Radio
+} from "@mui/material";
 import { Diagnosis, EntryFormValues, EntryType } from "../../types";
 import AddEntryForm from "./AddEntryForm";
 
@@ -16,40 +27,23 @@ const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSub
   return (
     <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
       <DialogTitle>Add a new entry</DialogTitle>
-      <div>
-        <input
-          type="radio"
-          id="hospital"
-          name="entryType"
-          value={EntryType.Hospital}
-          checked={entryType === EntryType.Hospital}
-          onChange={onEntryTypeChange}
-        />
-        <label htmlFor="hospital">Hospital</label>
-      </div>
-      <div>
-        <input
-          type="radio"
-          id="healthCheck"
-          name="entryType"
-          value={EntryType.HealthCheck}
-          checked={entryType === EntryType.HealthCheck}
-          onChange={onEntryTypeChange}
-        />
-        <label htmlFor="healthCheck">Health Check</label>
-      </div>
-      <div>
-        <input
-          type="radio"
-          id="occupationalHealthcare"
-          name="entryType"
-          value={EntryType.OccupationalHealthcare}
-          checked={entryType === EntryType.OccupationalHealthcare}
-          onChange={onEntryTypeChange}
-        />
-        <label htmlFor="occupationalHealthcare">Occupational Healthcare</label>
-      </div>
+
+      <FormControl onChange={onEntryTypeChange}>
+        <FormLabel id="demo-radio-buttons-group-label">Entry Type</FormLabel>
+
+        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
+          <FormControlLabel value={EntryType.HealthCheck} control={<Radio />} label="Health Check" />
+          <FormControlLabel value={EntryType.Hospital} control={<Radio />} label="Hospital" />
+          <FormControlLabel
+            value={EntryType.OccupationalHealthcare}
+            control={<Radio />}
+            label="Occupational Healthcare"
+          />
+        </RadioGroup>
+      </FormControl>
+
       <Divider />
+
       <DialogContent>
         {error && <Alert severity="error">{error}</Alert>}
         {entryType !== null ? (
