@@ -3,17 +3,17 @@ import { TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEven
 import { Diagnosis, EntryFormValues, EntryType } from "../../types";
 
 interface Props {
+  entryType: EntryType;
   onCancel: () => void;
   onSubmit: (values: EntryFormValues) => void;
   diagnoses: Array<Diagnosis>;
 }
 
-const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
+const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
   const [diagnosisCode, setDiagnosisCode] = useState(diagnoses[0].code);
-  const [entryType, setEntryType] = useState(EntryType.HealthCheck);
 
   const addPatient = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -24,15 +24,6 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
       diagnosisCodes: [diagnosisCode],
       type: entryType
     });
-  };
-
-  const onEntryTypeChange = (event: SelectChangeEvent<EntryType>) => {
-    event.preventDefault();
-    const { value } = event.target;
-    const entryType = Object.values(EntryType).find(entryType => entryType === value);
-    if (entryType) {
-      setEntryType(entryType);
-    }
   };
 
   const onDiagnosisCodesChange = (event: SelectChangeEvent<string>) => {
@@ -69,13 +60,6 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
               {diagnose.code}
             </MenuItem>
           ))}
-        </Select>
-
-        <InputLabel style={{ marginTop: 20 }}>Entry Type</InputLabel>
-        <Select label="EntryType" fullWidth value={entryType} onChange={onEntryTypeChange}>
-          <MenuItem value={EntryType.HealthCheck}>Health Check</MenuItem>
-          <MenuItem value={EntryType.OccupationalHealthcare}>Occupational Healthcare</MenuItem>
-          <MenuItem value={EntryType.Hospital}>Hospital</MenuItem>
         </Select>
 
         <Grid>
