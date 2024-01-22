@@ -29,7 +29,7 @@ const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSub
       <DialogTitle>Add a new entry</DialogTitle>
 
       <FormControl onChange={onEntryTypeChange}>
-        <FormLabel id="demo-radio-buttons-group-label">Entry Type</FormLabel>
+        <FormLabel id="demo-radio-buttons-group-label">Please, select the entry type:</FormLabel>
 
         <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
           <FormControlLabel value={EntryType.HealthCheck} control={<Radio />} label="Health Check" />
@@ -42,12 +42,23 @@ const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSub
         </RadioGroup>
       </FormControl>
 
-      <Divider />
-
       <DialogContent>
         {error && <Alert severity="error">{error}</Alert>}
-        {entryType !== null ? (
-          <AddEntryForm entryType={entryType} onSubmit={onSubmit} onCancel={onClose} diagnoses={diagnoses} />
+        {entryType === EntryType.HealthCheck ? (
+          <>
+            <Divider />
+            <AddEntryForm entryType={entryType} onSubmit={onSubmit} onCancel={onClose} diagnoses={diagnoses} />
+          </>
+        ) : entryType === EntryType.Hospital ? (
+          <>
+            <Divider />
+            <AddEntryForm entryType={entryType} onSubmit={onSubmit} onCancel={onClose} diagnoses={diagnoses} />
+          </>
+        ) : entryType === EntryType.OccupationalHealthcare ? (
+          <>
+            <Divider />
+            <AddEntryForm entryType={entryType} onSubmit={onSubmit} onCancel={onClose} diagnoses={diagnoses} />
+          </>
         ) : null}
       </DialogContent>
     </Dialog>
