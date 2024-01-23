@@ -36,7 +36,7 @@ export enum EntryType {
   Hospital = "Hospital"
 }
 
-enum HealthCheckRating {
+export enum HealthCheckRating {
   Healthy = 0,
   LowRisk = 1,
   HighRisk = 2,
