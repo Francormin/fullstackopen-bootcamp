@@ -1,6 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 import { TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from "@mui/material";
-import { Diagnosis, EntryFormValues, EntryType } from "../../types";
+import { Diagnosis, EntryFormValues, EntryType, HealthCheckRating } from "../../types";
 
 interface Props {
   entryType: EntryType;
@@ -10,13 +10,20 @@ interface Props {
 }
 
 const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
+  // base entry
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
   const [diagnosisCode, setDiagnosisCode] = useState<string>("");
-  const [healthCheckRating, setHealthCheckRating] = useState<number | "">("");
+
+  // health check entry
+  const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating | "">("");
+
+  // hospital entry
   const [dischargeDate, setDischargeDate] = useState("");
   const [dischargeCriteria, setDischargeCriteria] = useState("");
+
+  // occupational healthcare entry
   const [employerName, setEmployerName] = useState("");
   const [sickLeaveStartDate, setSickLeaveStartDate] = useState("");
   const [sickLeaveEndDate, setSickLeaveEndDate] = useState("");
@@ -41,8 +48,8 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
   const onHealthCheckRatingChange = (event: SelectChangeEvent<number>) => {
     const { value } = event.target;
-    if (value) {
-      setHealthCheckRating(Number(value));
+    if (typeof value === "number") {
+      setHealthCheckRating(value);
     }
   };
 
@@ -70,10 +77,10 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
         <>
           <InputLabel style={{ marginTop: 20 }}>Health Check Rating</InputLabel>
           <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange}>
-            <MenuItem value={0}>Healthy</MenuItem>
-            <MenuItem value={1}>Low Risk</MenuItem>
-            <MenuItem value={2}>High Risk</MenuItem>
-            <MenuItem value={3}>Critical Risk</MenuItem>
+            <MenuItem value={HealthCheckRating.Healthy}>Healthy</MenuItem>
+            <MenuItem value={HealthCheckRating.LowRisk}>Low Risk</MenuItem>
+            <MenuItem value={HealthCheckRating.HighRisk}>High Risk</MenuItem>
+            <MenuItem value={HealthCheckRating.CriticalRisk}>Critical Risk</MenuItem>
           </Select>
         </>
       )}
