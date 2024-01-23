@@ -56,13 +56,13 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   return (
     <form onSubmit={addPatient}>
       <InputLabel style={{ marginTop: 20 }}>Entry Date</InputLabel>
-      <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
+      <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} required />
 
       <InputLabel style={{ marginTop: 20 }}>Description</InputLabel>
-      <TextField fullWidth value={description} onChange={({ target }) => setDescription(target.value)} />
+      <TextField fullWidth value={description} onChange={({ target }) => setDescription(target.value)} required />
 
       <InputLabel style={{ marginTop: 20 }}>Specialist</InputLabel>
-      <TextField fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} />
+      <TextField fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} required />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
       <Select fullWidth value={diagnosisCode} onChange={onDiagnosisCodesChange}>
@@ -76,7 +76,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       {entryType === EntryType.HealthCheck && (
         <>
           <InputLabel style={{ marginTop: 20 }}>Health Check Rating</InputLabel>
-          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange}>
+          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange} required>
             <MenuItem value={HealthCheckRating.Healthy}>Healthy</MenuItem>
             <MenuItem value={HealthCheckRating.LowRisk}>Low Risk</MenuItem>
             <MenuItem value={HealthCheckRating.HighRisk}>High Risk</MenuItem>
@@ -107,7 +107,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       {entryType === EntryType.OccupationalHealthcare && (
         <>
           <InputLabel style={{ marginTop: 20 }}>Employer Name</InputLabel>
-          <TextField fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} />
+          <TextField fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} required />
 
           <InputLabel style={{ marginTop: 20 }}>Sick Leave - Start Date</InputLabel>
           <TextField
