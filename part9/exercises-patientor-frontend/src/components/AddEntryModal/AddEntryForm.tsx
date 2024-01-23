@@ -15,6 +15,8 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [specialist, setSpecialist] = useState("");
   const [diagnosisCode, setDiagnosisCode] = useState<string>("");
   const [healthCheckRating, setHealthCheckRating] = useState<number | "">("");
+  const [dischargeDate, setDischargeDate] = useState("");
+  const [dischargeCriteria, setDischargeCriteria] = useState("");
 
   const addPatient = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -43,14 +45,15 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
   return (
     <form onSubmit={addPatient}>
+      <InputLabel style={{ marginTop: 20 }}>Entry Date</InputLabel>
+      <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
+
       <TextField
         label="Description"
         fullWidth
         value={description}
         onChange={({ target }) => setDescription(target.value)}
       />
-
-      <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
 
       <TextField
         label="Specialist"
@@ -77,6 +80,24 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
             <MenuItem value={2}>High Risk</MenuItem>
             <MenuItem value={3}>Critical Risk</MenuItem>
           </Select>
+        </>
+      )}
+
+      {entryType === EntryType.Hospital && (
+        <>
+          <InputLabel style={{ marginTop: 20 }}>Discharge Date</InputLabel>
+          <TextField
+            type="date"
+            fullWidth
+            value={dischargeDate}
+            onChange={({ target }) => setDischargeDate(target.value)}
+          />
+          <TextField
+            label="Discharge Criteria"
+            fullWidth
+            value={dischargeCriteria}
+            onChange={({ target }) => setDischargeCriteria(target.value)}
+          />
         </>
       )}
 
