@@ -27,7 +27,9 @@ const PatientDetails = () => {
   const closeModal = (): void => {
     setModalOpen(false);
     setError("");
-    setEntryType(null);
+    setTimeout(() => {
+      setEntryType(null);
+    }, 300);
   };
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
