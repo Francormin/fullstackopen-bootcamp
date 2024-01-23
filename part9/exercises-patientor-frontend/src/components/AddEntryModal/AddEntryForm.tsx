@@ -17,6 +17,9 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [healthCheckRating, setHealthCheckRating] = useState<number | "">("");
   const [dischargeDate, setDischargeDate] = useState("");
   const [dischargeCriteria, setDischargeCriteria] = useState("");
+  const [employerName, setEmployerName] = useState("");
+  const [sickLeaveStartDate, setSickLeaveStartDate] = useState("");
+  const [sickLeaveEndDate, setSickLeaveEndDate] = useState("");
 
   const addPatient = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -48,19 +51,11 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       <InputLabel style={{ marginTop: 20 }}>Entry Date</InputLabel>
       <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
 
-      <TextField
-        label="Description"
-        fullWidth
-        value={description}
-        onChange={({ target }) => setDescription(target.value)}
-      />
+      <InputLabel style={{ marginTop: 20 }}>Description</InputLabel>
+      <TextField fullWidth value={description} onChange={({ target }) => setDescription(target.value)} />
 
-      <TextField
-        label="Specialist"
-        fullWidth
-        value={specialist}
-        onChange={({ target }) => setSpecialist(target.value)}
-      />
+      <InputLabel style={{ marginTop: 20 }}>Specialist</InputLabel>
+      <TextField fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
       <Select fullWidth value={diagnosisCode} onChange={onDiagnosisCodesChange}>
@@ -92,11 +87,35 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
             value={dischargeDate}
             onChange={({ target }) => setDischargeDate(target.value)}
           />
+
+          <InputLabel style={{ marginTop: 20 }}>Discharge Criteria</InputLabel>
           <TextField
-            label="Discharge Criteria"
             fullWidth
             value={dischargeCriteria}
             onChange={({ target }) => setDischargeCriteria(target.value)}
+          />
+        </>
+      )}
+
+      {entryType === EntryType.OccupationalHealthcare && (
+        <>
+          <InputLabel style={{ marginTop: 20 }}>Employer Name</InputLabel>
+          <TextField fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} />
+
+          <InputLabel style={{ marginTop: 20 }}>Sick Leave - Start Date</InputLabel>
+          <TextField
+            type="date"
+            fullWidth
+            value={sickLeaveStartDate}
+            onChange={({ target }) => setSickLeaveStartDate(target.value)}
+          />
+
+          <InputLabel style={{ marginTop: 20 }}>Sick Leave - End Date</InputLabel>
+          <TextField
+            type="date"
+            fullWidth
+            value={sickLeaveEndDate}
+            onChange={({ target }) => setSickLeaveEndDate(target.value)}
           />
         </>
       )}
