@@ -129,34 +129,58 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
       {entryType === EntryType.Hospital && (
         <>
-          <InputLabel style={{ marginTop: 20 }}>Discharge Date</InputLabel>
+          <InputLabel htmlFor="dischargeDate" style={{ marginTop: 20 }}>
+            Discharge Date
+          </InputLabel>
           <Input
+            id="dischargeDate"
             type="date"
             fullWidth
             value={dischargeDate}
             onChange={({ target }) => setDischargeDate(target.value)}
           />
 
-          <InputLabel style={{ marginTop: 20 }}>Discharge Criteria</InputLabel>
-          <Input fullWidth value={dischargeCriteria} onChange={({ target }) => setDischargeCriteria(target.value)} />
+          <InputLabel htmlFor="dischargeCriteria" style={{ marginTop: 20 }}>
+            Discharge Criteria
+          </InputLabel>
+          <Input
+            id="dischargeCriteria"
+            fullWidth
+            value={dischargeCriteria}
+            onChange={({ target }) => setDischargeCriteria(target.value)}
+          />
         </>
       )}
 
       {entryType === EntryType.OccupationalHealthcare && (
         <>
-          <InputLabel style={{ marginTop: 20 }}>Employer Name</InputLabel>
-          <Input fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} required />
-
-          <InputLabel style={{ marginTop: 20 }}>Sick Leave - Start Date</InputLabel>
+          <InputLabel htmlFor="employerName" style={{ marginTop: 20 }}>
+            Employer Name
+          </InputLabel>
           <Input
+            id="employerName"
+            fullWidth
+            value={employerName}
+            onChange={({ target }) => setEmployerName(target.value)}
+            required
+          />
+
+          <InputLabel htmlFor="sickLeaveStartDate" style={{ marginTop: 20 }}>
+            Sick Leave - Start Date
+          </InputLabel>
+          <Input
+            id="sickLeaveStartDate"
             type="date"
             fullWidth
             value={sickLeaveStartDate}
             onChange={({ target }) => setSickLeaveStartDate(target.value)}
           />
 
-          <InputLabel style={{ marginTop: 20 }}>Sick Leave - End Date</InputLabel>
+          <InputLabel htmlFor="sickLeaveEndDate" style={{ marginTop: 20 }}>
+            Sick Leave - End Date
+          </InputLabel>
           <Input
+            id="sickLeaveEndDate"
             type="date"
             fullWidth
             value={sickLeaveEndDate}
