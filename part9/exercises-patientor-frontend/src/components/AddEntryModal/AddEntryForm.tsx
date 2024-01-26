@@ -1,5 +1,5 @@
 import { useState, SyntheticEvent } from "react";
-import { TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from "@mui/material";
+import { InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent, Input } from "@mui/material";
 import { Diagnosis, EntryFormValues, EntryType, HealthCheckRating } from "../../types";
 
 interface Props {
@@ -55,14 +55,39 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
   return (
     <form onSubmit={addPatient}>
-      <InputLabel style={{ marginTop: 20 }}>Entry Date</InputLabel>
-      <TextField type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} required />
+      <InputLabel htmlFor="entryDate" style={{ marginTop: 20 }}>
+        Entry Date
+      </InputLabel>
+      <Input
+        id="entryDate"
+        type="date"
+        fullWidth
+        value={date}
+        onChange={({ target }) => setDate(target.value)}
+        required
+      />
 
-      <InputLabel style={{ marginTop: 20 }}>Description</InputLabel>
-      <TextField fullWidth value={description} onChange={({ target }) => setDescription(target.value)} required />
+      <InputLabel htmlFor="description" style={{ marginTop: 20 }}>
+        Description
+      </InputLabel>
+      <Input
+        id="description"
+        fullWidth
+        value={description}
+        onChange={({ target }) => setDescription(target.value)}
+        required
+      />
 
-      <InputLabel style={{ marginTop: 20 }}>Specialist</InputLabel>
-      <TextField fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} required />
+      <InputLabel htmlFor="specialist" style={{ marginTop: 20 }}>
+        Specialist
+      </InputLabel>
+      <Input
+        id="specialist"
+        fullWidth
+        value={specialist}
+        onChange={({ target }) => setSpecialist(target.value)}
+        required
+      />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
       <Select fullWidth value={diagnosisCode} onChange={onDiagnosisCodesChange}>
@@ -88,7 +113,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       {entryType === EntryType.Hospital && (
         <>
           <InputLabel style={{ marginTop: 20 }}>Discharge Date</InputLabel>
-          <TextField
+          <Input
             type="date"
             fullWidth
             value={dischargeDate}
@@ -96,21 +121,17 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
           />
 
           <InputLabel style={{ marginTop: 20 }}>Discharge Criteria</InputLabel>
-          <TextField
-            fullWidth
-            value={dischargeCriteria}
-            onChange={({ target }) => setDischargeCriteria(target.value)}
-          />
+          <Input fullWidth value={dischargeCriteria} onChange={({ target }) => setDischargeCriteria(target.value)} />
         </>
       )}
 
       {entryType === EntryType.OccupationalHealthcare && (
         <>
           <InputLabel style={{ marginTop: 20 }}>Employer Name</InputLabel>
-          <TextField fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} required />
+          <Input fullWidth value={employerName} onChange={({ target }) => setEmployerName(target.value)} required />
 
           <InputLabel style={{ marginTop: 20 }}>Sick Leave - Start Date</InputLabel>
-          <TextField
+          <Input
             type="date"
             fullWidth
             value={sickLeaveStartDate}
@@ -118,7 +139,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
           />
 
           <InputLabel style={{ marginTop: 20 }}>Sick Leave - End Date</InputLabel>
-          <TextField
+          <Input
             type="date"
             fullWidth
             value={sickLeaveEndDate}
