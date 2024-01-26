@@ -1,5 +1,15 @@
 import { useState, SyntheticEvent } from "react";
-import { InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent, Input } from "@mui/material";
+import {
+  InputLabel,
+  MenuItem,
+  Select,
+  Grid,
+  Button,
+  SelectChangeEvent,
+  Input,
+  Checkbox,
+  ListItemText
+} from "@mui/material";
 import { Diagnosis, EntryFormValues, EntryType, HealthCheckRating } from "../../types";
 
 interface Props {
@@ -14,7 +24,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [diagnosisCode, setDiagnosisCode] = useState<string>("");
+  const [diagnosisCodes, setDiagnosisCodes] = useState<Array<string>>([]);
 
   // health check entry
   const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating | "">("");
@@ -34,15 +44,15 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       description,
       date,
       specialist,
-      diagnosisCodes: [diagnosisCode],
+      diagnosisCodes: diagnosisCodes,
       type: entryType
     });
   };
 
-  const onDiagnosisCodesChange = (event: SelectChangeEvent<string>) => {
+  const onDiagnosisCodesChange = (event: SelectChangeEvent<Array<string>>) => {
     const { value } = event.target;
     if (value) {
-      setDiagnosisCode(value);
+      setDiagnosisCodes(typeof value === "string" ? value.split(",") : value);
     }
   };
 
@@ -90,10 +100,17 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
       />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
-      <Select fullWidth value={diagnosisCode} onChange={onDiagnosisCodesChange}>
+      <Select
+        fullWidth
+        multiple
+        value={diagnosisCodes}
+        onChange={onDiagnosisCodesChange}
+        renderValue={selected => Array.isArray(selected) && selected.join(", ")}
+      >
         {diagnoses.map(diagnose => (
           <MenuItem key={diagnose.code} value={diagnose.code}>
-            {diagnose.code}
+            <Checkbox checked={diagnosisCodes.indexOf(diagnose.code) > -1} />
+            <ListItemText primary={diagnose.code} />
           </MenuItem>
         ))}
       </Select>
