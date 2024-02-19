@@ -22,7 +22,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
   const [occupation, setOccupation] = useState("");
   const [ssn, setSsn] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [gender, setGender] = useState(Gender.Other);
+  const [gender, setGender] = useState<Gender | "">("");
 
   const onGenderChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
@@ -42,28 +42,30 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
       occupation,
       ssn,
       dateOfBirth,
-      gender
+      gender: gender as Gender
     });
   };
 
   return (
     <div>
       <form onSubmit={addPatient}>
-        <TextField label="Name" fullWidth value={name} onChange={({ target }) => setName(target.value)} />
+        <TextField label="Name" fullWidth value={name} onChange={({ target }) => setName(target.value)} required />
         <TextField
           label="Social security number"
           fullWidth
           value={ssn}
           onChange={({ target }) => setSsn(target.value)}
+          required
         />
         <TextField
           label="Occupation"
           fullWidth
           value={occupation}
           onChange={({ target }) => setOccupation(target.value)}
+          required
         />
 
-        <InputLabel htmlFor="dateOfBirth" style={{ marginTop: 20 }}>
+        <InputLabel htmlFor="dateOfBirth" style={{ marginTop: 20 }} required>
           Date of Birth
         </InputLabel>
         <TextField
@@ -74,7 +76,9 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           onChange={({ target }) => setDateOfBirth(target.value)}
         />
 
-        <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
+        <InputLabel style={{ marginTop: 20 }} required>
+          Gender
+        </InputLabel>
         <Select fullWidth value={gender} onChange={onGenderChange}>
           {genderOptions.map(option => (
             <MenuItem key={option.label} value={option.value}>
