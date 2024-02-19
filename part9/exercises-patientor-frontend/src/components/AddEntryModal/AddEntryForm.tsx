@@ -19,7 +19,7 @@ interface Props {
   diagnoses: Array<Diagnosis>;
 }
 
-const healthCheckOptions: { rating: number; label: HealthCheckRating }[] = [
+const healthCheckOptions: Array<{ rating: number; label: HealthCheckRating }> = [
   {
     rating: 0,
     label: HealthCheckRating.Healthy
