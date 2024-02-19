@@ -57,21 +57,25 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           onChange={({ target }) => setSsn(target.value)}
         />
         <TextField
-          label="Date of birth"
-          placeholder="YYYY-MM-DD"
-          fullWidth
-          value={dateOfBirth}
-          onChange={({ target }) => setDateOfBirth(target.value)}
-        />
-        <TextField
           label="Occupation"
           fullWidth
           value={occupation}
           onChange={({ target }) => setOccupation(target.value)}
         />
 
+        <InputLabel htmlFor="dateOfBirth" style={{ marginTop: 20 }}>
+          Date of Birth
+        </InputLabel>
+        <TextField
+          id="dateOfBirth"
+          type="date"
+          fullWidth
+          value={dateOfBirth}
+          onChange={({ target }) => setDateOfBirth(target.value)}
+        />
+
         <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
-        <Select label="Gender" fullWidth value={gender} onChange={onGenderChange}>
+        <Select fullWidth value={gender} onChange={onGenderChange}>
           {genderOptions.map(option => (
             <MenuItem key={option.label} value={option.value}>
               {option.label}
@@ -79,7 +83,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           ))}
         </Select>
 
-        <Grid>
+        <Grid mt={3}>
           <Grid item>
             <Button color="secondary" variant="contained" style={{ float: "left" }} type="button" onClick={onCancel}>
               Cancel
