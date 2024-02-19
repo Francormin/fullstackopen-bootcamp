@@ -19,6 +19,25 @@ interface Props {
   diagnoses: Array<Diagnosis>;
 }
 
+const healthCheckOptions: { rating: number; label: HealthCheckRating }[] = [
+  {
+    rating: 0,
+    label: HealthCheckRating.Healthy
+  },
+  {
+    rating: 1,
+    label: HealthCheckRating.LowRisk
+  },
+  {
+    rating: 2,
+    label: HealthCheckRating.HighRisk
+  },
+  {
+    rating: 3,
+    label: HealthCheckRating.CriticalRisk
+  }
+];
+
 const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   // base entry
   const [description, setDescription] = useState("");
@@ -27,7 +46,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [diagnosisCodes, setDiagnosisCodes] = useState<Array<string>>([]);
 
   // health check entry
-  const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating | "">("");
+  const [healthCheckRating, setHealthCheckRating] = useState<number | "">("");
 
   // hospital entry
   const [dischargeDate, setDischargeDate] = useState("");
@@ -119,10 +138,11 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
         <>
           <InputLabel style={{ marginTop: 20 }}>Health Check Rating</InputLabel>
           <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange} required>
-            <MenuItem value={HealthCheckRating.Healthy}>Healthy</MenuItem>
-            <MenuItem value={HealthCheckRating.LowRisk}>Low Risk</MenuItem>
-            <MenuItem value={HealthCheckRating.HighRisk}>High Risk</MenuItem>
-            <MenuItem value={HealthCheckRating.CriticalRisk}>Critical Risk</MenuItem>
+            {healthCheckOptions.map(option => (
+              <MenuItem key={option.rating} value={option.rating}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
         </>
       )}
