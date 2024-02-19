@@ -84,39 +84,20 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
   return (
     <form onSubmit={addPatient}>
-      <InputLabel htmlFor="entryDate" style={{ marginTop: 20 }}>
+      <InputLabel htmlFor="entryDate" style={{ marginTop: 20 }} required>
         Entry Date
       </InputLabel>
-      <Input
-        id="entryDate"
-        type="date"
-        fullWidth
-        value={date}
-        onChange={({ target }) => setDate(target.value)}
-        required
-      />
+      <Input id="entryDate" type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
 
-      <InputLabel htmlFor="description" style={{ marginTop: 20 }}>
+      <InputLabel htmlFor="description" style={{ marginTop: 20 }} required>
         Description
       </InputLabel>
-      <Input
-        id="description"
-        fullWidth
-        value={description}
-        onChange={({ target }) => setDescription(target.value)}
-        required
-      />
+      <Input id="description" fullWidth value={description} onChange={({ target }) => setDescription(target.value)} />
 
-      <InputLabel htmlFor="specialist" style={{ marginTop: 20 }}>
+      <InputLabel htmlFor="specialist" style={{ marginTop: 20 }} required>
         Specialist
       </InputLabel>
-      <Input
-        id="specialist"
-        fullWidth
-        value={specialist}
-        onChange={({ target }) => setSpecialist(target.value)}
-        required
-      />
+      <Input id="specialist" fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
       <Select
@@ -136,8 +117,10 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
       {entryType === EntryType.HealthCheck && (
         <>
-          <InputLabel style={{ marginTop: 20 }}>Health Check Rating</InputLabel>
-          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange} required>
+          <InputLabel style={{ marginTop: 20 }} required>
+            Health Check Rating
+          </InputLabel>
+          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange}>
             {healthCheckOptions.map(option => (
               <MenuItem key={option.rating} value={option.rating}>
                 {option.label}
@@ -174,7 +157,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
       {entryType === EntryType.OccupationalHealthcare && (
         <>
-          <InputLabel htmlFor="employerName" style={{ marginTop: 20 }}>
+          <InputLabel htmlFor="employerName" style={{ marginTop: 20 }} required>
             Employer Name
           </InputLabel>
           <Input
@@ -182,7 +165,6 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
             fullWidth
             value={employerName}
             onChange={({ target }) => setEmployerName(target.value)}
-            required
           />
 
           <InputLabel htmlFor="sickLeaveStartDate" style={{ marginTop: 20 }}>
