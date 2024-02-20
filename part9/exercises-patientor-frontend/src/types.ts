@@ -17,12 +17,12 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: Entry[];
+  entries: (HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry)[];
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -45,7 +45,7 @@ export enum HealthCheckRating {
 
 export interface HealthCheckEntry extends BaseEntry {
   type: EntryType.HealthCheck;
-  healthCheckRating: HealthCheckRating;
+  healthCheckRating: number;
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
@@ -65,6 +65,8 @@ export interface HospitalEntry extends BaseEntry {
   };
 }
 
-export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+export interface HealthCheckEntryValues extends Omit<HealthCheckEntry, "id"> {}
+export interface HospitalEntryValues extends Omit<HospitalEntry, "id"> {}
+export interface OccupationalHealthcareEntryValues extends Omit<OccupationalHealthcareEntry, "id"> {}
 
-export type EntryFormValues = Omit<Entry, "id">;
+export type EntryValues = HealthCheckEntryValues | HospitalEntryValues | OccupationalHealthcareEntryValues;
