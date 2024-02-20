@@ -10,12 +10,13 @@ import {
   Checkbox,
   ListItemText
 } from "@mui/material";
-import { Diagnosis, EntryFormValues, EntryType, HealthCheckRating } from "../../types";
+import { Diagnosis, EntryType, HealthCheckRating, EntryValues } from "../../types";
 
 interface Props {
   entryType: EntryType;
-  onCancel: () => void;
-  onSubmit: (values: EntryFormValues) => void;
+  resetEntryType: React.Dispatch<React.SetStateAction<EntryType | null>>;
+  onClose: () => void;
+  onSubmit: (values: EntryValues) => void;
   diagnoses: Array<Diagnosis>;
 }
 
@@ -38,7 +39,7 @@ const healthCheckOptions: Array<{ rating: number; label: HealthCheckRating }> = 
   }
 ];
 
-const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
+const AddEntryForm = ({ entryType, resetEntryType, onClose, onSubmit, diagnoses }: Props) => {
   // base entry
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -57,15 +58,55 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   const [sickLeaveStartDate, setSickLeaveStartDate] = useState("");
   const [sickLeaveEndDate, setSickLeaveEndDate] = useState("");
 
-  const addPatient = (event: SyntheticEvent) => {
+  const addPatientEntry = (event: SyntheticEvent) => {
     event.preventDefault();
-    onSubmit({
-      description,
-      date,
-      specialist,
-      diagnosisCodes: diagnosisCodes,
-      type: entryType
-    });
+
+    let values: EntryValues = {} as EntryValues;
+
+    if (entryType === EntryType.HealthCheck) {
+      values = {
+        description,
+        date,
+        specialist,
+        diagnosisCodes,
+        type: entryType,
+        healthCheckRating: healthCheckRating as number
+      };
+    }
+
+    if (entryType === EntryType.Hospital) {
+      values = {
+        description,
+        date,
+        specialist,
+        diagnosisCodes,
+        type: entryType,
+        discharge: {
+          date: dischargeDate,
+          criteria: dischargeCriteria
+        }
+      };
+    }
+
+    if (entryType === EntryType.OccupationalHealthcare) {
+      values = {
+        description,
+        date,
+        specialist,
+        diagnosisCodes,
+        type: entryType,
+        employerName,
+        sickLeave: {
+          startDate: sickLeaveStartDate,
+          endDate: sickLeaveEndDate
+        }
+      };
+    }
+
+    onSubmit(values);
+    setTimeout(() => {
+      resetEntryType(null);
+    }, 300);
   };
 
   const onDiagnosisCodesChange = (event: SelectChangeEvent<Array<string>>) => {
@@ -83,21 +124,40 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
   };
 
   return (
-    <form onSubmit={addPatient}>
+    <form onSubmit={addPatientEntry}>
       <InputLabel htmlFor="entryDate" style={{ marginTop: 20 }} required>
         Entry Date
       </InputLabel>
-      <Input id="entryDate" type="date" fullWidth value={date} onChange={({ target }) => setDate(target.value)} />
+      <Input
+        id="entryDate"
+        type="date"
+        fullWidth
+        value={date}
+        onChange={({ target }) => setDate(target.value)}
+        required
+      />
 
       <InputLabel htmlFor="description" style={{ marginTop: 20 }} required>
         Description
       </InputLabel>
-      <Input id="description" fullWidth value={description} onChange={({ target }) => setDescription(target.value)} />
+      <Input
+        id="description"
+        fullWidth
+        value={description}
+        onChange={({ target }) => setDescription(target.value)}
+        required
+      />
 
       <InputLabel htmlFor="specialist" style={{ marginTop: 20 }} required>
         Specialist
       </InputLabel>
-      <Input id="specialist" fullWidth value={specialist} onChange={({ target }) => setSpecialist(target.value)} />
+      <Input
+        id="specialist"
+        fullWidth
+        value={specialist}
+        onChange={({ target }) => setSpecialist(target.value)}
+        required
+      />
 
       <InputLabel style={{ marginTop: 20 }}>Diagnosis Codes</InputLabel>
       <Select
@@ -120,7 +180,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
           <InputLabel style={{ marginTop: 20 }} required>
             Health Check Rating
           </InputLabel>
-          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange}>
+          <Select fullWidth value={healthCheckRating} onChange={onHealthCheckRatingChange} required>
             {healthCheckOptions.map(option => (
               <MenuItem key={option.rating} value={option.rating}>
                 {option.label}
@@ -165,6 +225,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
             fullWidth
             value={employerName}
             onChange={({ target }) => setEmployerName(target.value)}
+            required
           />
 
           <InputLabel htmlFor="sickLeaveStartDate" style={{ marginTop: 20 }}>
@@ -193,7 +254,7 @@ const AddEntryForm = ({ entryType, onCancel, onSubmit, diagnoses }: Props) => {
 
       <Grid mt={3}>
         <Grid item>
-          <Button color="secondary" variant="contained" style={{ float: "left" }} type="button" onClick={onCancel}>
+          <Button color="secondary" variant="contained" style={{ float: "left" }} type="button" onClick={onClose}>
             Cancel
           </Button>
         </Grid>

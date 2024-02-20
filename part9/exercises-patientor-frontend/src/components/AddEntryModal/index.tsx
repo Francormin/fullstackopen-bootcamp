@@ -10,20 +10,30 @@ import {
   FormLabel,
   Radio
 } from "@mui/material";
-import { Diagnosis, EntryFormValues, EntryType } from "../../types";
+import { Diagnosis, EntryValues, EntryType } from "../../types";
 import AddEntryForm from "./AddEntryForm";
 
 interface Props {
   entryType: EntryType | null;
+  resetEntryType: React.Dispatch<React.SetStateAction<EntryType | null>>;
   onEntryTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: EntryValues) => void;
   error?: string;
   diagnoses: Array<Diagnosis>;
 }
 
-const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSubmit, error, diagnoses }: Props) => {
+const AddEntryModal = ({
+  entryType,
+  resetEntryType,
+  onEntryTypeChange,
+  modalOpen,
+  onClose,
+  onSubmit,
+  error,
+  diagnoses
+}: Props) => {
   return (
     <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
       <DialogTitle>Add a new entry</DialogTitle>
@@ -53,7 +63,13 @@ const AddEntryModal = ({ entryType, onEntryTypeChange, modalOpen, onClose, onSub
         <DialogContent sx={{ mb: 1 }}>
           {error && <Alert severity="error">{error}</Alert>}
           <Divider />
-          <AddEntryForm entryType={entryType} onSubmit={onSubmit} onCancel={onClose} diagnoses={diagnoses} />
+          <AddEntryForm
+            entryType={entryType}
+            resetEntryType={resetEntryType}
+            onSubmit={onSubmit}
+            onClose={onClose}
+            diagnoses={diagnoses}
+          />
         </DialogContent>
       )}
     </Dialog>
