@@ -105,6 +105,8 @@ const parseSickLeave = (object: unknown): { startDate: string; endDate: string }
   }
 
   const { startDate, endDate } = (object as { sickLeave: { startDate: string; endDate: string } }).sickLeave;
+  if (!startDate.length || !endDate.length) return;
+
   if (!isString(startDate) || !isDate(startDate) || !isString(endDate) || !isDate(endDate)) {
     throw new Error("Incorrect sick leave");
   }
@@ -121,6 +123,8 @@ const parseDischarge = (object: unknown): { date: string; criteria: string } | u
   }
 
   const { date, criteria } = (object as { discharge: { date: string; criteria: string } }).discharge;
+  if (!date.length || !criteria.length) return;
+
   if (!isString(date) || !isDate(date) || !isString(criteria)) {
     throw new Error("Incorrect discharge");
   }
@@ -183,25 +187,25 @@ export const toNewEntryPatient = (object: unknown): NewEntry => {
     };
 
     switch (object.type) {
-      case "HealthCheck":
+      case "healthCheck":
         return {
           ...newEntry,
-          type: "HealthCheck",
+          type: "healthCheck",
           healthCheckRating: parseHealthCheckRating(object)
         };
 
-      case "OccupationalHealthcare":
+      case "occupationalHealthcare":
         return {
           ...newEntry,
-          type: "OccupationalHealthcare",
+          type: "occupationalHealthcare",
           employerName: parseEmployerName(object),
           sickLeave: parseSickLeave(object)
         };
 
-      case "Hospital":
+      case "hospital":
         return {
           ...newEntry,
-          type: "Hospital",
+          type: "hospital",
           discharge: parseDischarge(object)
         };
 
