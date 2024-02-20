@@ -1,7 +1,7 @@
 import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
-import { OccupationalHealthcareEntry } from "../../../types";
+import { OccupationalHealthcareEntryValues } from "../../../types";
 
-const OccupationalHealthcareEntryDetails: React.FC<{ entry: OccupationalHealthcareEntry }> = ({ entry }) => {
+const OccupationalHealthcareEntryDetails: React.FC<{ entry: OccupationalHealthcareEntryValues }> = ({ entry }) => {
   return (
     <div
       style={{

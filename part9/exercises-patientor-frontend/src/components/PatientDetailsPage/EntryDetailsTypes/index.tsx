@@ -1,15 +1,15 @@
-import { Entry } from "../../../types";
+import { EntryValues } from "../../../types";
 import HealthCheckEntryDetails from "./HealthCheckEntryDetails";
 import HospitalEntryDetails from "./HospitalEntryDetails";
 import OccupationalHealthcareEntryDetails from "./OccupationalHealthcareEntryDetails";
 
-const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+const EntryDetails: React.FC<{ entry: EntryValues }> = ({ entry }) => {
   switch (entry.type) {
-    case "Hospital":
+    case "hospital":
       return <HospitalEntryDetails entry={entry} />;
-    case "OccupationalHealthcare":
+    case "occupationalHealthcare":
       return <OccupationalHealthcareEntryDetails entry={entry} />;
-    case "HealthCheck":
+    case "healthCheck":
       return <HealthCheckEntryDetails entry={entry} />;
     default:
       throw new Error("Invalid type for EntryDetails");

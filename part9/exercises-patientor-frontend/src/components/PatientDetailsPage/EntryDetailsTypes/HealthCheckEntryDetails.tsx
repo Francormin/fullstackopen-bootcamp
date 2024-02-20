@@ -1,8 +1,8 @@
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { HealthCheckEntry } from "../../../types";
+import { HealthCheckEntryValues } from "../../../types";
 
-const HealthCheckEntryDetails: React.FC<{ entry: HealthCheckEntry }> = ({ entry }) => {
+const HealthCheckEntryDetails: React.FC<{ entry: HealthCheckEntryValues }> = ({ entry }) => {
   return (
     <div
       style={{

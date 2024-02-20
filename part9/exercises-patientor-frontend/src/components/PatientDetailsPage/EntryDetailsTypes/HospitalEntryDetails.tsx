@@ -1,7 +1,7 @@
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import { HospitalEntry } from "../../../types";
+import { HospitalEntryValues } from "../../../types";
 
-const HospitalEntryDetails: React.FC<{ entry: HospitalEntry }> = ({ entry }) => {
+const HospitalEntryDetails: React.FC<{ entry: HospitalEntryValues }> = ({ entry }) => {
   return (
     <div
       style={{
