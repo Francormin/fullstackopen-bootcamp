@@ -5,7 +5,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import axios from "axios";
 
-import { Diagnosis, EntryFormValues, EntryType, Patient } from "../../types";
+import { Diagnosis, EntryType, Patient, EntryValues } from "../../types";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnoses";
 import EntryDetails from "./EntryDetailsTypes";
@@ -36,7 +36,7 @@ const PatientDetails = () => {
     setEntryType(event.target.value as EntryType);
   };
 
-  const submitNewEntry = async (values: EntryFormValues) => {
+  const submitNewEntry = async (values: EntryValues) => {
     try {
       await patientService.addEntry(id, values);
       setModalOpen(false);
@@ -50,6 +50,9 @@ const PatientDetails = () => {
           }, 3500);
         } else {
           setError("Unrecognized axios error");
+          setTimeout(() => {
+            setError("");
+          }, 3500);
         }
       } else {
         console.error("Unknown error", error);
@@ -114,6 +117,7 @@ const PatientDetails = () => {
           </div>
           <AddEntryModal
             entryType={entryType}
+            resetEntryType={setEntryType}
             onEntryTypeChange={handleRadioChange}
             modalOpen={modalOpen}
             onSubmit={submitNewEntry}
