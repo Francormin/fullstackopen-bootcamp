@@ -1,0 +1,46 @@
+services:
+  frontend-builder:
+    build:
+      context: ./todo-frontend
+      dockerfile: Dockerfile
+      target: build # solo se lee y ejecuta hasta la etapa build
+    volumes:
+      - todo-frontend-build:/usr/src/app/dist # expone dist
+  server:
+    build:
+      context: ./todo-backend
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+      - REDIS_URL=redis://redis:6379
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./todo-backend/mongo_data:/data/db
+  redis:
+    image: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./todo-backend/redis_data:/data
+  nginx:
+    image: nginx:1.20.1
+    container_name: reverse-proxy
+    ports:
+      - 8080:80
+    depends_on:
+      - frontend-builder
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - todo-frontend-build:/usr/share/nginx/html:ro # se utiliza el volumen creado y compartido
+
+volumes:
+  todo-frontend-build:
+    external: false
