@@ -1,7 +1,9 @@
 const sequelize = require("../config/database");
 const Blog = require("./blog");
 
-module.exports = {
+const db = {
   sequelize,
   Blog
 };
+
+module.exports = db;
