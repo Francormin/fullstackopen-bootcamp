@@ -11,15 +11,7 @@ const getAll = async (_req, res) => {
 };
 
 const getById = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const blog = await Blog.findByPk(id);
-    return !blog ? res.status(404).json({ error: "Blog not found" }) : res.json(blog);
-  } catch (error) {
-    console.error("Error fetching blog by ID: ", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+  return !req.blog ? res.status(404).end() : res.json(req.blog);
 };
 
 const create = async (req, res) => {
@@ -55,13 +47,11 @@ const create = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { id } = req.params;
-
-  if (
-    (req.body?.url && typeof req.body.url !== "string") ||
-    (req.body?.title && typeof req.body.title !== "string")
-  ) {
-    return res.status(400).json({ error: "URL and title must be strings" });
+  if (req.body?.url && typeof req.body.url !== "string") {
+    return res.status(400).json({ error: "URL must be a string" });
+  }
+  if (req.body?.title && typeof req.body.title !== "string") {
+    return res.status(400).json({ error: "Title must be a string" });
   }
   if (req.body?.likes && typeof req.body.likes !== "number") {
     return res.status(400).json({ error: "Likes must be a number" });
@@ -74,18 +64,17 @@ const updateById = async (req, res) => {
   }
 
   try {
-    const blog = await Blog.findByPk(id);
-    if (!blog) {
-      return res.status(404).json({ error: "Blog not found" });
+    if (!req.blog) {
+      return res.status(404).end();
     }
 
-    blog.author = req.body?.author || blog.author;
-    blog.url = req.body?.url || blog.url;
-    blog.title = req.body?.title || blog.title;
-    blog.likes = req.body?.likes || blog.likes;
-    await blog.save();
+    req.blog.author = req.body?.author || req.blog.author;
+    req.blog.url = req.body?.url || req.blog.url;
+    req.blog.title = req.body?.title || req.blog.title;
+    req.blog.likes = req.body?.likes || req.blog.likes;
+    await req.blog.save();
 
-    res.json(blog);
+    res.json(req.blog);
   } catch (error) {
     console.error("Error updating blog by ID: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -93,15 +82,12 @@ const updateById = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const blog = await Blog.findByPk(id);
-    if (!blog) {
-      return res.status(404).json({ error: "Blog not found" });
+    if (!req.blog) {
+      return res.status(404).end();
     }
 
-    await blog.destroy();
+    await req.blog.destroy();
     res.status(204).end();
   } catch (error) {
     console.error("Error deleting blog by ID: ", error);
