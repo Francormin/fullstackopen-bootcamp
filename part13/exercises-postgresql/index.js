@@ -1,22 +1,28 @@
-require("dotenv").config();
 const express = require("express");
-const { sequelize } = require("./src/models");
 const blogRoutes = require("./src/routes/blogRoutes");
+const { connectToDatabase } = require("./src/utils/db");
+const { PORT } = require("./src/utils/config");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use("/blogs", blogRoutes);
+app.use("/api/blogs", blogRoutes);
 
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("✅ Database connection has been established successfully.");
-
-    await sequelize.sync({ alter: true }); // o { force: true } para reiniciar tablas
-    app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
-  } catch (error) {
-    console.error("❌ Unable to connect to the database: ", error);
+// Middleware de manejo de errores (después de las rutas)
+app.use((err, _req, res, _next) => {
+  if (err.name === "SequelizeValidationError") {
+    return res.status(400).json({ error: err.message });
   }
-})();
+
+  console.error(err.message);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+const start = async () => {
+  await connectToDatabase();
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+start();
