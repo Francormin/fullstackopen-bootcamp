@@ -1,22 +1,12 @@
 const { Blog } = require("../models");
+const { validateIdParam } = require("../utils/validators");
+const { NotFoundError } = require("../utils/errors");
 
 const blogFinder = async (req, _res, next) => {
-  if (!req.params.id) {
-    return next(new Error("Blog ID is required"));
-  }
-  if (isNaN(req.params.id)) {
-    return next(new Error("Blog ID must be a number"));
-  }
-  if (req.params.id < 1) {
-    return next(new Error("Blog ID must be a positive integer"));
-  }
-
-  try {
-    req.blog = await Blog.findByPk(req.params.id);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  validateIdParam(req.params.id);
+  req.blog = await Blog.findByPk(req.params.id);
+  if (!req.blog) throw new NotFoundError("Blog not found");
+  next();
 };
 
 module.exports = { blogFinder };
