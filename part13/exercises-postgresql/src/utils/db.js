@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = require("./config");
-const { Blog } = require("../models");
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
@@ -12,10 +11,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
-    await Blog.sync({ alter: true });
-    console.log("Connected and synced with the database.");
+    console.log("Connected to the database.");
   } catch (error) {
-    console.log("Database connection/sync failed: ", error);
+    console.log("Database connection failed: ", error);
     return process.exit(1);
   }
 };
