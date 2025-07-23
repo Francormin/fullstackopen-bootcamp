@@ -1,19 +1,13 @@
 const { Router } = require("express");
-const {
-  getAll,
-  getById,
-  create,
-  updateById,
-  deleteById
-} = require("../controllers/blogControllers");
+const { blogControllers } = require("../controllers");
 const { blogFinder } = require("../middlewares");
 
 const router = Router();
 
-router.get("/", getAll);
-router.get("/:id", blogFinder, getById);
-router.post("/", create);
-router.put("/:id", blogFinder, updateById);
-router.delete("/:id", blogFinder, deleteById);
+router.get("/", blogControllers.getAll);
+router.get("/:id", blogFinder, blogControllers.getById);
+router.post("/", blogControllers.create);
+router.put("/:id", blogFinder, blogControllers.updateById);
+router.delete("/:id", blogFinder, blogControllers.deleteById);
 
 module.exports = router;
