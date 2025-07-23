@@ -24,7 +24,8 @@ const Blog = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: { msg: "Url is required" },
+        notNull: { msg: "Url is required" },
+        notEmpty: { msg: "Url cannot be empty" },
         isUrl: { msg: "Url must be valid" }
       }
     },
@@ -32,7 +33,8 @@ const Blog = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: { msg: "Title is required" },
+        notNull: { msg: "Title is required" },
+        notEmpty: { msg: "Title cannot be empty" },
         isString(value) {
           if (typeof value !== "string") {
             throw new Error("Title must be a string");
@@ -50,7 +52,7 @@ const Blog = sequelize.define(
     }
   },
   {
-    timestamps: false // Para evitar columnas createdAt/updatedAt
+    timestamps: false
   }
 );
 
