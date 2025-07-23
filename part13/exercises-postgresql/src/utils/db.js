@@ -18,4 +18,7 @@ const connectToDatabase = async () => {
   }
 };
 
-module.exports = { sequelize, connectToDatabase };
+module.exports = {
+  sequelize,
+  connectToDatabase
+};
