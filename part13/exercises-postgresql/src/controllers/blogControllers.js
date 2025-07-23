@@ -5,9 +5,7 @@ const getAll = async (_req, res) => {
   res.json(blogs);
 };
 
-const getById = async (req, res) => {
-  return res.json(req.blog);
-};
+const getById = async (req, res) => res.json(req.blog);
 
 const create = async (req, res) => {
   const { author, url, title, likes } = req.body;
@@ -39,10 +37,12 @@ const deleteById = async (req, res) => {
   res.status(204).end();
 };
 
-module.exports = {
+const blogControllers = {
   getAll,
   getById,
   create,
   updateById,
   deleteById
 };
+
+module.exports = blogControllers;
