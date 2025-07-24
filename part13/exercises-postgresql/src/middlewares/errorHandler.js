@@ -13,7 +13,11 @@ const errorHandler = (err, _req, res, _next) => {
       : res.status(500).json({ error: "Internal database error" });
   }
 
-  if (err.name === "BadRequestError" || err.name === "NotFoundError") {
+  if (
+    err.name === "BadRequestError" ||
+    err.name === "NotFoundError" ||
+    err.name === "UnauthorizedError"
+  ) {
     return res.status(err.statusCode).json({ error: err.message });
   }
 
