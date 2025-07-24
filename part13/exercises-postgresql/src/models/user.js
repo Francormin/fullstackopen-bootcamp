@@ -21,7 +21,8 @@ const User = sequelize.define("user", {
         if (typeof value !== "string") {
           throw new Error("Username must be a string");
         }
-      }
+      },
+      isEmail: { msg: "Username must be a valid email address" }
     }
   },
   name: {
