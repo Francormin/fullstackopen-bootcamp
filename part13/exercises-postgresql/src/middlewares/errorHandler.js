@@ -1,15 +1,16 @@
 const errorHandler = (err, _req, res, _next) => {
   if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
     const messages = err.errors.map(e => e.message);
-    return res.status(400).json({ error: messages.join(", ") });
+    return messages.length > 1
+      ? res.status(400).json({ errors: messages })
+      : res.status(400).json({ error: messages[0] });
   }
 
   if (err.name === "SequelizeDatabaseError") {
     console.error("Database error: ", err.message);
-    if (err.message.includes("invalid input syntax")) {
-      return res.status(400).json({ error: "Invalid data format" });
-    }
-    return res.status(500).json({ error: "Internal database error" });
+    return err.message.includes("invalid input syntax")
+      ? res.status(400).json({ error: "Invalid data format" })
+      : res.status(500).json({ error: "Internal database error" });
   }
 
   if (err.name === "BadRequestError" || err.name === "NotFoundError") {
