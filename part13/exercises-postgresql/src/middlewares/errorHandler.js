@@ -13,6 +13,10 @@ const errorHandler = (err, _req, res, _next) => {
       : res.status(500).json({ error: "Internal database error" });
   }
 
+  if (err.name === "JsonWebTokenError") {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+
   if (
     err.name === "BadRequestError" ||
     err.name === "NotFoundError" ||
