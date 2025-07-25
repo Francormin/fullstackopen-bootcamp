@@ -1,7 +1,15 @@
-const { Blog } = require("../models");
+const { Blog, User } = require("../models");
 
 const getAll = async (_req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    attributes: {
+      exclude: ["userId"]
+    },
+    include: {
+      model: User,
+      attributes: ["username", "name"]
+    }
+  });
   res.json(blogs);
 };
 
@@ -10,14 +18,20 @@ const getById = async (req, res) => res.json(req.blog);
 const create = async (req, res) => {
   const { author, url, title, likes } = req.body;
 
+  const user = await User.findByPk(req.decodedToken.id);
+
   const newBlog = await Blog.create({
     author,
     url,
     title,
-    likes
+    likes,
+    userId: user.id
   });
 
-  res.status(201).json(newBlog);
+  const blogData = newBlog.toJSON();
+  delete blogData.userId;
+
+  res.status(201).json(blogData);
 };
 
 const updateById = async (req, res) => {
