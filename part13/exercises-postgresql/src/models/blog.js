@@ -56,4 +56,10 @@ const Blog = sequelize.define(
   }
 );
 
+Blog.prototype.toPublicJSON = function () {
+  const data = this.toJSON();
+  delete data.userId;
+  return data;
+};
+
 module.exports = Blog;
