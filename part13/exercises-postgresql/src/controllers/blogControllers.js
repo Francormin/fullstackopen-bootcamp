@@ -28,10 +28,7 @@ const create = async (req, res) => {
     userId: user.id
   });
 
-  const blogData = newBlog.toJSON();
-  delete blogData.userId;
-
-  res.status(201).json(blogData);
+  res.status(201).json(newBlog.toPublicJSON());
 };
 
 const updateById = async (req, res) => {
