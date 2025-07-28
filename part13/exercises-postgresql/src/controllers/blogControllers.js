@@ -2,12 +2,13 @@ const { Op } = require("sequelize");
 const { Blog, User } = require("../models");
 
 const getAll = async (req, res) => {
-  const where = {};
+  let where = {};
 
   if (req.query?.search) {
     const searchTerm = `%${req.query.search}%`;
-    where[Op.or] = [{ title: { [Op.iLike]: searchTerm } }];
-    where[Op.or].push({ author: { [Op.iLike]: searchTerm } });
+    where = {
+      [Op.or]: [{ title: { [Op.iLike]: searchTerm } }, { author: { [Op.iLike]: searchTerm } }]
+    };
   }
 
   const blogs = await Blog.findAll({
