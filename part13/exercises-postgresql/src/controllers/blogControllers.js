@@ -53,7 +53,7 @@ const updateById = async (req, res) => {
   req.blog.likes = likes ?? req.blog.likes;
 
   await req.blog.save();
-  res.json(req.blog);
+  res.json(req.blog.toPublicJSON());
 };
 
 const deleteById = async (req, res) => {
