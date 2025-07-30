@@ -1,7 +1,6 @@
 const express = require("express");
 const { blogRoutes, userRoutes, loginRoutes, authorRoutes } = require("./src/routes");
 const { unknownEndpoint, errorHandler } = require("./src/middlewares");
-const { Blog, User } = require("./src/models");
 const { connectToDatabase } = require("./src/utils/db");
 const { PORT } = require("./src/utils/config");
 
@@ -21,8 +20,6 @@ app.use(errorHandler);
 
 const start = async () => {
   await connectToDatabase();
-  await Blog.sync({ alter: true });
-  await User.sync({ alter: true });
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 };
 
