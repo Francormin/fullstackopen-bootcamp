@@ -49,16 +49,28 @@ const Blog = sequelize.define(
         isInt: { msg: "Likes must be a number" },
         min: { args: [0], msg: "Likes cannot be negative" }
       }
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "Year is required" },
+        isInt: { msg: "Year must be a number" },
+        min: { args: [1991], msg: "Year must be at least 1991" },
+        max: { args: [new Date().getFullYear()], msg: "Year cannot be in the future" }
+      }
     }
   },
   {
-    timestamps: false
+    underscored: true,
+    timestamps: true
   }
 );
 
 Blog.prototype.toPublicJSON = function () {
   const data = this.toJSON();
   delete data.userId;
+  delete data.user_id;
   return data;
 };
 
