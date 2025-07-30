@@ -4,7 +4,7 @@ const getAll = async (_req, res) => {
   const users = await User.findAll({
     include: {
       model: Blog,
-      attributes: ["author", "url", "title", "likes"]
+      attributes: ["author", "url", "title", "likes", "year"]
     }
   });
   res.json(users);
