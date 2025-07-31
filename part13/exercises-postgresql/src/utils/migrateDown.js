@@ -14,7 +14,7 @@ const revertMigration = async () => {
   try {
     await sequelize.authenticate();
     const migration = await migrator.down(); // Revierte la última migración
-    console.log("Migration reverted:", migration.name);
+    console.log("Migration reverted:", migration[0].name);
     await sequelize.close();
   } catch (error) {
     console.error("Revert failed:", error);
