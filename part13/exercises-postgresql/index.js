@@ -1,5 +1,11 @@
 const express = require("express");
-const { blogRoutes, userRoutes, loginRoutes, authorRoutes } = require("./src/routes");
+const {
+  blogRoutes,
+  userRoutes,
+  loginRoutes,
+  authorRoutes,
+  readingListRoutes
+} = require("./src/routes");
 const { unknownEndpoint, errorHandler } = require("./src/middlewares");
 const { connectToDatabase } = require("./src/utils/db");
 const { PORT } = require("./src/utils/config");
@@ -11,6 +17,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/authors", authorRoutes);
+app.use("/api/reading-lists", readingListRoutes);
 
 // Middleware global para manejar rutas desconocidas
 app.use(unknownEndpoint);
