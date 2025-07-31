@@ -7,6 +7,7 @@ const getAll = async (_req, res) => {
       attributes: ["author", "url", "title", "likes", "year"]
     }
   });
+
   res.json(users);
 };
 
