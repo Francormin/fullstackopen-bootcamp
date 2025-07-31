@@ -1,11 +1,19 @@
 const Blog = require("./blog");
 const User = require("./user");
+const ReadingList = require("./readingList");
 
-// Relación entre tablas
+// Relación uno a muchos
+// Un usuario puede tener muchos blogs, pero un blog pertenece a un solo usuario
 User.hasMany(Blog);
 Blog.belongsTo(User);
 
+// Relación muchos a muchos
+// Un usuario puede leer muchos blogs y un blog puede ser leído por muchos usuarios
+User.belongsToMany(Blog, { through: ReadingList, as: "saved_blogs" });
+Blog.belongsToMany(User, { through: ReadingList, as: "saved_by_users" });
+
 module.exports = {
   Blog,
-  User
+  User,
+  ReadingList
 };
