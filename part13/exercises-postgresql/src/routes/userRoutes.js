@@ -5,7 +5,7 @@ const { userFinder } = require("../middlewares");
 const router = Router();
 
 router.get("/", userControllers.getAll);
-router.get("/:id", userFinder, userControllers.getById);
+router.get("/:id", userFinder({ includeReadingList: true }), userControllers.getById);
 router.post("/", userControllers.create);
 router.put("/:id", userFinder, userControllers.updateById);
 router.delete("/:id", userFinder, userControllers.deleteById);
