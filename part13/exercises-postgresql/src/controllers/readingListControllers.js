@@ -1,15 +1,17 @@
 const { ReadingList } = require("../models");
 
 const addBlogToReadingList = async (req, res) => {
-  const { id, blogId, userId } = req.body;
+  const { blogId, userId } = req.body;
 
-  await ReadingList.create({
-    id,
+  const readingListEntry = await ReadingList.create({
     blogId,
     userId
   });
 
-  res.json({ message: "Blog added to reading list successfully" });
+  res.status(201).json({
+    message: "Blog added to reading list successfully",
+    readingListEntry
+  });
 };
 
 const readingListControllers = { addBlogToReadingList };
