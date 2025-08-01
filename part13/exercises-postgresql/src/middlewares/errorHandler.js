@@ -1,4 +1,10 @@
 const errorHandler = (err, _req, res, _next) => {
+  if (err.message && err.message.includes("WHERE parameter") && err.message.includes("undefined")) {
+    return res
+      .status(400)
+      .json({ error: "Missing or invalid data (blogId or userId is undefined)" });
+  }
+
   if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
     const messages = err.errors.map(e => e.message);
     return messages.length > 1
@@ -25,7 +31,8 @@ const errorHandler = (err, _req, res, _next) => {
     return res.status(err.statusCode).json({ error: err.message });
   }
 
-  console.error("Error handler log: ", err);
+  console.dir(err, { depth: null });
+  console.error("Error handler log: ", err.message);
   res.status(500).json({ error: "Internal server error" });
 };
 
