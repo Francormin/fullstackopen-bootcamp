@@ -1,19 +1,13 @@
-const { Blog } = require("../models");
-const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 const { validateParamId } = require("../utils/validators");
+const { findBlogByIdAndUser, findBlogById } = require("../utils/queries/blogQueries");
 
 const blogFinder = async (req, _res, next) => {
   validateParamId(req.params.id);
+  const blogId = req.params.id;
 
-  if (req.decodedToken && req.decodedToken.id) {
-    req.blog = await Blog.findOne({
-      where: { id: req.params.id, userId: req.decodedToken.id }
-    });
-    if (!req.blog) throw new UnauthorizedError("You are not authorized to access this resource");
-  } else {
-    req.blog = await Blog.findByPk(req.params.id);
-    if (!req.blog) throw new NotFoundError("Blog not found");
-  }
+  req.blog = req.decodedToken?.id
+    ? await findBlogByIdAndUser(blogId, req.decodedToken.id)
+    : await findBlogById(blogId);
 
   next();
 };
