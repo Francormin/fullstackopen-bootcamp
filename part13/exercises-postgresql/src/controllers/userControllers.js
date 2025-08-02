@@ -11,12 +11,15 @@ const getAll = async (_req, res) => {
   res.json(users);
 };
 
-const getById = (req, res) =>
+const getById = (req, res) => {
+  const { name, username, savedBlogs } = req.user;
+
   res.json({
-    name: req.user.name,
-    username: req.user.username,
-    readings: req.user.saved_blogs
+    name,
+    username,
+    readings: savedBlogs
   });
+};
 
 const create = async (req, res) => {
   const user = await User.create(req.body);
