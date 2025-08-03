@@ -4,7 +4,7 @@ const { UnauthorizedError, BadRequestError } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
 const userLogin = async (req, res) => {
-  const { username, password } = req.body || {};
+  const { username, password } = req.body ?? {};
 
   if (!username || !password) {
     throw new BadRequestError("Username and password are required");

@@ -29,14 +29,8 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => res.json(req.blog.toPublicJSON());
 
 const create = async (req, res) => {
-  const { author, url, title, likes, year } = req.body;
-
   const newBlog = await Blog.create({
-    author,
-    url,
-    title,
-    likes,
-    year,
+    ...req.body,
     userId: req.user.id
   });
 
