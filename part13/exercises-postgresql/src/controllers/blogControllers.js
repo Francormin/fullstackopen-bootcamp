@@ -44,7 +44,7 @@ const create = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { author, url, title, likes, year } = req.body;
+  const { author, url, title, likes, year } = req.body ?? {};
 
   req.blog.author = author ?? req.blog.author;
   req.blog.url = url ?? req.blog.url;

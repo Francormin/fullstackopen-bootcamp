@@ -27,7 +27,7 @@ const create = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { username, name } = req.body;
+  const { username, name } = req.body ?? {};
 
   req.user.username = username ?? req.user.username;
   req.user.name = name ?? req.user.name;
