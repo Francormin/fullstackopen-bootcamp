@@ -1,39 +1,61 @@
+const {
+  ValidationError,
+  UniqueConstraintError,
+  ForeignKeyConstraintError,
+  DatabaseError
+} = require("sequelize");
+
 const errorHandler = (err, _req, res, _next) => {
-  if (err.message && err.message.includes("WHERE parameter") && err.message.includes("undefined")) {
+  const { name, message } = err;
+
+  // Sequelize validation and constraint errors
+  if (err instanceof ValidationError || err instanceof UniqueConstraintError) {
+    const messages = err.errors.map(e => e.message);
     return res
       .status(400)
-      .json({ error: "Missing or invalid data (blogId or userId is undefined)" });
+      .json(messages.length > 1 ? { errors: messages } : { error: messages[0] });
   }
 
-  if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
-    const messages = err.errors.map(e => e.message);
-    return messages.length > 1
-      ? res.status(400).json({ errors: messages })
-      : res.status(400).json({ error: messages[0] });
+  // Foreign key constraint violation
+  if (err instanceof ForeignKeyConstraintError) {
+    return res.status(400).json({
+      error: "Invalid userId or blogId. Foreign key constraint failed"
+    });
   }
 
-  if (err.name === "SequelizeDatabaseError") {
-    console.error("Database error: ", err.message);
-    return err.message.includes("invalid input syntax")
-      ? res.status(400).json({ error: "Invalid data format" })
-      : res.status(500).json({ error: "Internal database error" });
+  // General database errors
+  if (err instanceof DatabaseError) {
+    console.error("Database error:", message);
+
+    if (message.includes("invalid input syntax") && message.includes("integer")) {
+      return res.status(400).json({
+        error: "Invalid input syntax for integer (blogId or userId)"
+      });
+    }
+
+    if (message.includes("WHERE parameter") && message.includes("undefined")) {
+      return res.status(400).json({
+        error: "Missing or invalid data (blogId or userId is undefined)"
+      });
+    }
+
+    return res.status(500).json({ error: "Internal database error" });
   }
 
-  if (err.name === "JsonWebTokenError") {
+  // Custom domain-specific errors
+  if (name === "BadRequestError" || name === "NotFoundError" || name === "UnauthorizedError") {
+    return res.status(err.statusCode).json({ error: message });
+  }
+
+  // JWT errors
+  if (name === "JsonWebTokenError") {
     return res.status(401).json({ error: "Invalid token" });
   }
 
-  if (
-    err.name === "BadRequestError" ||
-    err.name === "NotFoundError" ||
-    err.name === "UnauthorizedError"
-  ) {
-    return res.status(err.statusCode).json({ error: err.message });
-  }
-
+  // Fallback error
   console.dir(err, { depth: null });
-  console.error("Error handler log: ", err.message);
-  res.status(500).json({ error: "Internal server error" });
+  console.error("Unhandled error:", message);
+  return res.status(500).json({ error: "Internal server error" });
 };
 
 module.exports = errorHandler;
