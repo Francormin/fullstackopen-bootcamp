@@ -6,6 +6,7 @@ const tokenExtractor = require("./tokenExtractor");
 const checkDuplicate = require("./checkDuplicate");
 const validateReadingListBody = require("./validateReadingListBody");
 const validateParamId = require("./validateParamId");
+const blogInReadingListFinder = require("./blogInReadingListFinder");
 
 module.exports = {
   unknownEndpoint,
@@ -15,5 +16,6 @@ module.exports = {
   tokenExtractor,
   checkDuplicate,
   validateReadingListBody,
-  validateParamId
+  validateParamId,
+  blogInReadingListFinder
 };
