@@ -13,10 +13,10 @@ const { PORT } = require("./src/utils/config");
 const app = express();
 
 app.use(express.json());
+app.use("/api/blogs/authors", authorRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/login", loginRoutes);
-app.use("/api/authors", authorRoutes);
 app.use("/api/reading-lists", readingListRoutes);
 
 // Middleware global para manejar rutas desconocidas
