@@ -1,15 +1,18 @@
 const { ReadingList } = require("../../models");
-const { BadRequestError } = require("../errors");
+const { BadRequestError, UnauthorizedError } = require("../errors");
 
 const checkIfBlogIsAlreadySaved = async (userId, blogId) => {
-  const existing = await ReadingList.findOne({
-    where: {
-      user_id: userId,
-      blog_id: blogId
-    }
-  });
-
-  if (existing) throw new BadRequestError("Blog already exists in reading list");
+  const matchFound = await ReadingList.findOne({ where: { userId, blogId } });
+  if (matchFound) throw new BadRequestError("Blog already exists in reading list");
 };
 
-module.exports = { checkIfBlogIsAlreadySaved };
+const findBlogInUserReadingList = async (userId, blogId) => {
+  const matchFound = await ReadingList.findOne({ where: { userId, blogId } });
+  if (!matchFound) throw new UnauthorizedError("You are not authorized to access this resource");
+  return matchFound;
+};
+
+module.exports = {
+  checkIfBlogIsAlreadySaved,
+  findBlogInUserReadingList
+};
