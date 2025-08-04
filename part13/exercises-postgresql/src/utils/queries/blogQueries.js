@@ -8,9 +8,9 @@ const findBlogById = async id => {
 };
 
 const findBlogByIdAndUser = async (id, userId) => {
-  const blog = await Blog.findOne({ where: { id, userId } });
-  if (!blog) throw new UnauthorizedError("You are not authorized to access this resource");
-  return blog;
+  const matchFound = await Blog.findOne({ where: { id, userId } });
+  if (!matchFound) throw new UnauthorizedError("You are not authorized to access this resource");
+  return matchFound;
 };
 
 module.exports = {
