@@ -1,25 +1,31 @@
 const { Blog, User } = require("../../models");
 const { NotFoundError } = require("../errors");
 
-const buildUserQueryOptions = (includeReadingList = false) => {
+const buildUserQueryOptions = (read, includeReadingList = false) => {
   if (!includeReadingList) return undefined;
+
+  const throughOptions = {
+    attributes: ["read", "id"],
+    as: "readingList"
+  };
+
+  if (read !== undefined) {
+    throughOptions.where = { read };
+  }
 
   return {
     attributes: ["name", "username"],
     include: {
       model: Blog,
       as: "savedBlogs",
-      through: {
-        attributes: ["read", "id"],
-        as: "readingList"
-      },
+      through: throughOptions,
       attributes: ["id", "url", "title", "author", "likes", "year"]
     }
   };
 };
 
-const findUserById = async (id, includeReadingList = false) => {
-  const options = buildUserQueryOptions(includeReadingList);
+const findUserById = async (id, read, includeReadingList = false) => {
+  const options = buildUserQueryOptions(read, includeReadingList);
   const user = await User.findByPk(id, options);
   if (!user) throw new NotFoundError("User not found");
 
