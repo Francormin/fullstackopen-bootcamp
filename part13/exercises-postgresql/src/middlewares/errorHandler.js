@@ -18,25 +18,21 @@ const errorHandler = (err, _req, res, _next) => {
 
   // Foreign key constraint violation
   if (err instanceof ForeignKeyConstraintError) {
-    return res.status(400).json({
-      error: "Invalid userId or blogId. Foreign key constraint failed"
-    });
+    return res
+      .status(400)
+      .json({ error: "Invalid userId or blogId. Foreign key constraint failed" });
   }
 
   // General database errors
   if (err instanceof DatabaseError) {
     console.error("Database error:", message);
 
-    if (message.includes("invalid input syntax") && message.includes("integer")) {
-      return res.status(400).json({
-        error: "Invalid input syntax for integer (blogId or userId)"
-      });
+    if (message.includes("invalid input syntax")) {
+      return res.status(400).json({ error: "Invalid input syntax" });
     }
 
     if (message.includes("WHERE parameter") && message.includes("undefined")) {
-      return res.status(400).json({
-        error: "Missing or invalid data (blogId or userId is undefined)"
-      });
+      return res.status(400).json({ error: "Missing or invalid data" });
     }
 
     return res.status(500).json({ error: "Internal database error" });
