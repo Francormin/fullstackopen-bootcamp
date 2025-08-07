@@ -1,5 +1,3 @@
-const { DataTypes } = require("sequelize");
-
 module.exports = {
   up: async ({ context: queryInterface }) => {
     // 1. Eliminar constraint existente
