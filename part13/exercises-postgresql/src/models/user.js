@@ -39,6 +39,15 @@ const User = sequelize.define(
           }
         }
       }
+    },
+    disabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      validate: {
+        notNull: { msg: "Disabled is required" },
+        isIn: { args: [[true, false]], msg: "Disabled must be true or false" }
+      }
     }
   },
   {
