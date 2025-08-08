@@ -4,8 +4,8 @@ const {
   validateReadingListBody,
   checkDuplicate,
   validateParamId,
-  tokenExtractor,
-  blogInReadingListFinder
+  blogInReadingListFinder,
+  sessionValidator
 } = require("../middlewares");
 
 const router = Router();
@@ -20,7 +20,7 @@ router.post(
 router.patch(
   "/:id",
   validateParamId,
-  tokenExtractor,
+  sessionValidator,
   blogInReadingListFinder,
   readingListControllers.markBlogInReadingListAsRead
 );
