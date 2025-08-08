@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
-const { UnauthorizedError, BadRequestError } = require("../utils/errors");
+const { User, Session } = require("../models");
+const { UnauthorizedError, BadRequestError, ForbiddenError } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
 const userLogin = async (req, res) => {
@@ -14,15 +14,11 @@ const userLogin = async (req, res) => {
     throw new BadRequestError("Username and password must be strings");
   }
 
-  const user = await User.findOne({
-    where: {
-      username
-    }
-  });
-
+  const user = await User.findOne({ where: { username } });
   const passwordCorrect = password === "password";
 
   if (!(user && passwordCorrect)) throw new UnauthorizedError("Invalid username or password");
+  if (user.disabled) throw new ForbiddenError("Account disabled. Contact admin.");
 
   const userForToken = {
     username: user.username,
@@ -30,6 +26,11 @@ const userLogin = async (req, res) => {
   };
 
   const token = jwt.sign(userForToken, JWT_SECRET);
+
+  await Session.create({
+    userId: user.id,
+    token
+  });
 
   res.json({
     token,
