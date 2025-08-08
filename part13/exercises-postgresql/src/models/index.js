@@ -1,8 +1,9 @@
 const Blog = require("./blog");
 const User = require("./user");
 const ReadingList = require("./readingList");
+const Session = require("./session");
 
-// Relación uno a muchos
+// Relación uno a muchos entre User y Blog
 // Un usuario puede tener muchos blogs, pero un blog pertenece a un solo usuario
 User.hasMany(Blog, {
   foreignKey: "userId",
@@ -14,7 +15,7 @@ Blog.belongsTo(User, {
   onDelete: "CASCADE"
 });
 
-// Relación muchos a muchos
+// Relación muchos a muchos entre User y Blog
 // Un usuario puede leer muchos blogs y un blog puede ser leído por muchos usuarios
 User.belongsToMany(Blog, {
   through: ReadingList,
@@ -30,8 +31,21 @@ Blog.belongsToMany(User, {
   onDelete: "CASCADE"
 });
 
+// Relación uno a muchos entre User y Session
+// Un usuario puede tener muchas sesiones, pero una sesión pertenece a un solo usuario
+User.hasMany(Session, {
+  foreignKey: "userId",
+  onDelete: "CASCADE"
+});
+
+Session.belongsTo(User, {
+  foreignKey: "userId",
+  onDelete: "CASCADE"
+});
+
 module.exports = {
   Blog,
   User,
-  ReadingList
+  ReadingList,
+  Session
 };
