@@ -39,7 +39,12 @@ const errorHandler = (err, _req, res, _next) => {
   }
 
   // Custom domain-specific errors
-  if (name === "BadRequestError" || name === "NotFoundError" || name === "UnauthorizedError") {
+  if (
+    name === "BadRequestError" ||
+    name === "NotFoundError" ||
+    name === "UnauthorizedError" ||
+    name === "ForbiddenError"
+  ) {
     return res.status(err.statusCode).json({ error: message });
   }
 
